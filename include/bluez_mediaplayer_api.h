@@ -1,0 +1,4 @@
+#ifndef BLUEZMEDIAPLAYER_H
+#define BLUEZMEDIAPLAYER_H
+
+#endif
