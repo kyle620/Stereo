@@ -117,10 +117,7 @@ void bluez_adapter_deinit();
 int bluez_start_scan();
 int bluez_stop_scan();
 int bluez_connect(const char * objectPath);
-static int bluez_set_discovery_filter();
 
-static int bluez_register_autopair_agent(void);
-static int bluez_agent_call_method(const gchar *method, GVariant *param);
 
 int bluez_get_number_devices_found();
 char * bluez_get_device(int index);
