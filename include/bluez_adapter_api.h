@@ -1,12 +1,16 @@
 #ifndef BLUEZADAPTERAPI_H
 #define BLUEZADAPTERAPI_H
 
+/*
+ * Author Kyle Van Cleave
+*/
+
 #include <glib.h>
 #include <gio/gio.h>
 #include <stdbool.h>
 
-#define MAX_DEVICE_STRING_LEN 100
-#define MAX_NUMBER_DEVICES 100
+#define MAX_DEVICE_STRING_LEN 	100
+#define MAX_NUMBER_DEVICES 		100
 
 /*
  * 	Helpful UUID's used to filter which devices we scan for
@@ -97,29 +101,23 @@ typedef struct _DiscoveryFilter DiscoveryFilter;
 /*
  * Modifiers
 */
+int bluez_adapter_init();
+void bluez_adapter_deinit();
 bool bluez_adapter_power_on(void);				// powers on the adapter
 bool bluez_adapter_power_off(void);				// powers off the adapter
 bool bluez_adapter_scan_on(void);				// start scanning for devices, also makes adapter discoverable
 bool bluez_adapter_scan_off(void);
-bool bluez_adapter_init_signals(void);
-bool bluez_adapter_mute_signals(void);
+bool bluez_adapter_pairable(bool value);
+void bluez_adapter_init_signals(void);
+void bluez_adapter_mute_signals(void);
 
 // for setting up filter for discovery settings
 bool bluez_adapter_set_filter(DiscoveryFilter * filterSettings);
 void bluez_adapter_set_filter_default(void);
+
 /*
  * Accessors
 */ 
 bool bluez_is_adapter_on(void);					// returns true if adapter is powered on
 
-int bluez_adapter_init();
-void bluez_adapter_deinit();
-int bluez_start_scan();
-int bluez_stop_scan();
-int bluez_connect(const char * objectPath);
-
-
-int bluez_get_number_devices_found();
-char * bluez_get_device(int index);
-void bluez_print_devices_found();
 #endif

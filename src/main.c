@@ -37,9 +37,6 @@ int main( int argc, char** argv )
 	//char devices[MAX_NUMBER_DEVICES][MAX_DEVICE_STRING_LEN];
 	//bluez_start_scan(devices);
 	
-	printf("Number devices: %d\n", bluez_get_number_devices_found());
-	
-	
 	bluez_adapter_set_filter_default();
 	
 	
