@@ -1,3 +1,7 @@
+/**
+* Author Kyle Van Cleave
+*/
+
 #include <stdlib.h>				// used for system
 #include <stdio.h>				// for printf
 #include <stdbool.h> 
