@@ -101,7 +101,7 @@ typedef struct _DiscoveryFilter DiscoveryFilter;
 /*
  * Modifiers
 */
-int bluez_adapter_init();
+int bluez_adapter_init(GDBusConnection * conn);
 void bluez_adapter_deinit();
 bool bluez_adapter_power_on(void);				// powers on the adapter
 bool bluez_adapter_power_off(void);				// powers off the adapter
@@ -110,6 +110,7 @@ bool bluez_adapter_scan_off(void);
 bool bluez_adapter_pairable(bool value);
 void bluez_adapter_init_signals(void);
 void bluez_adapter_mute_signals(void);
+void bluez_adapter_remove_device_found(const char * address);	// bluez caches BT devices found during a scan, this removes them, also bluez auto removes 180seconds if device is connected to
 
 // for setting up filter for discovery settings
 bool bluez_adapter_set_filter(DiscoveryFilter * filterSettings);

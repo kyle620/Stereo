@@ -75,25 +75,60 @@ void bluez_adapter_set_filter_default(void)
 	g_print("Filter UUID: %s", filter.UUID_ARRAY[0]);
 }
 
+int bluez_adapter_init(GDBusConnection * conn)
+{
+	
+	printf("Initializing Adapter...\n");
+	
+	mCon = conn;
+	
+	if(mCon == NULL) {
+		g_printerr("Not able to get connection to system bus\n");
+		/**TODO Need to organize Error Codes */
+		return -3;
+	}
+	
+	bluez_adapter_init_signals();
+	
+	return 0;
+}
+
 void bluez_adapter_deinit()
 {
 	//TODO handle cleanup
-	// need to remove singles 
 	
+	g_print("Adapter Deinitializing...\n");
+	
+	bluez_adapter_mute_signals();
+	
+	int numberDevices = bluetooth_device_get_number_devices();
+	int i;
+	char addr[BT_ADDRESS_STRING_SIZE];
+	
+	for(i = 0; i < numberDevices; i++)
+	{
+		bluetooth_get_device_address_at_index(i, addr, true);
+		bluez_adapter_remove_device_found(addr);
+	}
+	
+	bluez_adapter_power_off();
+
 }
 
 bool bluez_adapter_power_on(void)
 {
 	int rc = 0;
-	
+	bool ret = true;
 	rc  = bluez_adapter_set_property("Powered", g_variant_new("b", TRUE));
 	
 	if(rc) {
-		g_print("Not able to enable the adapter\n");
+		g_print("Not able to Power on the adapter\n");
 		bluez_adapter_mute_signals();
+		ret = false;
 	}
 	
-	return rc;
+	g_print("Adapter is Powered On!\n");
+	return ret;
 }	
 
 bool bluez_adapter_power_off(void)
@@ -108,46 +143,53 @@ bool bluez_adapter_power_off(void)
 bool bluez_adapter_scan_on(void)
 {
 	int rc = 0;
-	
+	bool ret = true;
 	printf("Starting Scan...\n");
 	
 	rc = bluez_adapter_call_method("StartDiscovery",NULL);
 	if(rc) {
 		g_print("Not able to scan for new devices\n");
 		bluez_adapter_mute_signals();
+		ret = false;
 	}
 
-	return rc;
+	return ret;
 }
 
 bool bluez_adapter_scan_off(void)
 {
 	int rc = 0;
+	bool ret = true;
+	
 	printf("Stopping Scan...\n");
 	
 	rc = bluez_adapter_call_method("StopDiscovery",NULL);
 	if(rc)
+	{
 		g_print("Not able to stop scanning\n");
+		ret = false;
+	}
 	
 	g_usleep(100);
 
-	return rc;
+	return ret;
 }
 
 bool bluez_adapter_pairable(bool value)
 {
 	int rc = 0;
+	bool ret = true;
 	
-	printf("Setting Adapter Pairable to %B\n");
+	 g_print("Aapter is Pairable: \"%s\"\n", value ? "Ture" : "False");
 	
 	rc = bluez_adapter_set_property("Pairable", g_variant_new("b", value));
 	
 	if(rc) {
 			g_print("Not able to set adapter pairable\n");
-			return -1;
+			ret = false;
 	}
 	
-	return rc;
+	return ret;
 }
 
 void bluez_adapter_init_signals(void)
@@ -177,7 +219,7 @@ void bluez_adapter_init_signals(void)
 						NULL);
 
 	iface_added = g_dbus_connection_signal_subscribe(mCon,
-							BLUEZ_BUS_NAME,
+							BLUEZ_BUS_NAME,							// defined in bluez_dbus_names.h
 							"org.freedesktop.DBus.ObjectManager",
 							"InterfacesAdded",
 							NULL,
@@ -188,7 +230,7 @@ void bluez_adapter_init_signals(void)
 							NULL);
 
 	iface_removed = g_dbus_connection_signal_subscribe(mCon,
-							BLUEZ_BUS_NAME,
+							BLUEZ_BUS_NAME,							// defined in bluez_dbus_names.h
 							"org.freedesktop.DBus.ObjectManager",
 							"InterfacesRemoved",
 							NULL,
@@ -205,6 +247,18 @@ void bluez_adapter_mute_signals(void)
 	g_dbus_connection_signal_unsubscribe(mCon, iface_added);
 	g_dbus_connection_signal_unsubscribe(mCon, iface_removed);
 }
+
+void bluez_adapter_remove_device_found(const char * address)
+{
+	GVariant * addr;
+	addr = g_variant_new_string(address);
+	
+	g_print("Removing device %s\n",address);
+		
+	bluez_adapter_call_method("RemoveDevice",g_variant_new_tuple(&addr, 1));
+	
+}
+
 
 /** 
 * Private Functions
@@ -268,6 +322,8 @@ static void bluez_property_value(const gchar *key, GVariant *value)
 	switch(*type) {
 		case 'o':
 		case 's':
+			if(strcmp(key,"Address") == 0)
+				bluetooth_device_add_device(value,g_variant_get_string(value, NULL));
 			g_print("%s\n", g_variant_get_string(value, NULL));
 			break;
 		case 'b':
@@ -312,8 +368,11 @@ static void bluez_device_appeared(GDBusConnection *sig,
 	const char *object;
 	const gchar *interface_name;
 	GVariant *properties;
-
+	
+	g_print("\n****\t Device Appeared \t****\n");
+	
 	g_variant_get(parameters, "(&oa{sa{sv}})", &object, &interfaces);
+	
 	while(g_variant_iter_next(interfaces, "{&s@a{sv}}", &interface_name, &properties)) {
 		if(g_strstr_len(g_ascii_strdown(interface_name, -1), -1, "device")) {
 			g_print("[ %s ]\n", object);
@@ -390,7 +449,7 @@ static void bluez_signal_adapter_changed(GDBusConnection *conn,
 	(void)interface;
 	(void)userdata;
 	
-	g_print("***\t Properties Changed ***\n");
+	g_print("***\t Adapter Properties Changed ***\n");
 
 	GVariantIter *properties = NULL;
 	GVariantIter *unknown = NULL;
@@ -460,8 +519,8 @@ static int bluez_adapter_set_property(const char *prop, GVariant *value)
 	GError *error = NULL;
 
 	result = g_dbus_connection_call_sync(mCon,
-					     BLUEZ_BUS_NAME,
-					     BLUEZ_HCI0_PATH,
+					     BLUEZ_BUS_NAME,						// defined in bluez_dbus_names.h
+					     BLUEZ_HCI0_PATH,						// defined in bluez_dbus_names.h
 					     "org.freedesktop.DBus.Properties",
 					     "Set",
 					     g_variant_new("(ssv)", BLUEZ_ADAPTER_INTERFACE, prop, value),
@@ -471,29 +530,12 @@ static int bluez_adapter_set_property(const char *prop, GVariant *value)
 					     NULL,
 					     &error);
 	if(error != NULL)
-		return 1;
+		return -1;
 
 	g_variant_unref(result);
 	return 0;
 }
 
-int bluez_adapter_init(GDBusConnection * conn)
-{
-	
-	printf("Initializing Adapter...\n");
-	
-	mCon = conn;
-	
-	if(mCon == NULL) {
-		g_printerr("Not able to get connection to system bus\n");
-		/**TODO Need to organize Error Codes */
-		return -3;
-	}
-	
-	bluez_adapter_init_signals();
-	
-	return 0;
-}
 
 bool bluez_adapter_set_filter(DiscoveryFilter * filterSettings)
 {
