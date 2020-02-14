@@ -70,7 +70,7 @@ int main( int argc, char** argv )
 		  if(c == 's')
 		  {
 			 bluez_adapter_init(connection);
-			 if(bluez_adapter_power_on())
+			 if(bluez_adapter_power_on(true))
 				 bluez_adapter_scan_on();
 		  }
 		  else if(c == 'l')
@@ -88,6 +88,9 @@ int main( int argc, char** argv )
 	pthread_cancel(gdbusThread);
 	int returnValue = pthread_join(gdbusThread,NULL);
 	g_print("Return Value: %d\n",returnValue);
+	
+	// clean up GDBusConnection
+	g_object_unref(connection);
 	
 	return 0;
 	  
