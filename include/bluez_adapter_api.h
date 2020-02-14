@@ -92,32 +92,34 @@ struct _DiscoveryFilter{
 	bool	DUPLICATE_DATA;		// Default 'true'
 	bool	DISCOVERABLE;
 	gint16 	RSSI;
-	guint16 PATHLOSS;
-	int		UUID_ARRAY_INDEX;
+	int		NUM_OF_UUIDS;
 };
 
 typedef struct _DiscoveryFilter DiscoveryFilter;
+typedef void (*method_cb_t)(GObject *, GAsyncResult *, gpointer);
 
 /*
  * Modifiers
 */
-int bluez_adapter_init();
+int bluez_adapter_init(GDBusConnection * conn);
 void bluez_adapter_deinit();
-bool bluez_adapter_power_on(void);				// powers on the adapter
+bool bluez_adapter_power_on(bool setPairable);	// powers on the adapter, user has option to make it pairable or not
 bool bluez_adapter_power_off(void);				// powers off the adapter
 bool bluez_adapter_scan_on(void);				// start scanning for devices, also makes adapter discoverable
 bool bluez_adapter_scan_off(void);
 bool bluez_adapter_pairable(bool value);
 void bluez_adapter_init_signals(void);
 void bluez_adapter_mute_signals(void);
+void bluez_adapter_remove_device_found(const char * address);	// bluez caches BT devices found during a scan, this removes them, also bluez auto removes 180seconds if device is connected to
 
 // for setting up filter for discovery settings
 bool bluez_adapter_set_filter(DiscoveryFilter * filterSettings);
-void bluez_adapter_set_filter_default(void);
+bool bluez_adapter_set_filter_default(void);
+
 
 /*
  * Accessors
 */ 
 bool bluez_is_adapter_on(void);					// returns true if adapter is powered on
-
+bool bluez_adapter_print_filter_settings(void);
 #endif

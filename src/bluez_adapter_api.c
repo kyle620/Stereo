@@ -20,6 +20,7 @@
 * Private Variable Declerations
 **/
 static GDBusConnection *mCon;
+static bool mAdapterOn = false;
 
 // GDBUS signals
 static guint prop_changed;
@@ -52,62 +53,150 @@ static void bluez_device_disappeared(GDBusConnection *sig,
 				GVariant *parameters,
 				gpointer user_data);
 static int bluez_adapter_call_method( const char *method, GVariant *param);
+static int bluez_adapter_call_method_callback(const char *method, GVariant *param, method_cb_t method_cb);
 static int bluez_adapter_set_property(const char *prop, GVariant *value);
 static void bluez_get_discovery_filter_cb(GObject *con,GAsyncResult *res,gpointer data);
-static void bluez_property_value(const gchar *key, GVariant *value);
-static int bluez_set_discovery_filter();
+static void bluez_property_value(const gchar *key, GVariant *value, BluetoothDevice * device);
 
 /** 
 * Modifiers
 **/
 
-void bluez_adapter_set_filter_default(void)
+bool bluez_adapter_set_filter_default(void)
 {
 	DiscoveryFilter filter;
 	
 	
 	filter.RSSI = -100;
 	strcpy(filter.TRANSPORT,"auto");
+	filter.DUPLICATE_DATA = true;
 	
 	// add the UUID's we want to filter for
 	strcpy(filter.UUID_ARRAY[0], UUID_AUDIO_SOURCE);
+	filter.NUM_OF_UUIDS = 1;
 	
 	g_print("Filter UUID: %s", filter.UUID_ARRAY[0]);
+	
+	return bluez_adapter_set_filter(&filter);
+}
+
+bool bluez_adapter_set_filter(DiscoveryFilter * filterSettings)
+{
+	int rc;
+	int i;
+	GVariantBuilder *b = g_variant_builder_new(G_VARIANT_TYPE_VARDICT);
+	g_variant_builder_add(b, "{sv}", "Transport", g_variant_new_string(filterSettings->TRANSPORT));
+	g_variant_builder_add(b, "{sv}", "RSSI", g_variant_new_int16(filterSettings->RSSI));
+	g_variant_builder_add(b, "{sv}", "DuplicateData", g_variant_new_boolean(filterSettings->DUPLICATE_DATA));
+
+	GVariantBuilder *u = g_variant_builder_new(G_VARIANT_TYPE_STRING_ARRAY);
+	for(i = 0; i < filterSettings->NUM_OF_UUIDS; i++)
+		g_variant_builder_add(u, "s", filterSettings->UUID_ARRAY[i]);
+	
+	g_variant_builder_add(b, "{sv}", "UUIDs", g_variant_builder_end(u));
+
+	GVariant *device_dict = g_variant_builder_end(b);
+	g_variant_builder_unref(u);
+	g_variant_builder_unref(b);
+	rc = bluez_adapter_call_method("SetDiscoveryFilter", g_variant_new_tuple(&device_dict, 1));
+	
+	if(rc) {
+		g_print("Not able to set discovery filter\n");
+		return 1;
+	}
+
+	return 0;
+}
+
+int bluez_adapter_init(GDBusConnection * conn)
+{
+	
+	printf("Initializing Adapter...\n");
+	
+	mCon = conn;
+	
+	if(mCon == NULL) {
+		g_printerr("Not able to get connection to system bus\n");
+		/**TODO Need to organize Error Codes */
+		return -3;
+	}
+	
+	bluez_adapter_init_signals();
+	
+	return 0;
 }
 
 void bluez_adapter_deinit()
 {
 	//TODO handle cleanup
-	// need to remove singles 
 	
+	g_print("Adapter Deinitializing...\n");
+	
+	bluez_adapter_mute_signals();
+	
+	int numberDevices = bluetooth_device_get_number_devices();
+	int i;
+	char objectPath[MAX_DEVICE_STRING_LEN];
+	
+	for(i = 0; i < numberDevices; i++)
+	{
+		bluetooth_get_device_address_at_index(i, objectPath, true);
+		bluez_adapter_remove_device_found(objectPath);
+	}
+	
+	bluez_adapter_power_off();
+
 }
 
-bool bluez_adapter_power_on(void)
+bool bluez_adapter_power_on(bool setPairable)
 {
 	int rc = 0;
-	
+	bool ret = true;
 	rc  = bluez_adapter_set_property("Powered", g_variant_new("b", TRUE));
 	
 	if(rc) {
-		g_print("Not able to enable the adapter\n");
+		g_print("Not able to Power on the adapter\n");
 		bluez_adapter_mute_signals();
+		mAdapterOn = false;
+		ret = false;
 	}
 	
-	return rc;
+	mAdapterOn = true;
+	g_print("Adapter is Powered On!\n");
+	
+	if(setPairable)
+		return bluez_adapter_pairable(setPairable);
+	else
+		return ret;
 }	
 
 bool bluez_adapter_power_off(void)
 {
 	int rc = 0;
+	bool ret = true;
 	
 	rc = bluez_adapter_set_property("Powered", g_variant_new("b", FALSE));
 	
-	return rc;
+	if(rc)
+	{
+		g_print("Not able to Power off the adapter\n");
+		mAdapterOn = false;
+		ret = false;
+	}
+	
+	return ret;
 }
 
 bool bluez_adapter_scan_on(void)
 {
 	int rc = 0;
+	bool ret = true;
+	
+	bluez_adapter_print_filter_settings();
+	
+	bluez_adapter_set_filter_default();
+	
+	bluez_adapter_print_filter_settings();
 	
 	printf("Starting Scan...\n");
 	
@@ -115,39 +204,46 @@ bool bluez_adapter_scan_on(void)
 	if(rc) {
 		g_print("Not able to scan for new devices\n");
 		bluez_adapter_mute_signals();
+		ret = false;
 	}
 
-	return rc;
+	return ret;
 }
 
 bool bluez_adapter_scan_off(void)
 {
 	int rc = 0;
+	bool ret = true;
+	
 	printf("Stopping Scan...\n");
 	
 	rc = bluez_adapter_call_method("StopDiscovery",NULL);
 	if(rc)
+	{
 		g_print("Not able to stop scanning\n");
+		ret = false;
+	}
 	
 	g_usleep(100);
 
-	return rc;
+	return ret;
 }
 
 bool bluez_adapter_pairable(bool value)
 {
 	int rc = 0;
+	bool ret = true;
 	
-	printf("Setting Adapter Pairable to %B\n");
+	g_print("Adapter Pairable set to: \"%s\"\n", value ? "True" : "False");
 	
 	rc = bluez_adapter_set_property("Pairable", g_variant_new("b", value));
 	
 	if(rc) {
 			g_print("Not able to set adapter pairable\n");
-			return -1;
+			ret = false;
 	}
 	
-	return rc;
+	return ret;
 }
 
 void bluez_adapter_init_signals(void)
@@ -177,7 +273,7 @@ void bluez_adapter_init_signals(void)
 						NULL);
 
 	iface_added = g_dbus_connection_signal_subscribe(mCon,
-							BLUEZ_BUS_NAME,
+							BLUEZ_BUS_NAME,							// defined in bluez_dbus_names.h
 							"org.freedesktop.DBus.ObjectManager",
 							"InterfacesAdded",
 							NULL,
@@ -188,7 +284,7 @@ void bluez_adapter_init_signals(void)
 							NULL);
 
 	iface_removed = g_dbus_connection_signal_subscribe(mCon,
-							BLUEZ_BUS_NAME,
+							BLUEZ_BUS_NAME,							// defined in bluez_dbus_names.h
 							"org.freedesktop.DBus.ObjectManager",
 							"InterfacesRemoved",
 							NULL,
@@ -204,6 +300,38 @@ void bluez_adapter_mute_signals(void)
 	g_dbus_connection_signal_unsubscribe(mCon, prop_changed);
 	g_dbus_connection_signal_unsubscribe(mCon, iface_added);
 	g_dbus_connection_signal_unsubscribe(mCon, iface_removed);
+}
+
+void bluez_adapter_remove_device_found(const char * objectPath)
+{
+	
+	g_print("Removing device %s\n",objectPath);
+		
+	bluez_adapter_call_method("RemoveDevice", g_variant_new("(o)", objectPath));
+	
+}
+
+
+/*
+* Accessors
+*/
+bool bluez_is_adapter_on(void)
+{
+	return mAdapterOn;
+}
+
+bool bluez_adapter_print_filter_settings(void)
+{
+	int rc;
+	bool ret = true;
+	rc = bluez_adapter_call_method_callback("GetDiscoveryFilters",
+			NULL,
+			bluez_get_discovery_filter_cb);
+	if(rc) {
+		g_print("Not able to get discovery filter\n");
+		ret = false;
+	}
+	return ret;
 }
 
 /** 
@@ -260,7 +388,7 @@ done:
 }
 */
 
-static void bluez_property_value(const gchar *key, GVariant *value)
+static void bluez_property_value(const gchar *key, GVariant *value,BluetoothDevice * device)
 {
 	const gchar *type = g_variant_get_type_string(value);
 	
@@ -268,25 +396,69 @@ static void bluez_property_value(const gchar *key, GVariant *value)
 	switch(*type) {
 		case 'o':
 		case 's':
+			if(device != NULL)
+			{
+				if(strcmp(key,"Address") == 0)
+					strcpy(device->MAC_ADDRESS,g_variant_get_string(value, NULL));
+				
+				else if(strcmp(key,"Alias") == 0)
+					strcpy(device->ALIAS,g_variant_get_string(value, NULL));		// note alias is only 100 bytes, may need to bound checking here at somepoint
+			}
+					
 			g_print("%s\n", g_variant_get_string(value, NULL));
+			
 			break;
 		case 'b':
+			if(device != NULL)
+			{
+				if(strcmp(key,"Trusted") == 0)
+					device->TRUSTED = g_variant_get_boolean(value);
+				else if(strcmp(key,"Paired") == 0)
+					device->PAIRED = g_variant_get_boolean(value);
+				else if(strcmp(key,"Connected") == 0)	
+					device->CONNECTED = g_variant_get_boolean(value);
+			}
+					
 			g_print("%d\n", g_variant_get_boolean(value));
+			
 			break;
 		case 'u':
+			
 			g_print("%d\n", g_variant_get_uint32(value));
+			
+			break;
+			
+		case 'n':
+			if(device != NULL)
+			{
+				if(strcmp(key,"RSSI") == 0)
+					device->RSSI = g_variant_get_int16(value);
+			}
+			
+			g_print("%d\n", g_variant_get_int16(value));
+			
 			break;
 		case 'a':
+		
 		/* TODO Handling only 'as', but not array of dicts */
 			if(g_strcmp0(type, "as"))
 				break;
+			
 			g_print("\n");
 			const gchar *uuid;
 			GVariantIter i;
 			g_variant_iter_init(&i, value);
+			int count = 0;
 			while(g_variant_iter_next(&i, "s", &uuid))
+			{
+				if(device != NULL)
+					strcpy(device->SERVICE_UUIDS[count++],uuid);
 				g_print("\t\t%s\n", uuid);
+			}
+			if(device != NULL)
+				device->NUMBER_OF_UUIDS = count;
 			break;
+		
 		default:
 			g_print("Other\n");
 			break;
@@ -312,29 +484,33 @@ static void bluez_device_appeared(GDBusConnection *sig,
 	const char *object;
 	const gchar *interface_name;
 	GVariant *properties;
-
+	
+	g_print("\n****\t Device Appeared \t****\n");
+	
 	g_variant_get(parameters, "(&oa{sa{sv}})", &object, &interfaces);
-	while(g_variant_iter_next(interfaces, "{&s@a{sv}}", &interface_name, &properties)) {
-		if(g_strstr_len(g_ascii_strdown(interface_name, -1), -1, "device")) {
+	
+	BluetoothDevice newDevice;
+	
+	strcpy(newDevice.PATH,object);
+	
+	while(g_variant_iter_next(interfaces, "{&s@a{sv}}", &interface_name, &properties)) 
+	{
+		if(g_strstr_len(g_ascii_strdown(interface_name, -1), -1, "device")) 
+		{
 			g_print("[ %s ]\n", object);
-			// TODO Create and add bluetoothdevce
-			/*
-			if(mDeviceCount < MAX_NUMBER_DEVICES)
-			{
-				strcpy(mDeviceList[mDeviceCount],object);
-				mDeviceCount++;
-			}
-			*/
 			const gchar *property_name;
 			GVariantIter i;
 			GVariant *prop_val;
 			g_variant_iter_init(&i, properties);
 			while(g_variant_iter_next(&i, "{&sv}", &property_name, &prop_val))
-				bluez_property_value(property_name, prop_val);
+				bluez_property_value(property_name, prop_val,&newDevice);
 			g_variant_unref(prop_val);
 		}
 		g_variant_unref(properties);
 	}
+	
+	bluetooth_device_add_device(&newDevice);
+	
 	return;
 }
 
@@ -390,7 +566,7 @@ static void bluez_signal_adapter_changed(GDBusConnection *conn,
 	(void)interface;
 	(void)userdata;
 	
-	g_print("***\t Properties Changed ***\n");
+	g_print("***\t Adapter Properties Changed ***\n");
 
 	GVariantIter *properties = NULL;
 	GVariantIter *unknown = NULL;
@@ -448,11 +624,37 @@ static int bluez_adapter_call_method( const char *method, GVariant *param)
 					     NULL,
 					     &error);
 	if(error != NULL)
-		return 1;
+	{
+		g_print("Method Call Error: %s",error->message);
+		return -1;
+	}
 
 	g_variant_unref(result);
 	return 0;
 }
+
+static int bluez_adapter_call_method_callback(const char *method, GVariant *param, method_cb_t method_cb)
+{
+	GError *error = NULL;
+
+	g_dbus_connection_call(mCon,
+			     BLUEZ_BUS_NAME,
+			/* TODO Find the adapter path runtime */
+				 BLUEZ_HCI0_PATH,
+			     BLUEZ_ADAPTER_INTERFACE,
+			     method,
+			     param,
+			     NULL,
+			     G_DBUS_CALL_FLAGS_NONE,
+			     -1,
+			     NULL,
+			     method_cb,
+			     &error);
+	if(error != NULL)
+		return 1;
+	return 0;
+}
+
 
 static int bluez_adapter_set_property(const char *prop, GVariant *value)
 {
@@ -460,8 +662,8 @@ static int bluez_adapter_set_property(const char *prop, GVariant *value)
 	GError *error = NULL;
 
 	result = g_dbus_connection_call_sync(mCon,
-					     BLUEZ_BUS_NAME,
-					     BLUEZ_HCI0_PATH,
+					     BLUEZ_BUS_NAME,						// defined in bluez_dbus_names.h
+					     BLUEZ_HCI0_PATH,						// defined in bluez_dbus_names.h
 					     "org.freedesktop.DBus.Properties",
 					     "Set",
 					     g_variant_new("(ssv)", BLUEZ_ADAPTER_INTERFACE, prop, value),
@@ -471,33 +673,10 @@ static int bluez_adapter_set_property(const char *prop, GVariant *value)
 					     NULL,
 					     &error);
 	if(error != NULL)
-		return 1;
+		return -1;
 
 	g_variant_unref(result);
 	return 0;
-}
-
-int bluez_adapter_init(GDBusConnection * conn)
-{
-	
-	printf("Initializing Adapter...\n");
-	
-	mCon = conn;
-	
-	if(mCon == NULL) {
-		g_printerr("Not able to get connection to system bus\n");
-		/**TODO Need to organize Error Codes */
-		return -3;
-	}
-	
-	bluez_adapter_init_signals();
-	
-	return 0;
-}
-
-bool bluez_adapter_set_filter(DiscoveryFilter * filterSettings)
-{
-	return true;
 }
 
 
@@ -512,30 +691,6 @@ static void fail_cleanup()
 }
 */
 
-static int bluez_set_discovery_filter()
-{
-	int rc;
-	GVariantBuilder *b = g_variant_builder_new(G_VARIANT_TYPE_VARDICT);
-	g_variant_builder_add(b, "{sv}", "Transport", g_variant_new_string("auto"));
-	g_variant_builder_add(b, "{sv}", "RSSI", g_variant_new_int16(-100));
-	g_variant_builder_add(b, "{sv}", "DuplicateData", g_variant_new_boolean(FALSE));
-
-	GVariantBuilder *u = g_variant_builder_new(G_VARIANT_TYPE_STRING_ARRAY);
-	g_variant_builder_add(u, "s", "0000110a-0000-1000-8000-00805f9b34fb");
-	g_variant_builder_add(b, "{sv}", "UUIDs", g_variant_builder_end(u));
-
-	GVariant *device_dict = g_variant_builder_end(b);
-	g_variant_builder_unref(u);
-	g_variant_builder_unref(b);
-	rc = bluez_adapter_call_method("SetDiscoveryFilter", g_variant_new_tuple(&device_dict, 1));
-	if(rc) {
-		g_print("Not able to set discovery filter\n");
-		return 1;
-	}
-
-	return 0;
-}
-
 static void bluez_get_discovery_filter_cb(GObject *con,GAsyncResult *res,gpointer data)
 {
 	(void)data;
@@ -546,7 +701,7 @@ static void bluez_get_discovery_filter_cb(GObject *con,GAsyncResult *res,gpointe
 
 	if(result) {
 		result = g_variant_get_child_value(result, 0);
-		bluez_property_value("GetDiscoveryFilter", result);
+		bluez_property_value("GetDiscoveryFilter", result,NULL);
 	}
 	g_variant_unref(result);
 }
