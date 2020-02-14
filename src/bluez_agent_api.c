@@ -8,7 +8,7 @@
  *	  automatically if the device is not used.
  * gcc `pkg-config --cflags glib-2.0 gio-2.0` -Wall -Wextra -o ./bin/bluez_adapter_scan ./bluez_adapter_scan.c `pkg-config --libs glib-2.0 gio-2.0`
  */
-
+#include <stdio.h>
 #include "bluez_agent_api.h"
 #include "bluez_dbus_names.h"
 
@@ -21,7 +21,7 @@ static GDBusConnection *mCon;
  *
 */
 static int bluez_agent_call_method(const gchar *method, GVariant *param);
-static int bluez_register_autopair_agent(void);
+
 
 
 static int bluez_agent_call_method(const gchar *method, GVariant *param)
@@ -42,26 +42,41 @@ static int bluez_agent_call_method(const gchar *method, GVariant *param)
                                              &error);
         if(error != NULL) {
 		g_print("Register %s: %s\n", AGENT_PATH, error->message);
-                return 1;
+                return  1;
 	}
 
         g_variant_unref(result);
         return 0;
 }
 
-static int bluez_register_autopair_agent(void)
+int bluez_agent_init(GDBusConnection *conn)
+{
+	printf("Initializing Agent...\n");
+	
+	mCon = conn;
+	
+	if(mCon == NULL) {
+		g_printerr("Not able to get connection to system bus\n");
+		/**TODO Need to organize Error Codes */
+		return -3;
+	}
+	
+	return 0;
+}
+
+int bluez_register_autopair_agent(void)
 {
 	int rc;
 	
 	 // According to the agent-api.txt, AGENT_PATH is freely definable. This could be anything as far as I know
 	rc = bluez_agent_call_method("RegisterAgent", g_variant_new("(os)", AGENT_PATH, "NoInputNoOutput"));
 	if(rc)
-		return 1;
+		return - 1;
 
 	rc = bluez_agent_call_method("RequestDefaultAgent", g_variant_new("(o)", AGENT_PATH));
 	if(rc) {
 		bluez_agent_call_method("UnregisterAgent", g_variant_new("(o)", AGENT_PATH));
-		return 1;
+		return  -2;
 	}
 
 	return 0;

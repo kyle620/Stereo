@@ -53,7 +53,7 @@ static void bluez_device_disappeared(GDBusConnection *sig,
 				GVariant *parameters,
 				gpointer user_data);
 static int bluez_adapter_call_method( const char *method, GVariant *param);
-static int bluez_adapter_call_method_callback(const char *method, GVariant *param, method_cb_t method_cb);
+static int bluez_adapter_call_method_callback(const char *method, GVariant *param,  bluez_call_method_callback callback);
 static int bluez_adapter_set_property(const char *prop, GVariant *value);
 static void bluez_get_discovery_filter_cb(GObject *con,GAsyncResult *res,gpointer data);
 static void bluez_property_value(const gchar *key, GVariant *value, BluetoothDevice * device);
@@ -152,6 +152,10 @@ bool bluez_adapter_power_on(bool setPairable)
 {
 	int rc = 0;
 	bool ret = true;
+	
+	if(mAdapterOn)
+		return true;
+	
 	rc  = bluez_adapter_set_property("Powered", g_variant_new("b", TRUE));
 	
 	if(rc) {
@@ -175,6 +179,9 @@ bool bluez_adapter_power_off(void)
 	int rc = 0;
 	bool ret = true;
 	
+	if(!mAdapterOn)
+		return true;
+	
 	rc = bluez_adapter_set_property("Powered", g_variant_new("b", FALSE));
 	
 	if(rc)
@@ -183,6 +190,8 @@ bool bluez_adapter_power_off(void)
 		mAdapterOn = false;
 		ret = false;
 	}
+	
+	mAdapterOn = false;
 	
 	return ret;
 }
@@ -633,7 +642,7 @@ static int bluez_adapter_call_method( const char *method, GVariant *param)
 	return 0;
 }
 
-static int bluez_adapter_call_method_callback(const char *method, GVariant *param, method_cb_t method_cb)
+static int bluez_adapter_call_method_callback(const char *method, GVariant *param,  bluez_call_method_callback callback)
 {
 	GError *error = NULL;
 
@@ -648,7 +657,7 @@ static int bluez_adapter_call_method_callback(const char *method, GVariant *para
 			     G_DBUS_CALL_FLAGS_NONE,
 			     -1,
 			     NULL,
-			     method_cb,
+			     callback,
 			     &error);
 	if(error != NULL)
 		return 1;

@@ -9,6 +9,9 @@
 
 #include "file_reader.h"
 #include "bluez_adapter_api.h"
+#include "bluetooth_device.h"
+#include "bluez_agent_api.h"
+#include "bluez_device_api.h"
 
 // includes to use glib and dbus
 #include <glib.h>
@@ -27,6 +30,7 @@
 /*
 * Private Function Decleartions
 */
+static void printOptions(void);
 static void* gdbusMainLoopThread(void* aArg);
 
 /* 
@@ -35,18 +39,18 @@ static void* gdbusMainLoopThread(void* aArg);
 static GDBusConnection * connection;
 static GDBusProxy *deviceProxy;		/* Must be freed with g_object_unref when done with it */
 static GError *error;
+static bool printFlag = true;
 
 int main( int argc, char** argv )
 {
-	printf ("Hello!\n");
 	
 	char c = '1';
+	char userInput[100];
 	char path[100];
 	char fileArray[MAX_NUMBER_FILES][MAX_STRING_LEN];		// defined in file_reader.h
 	
-	sprintf(path,"%s","/var/lib/bluetooth/DC:A6:32:36:5C:D2/cache");
-	
-	listFiles(path, fileArray,false);
+	//sprintf(path,"%s","/var/lib/bluetooth/DC:A6:32:36:5C:D2/cache");
+	//listFiles(path, fileArray,false);
 
 	pthread_t gdbusThread;
 	pthread_attr_t gdbusThreadAttr;
@@ -61,28 +65,61 @@ int main( int argc, char** argv )
 	pthread_create( &gdbusThread, &gdbusThreadAttr, gdbusMainLoopThread, NULL );
 	pthread_attr_destroy( &gdbusThreadAttr );
 	sleep( 1 );
+	
 	  
 	while(c != 'q')
 	  {
+		  
+		  if(printFlag)
+			  printOptions();
+		  
 		  c = getchar();
 		  usleep(200);
 		  
-		  if(c == 's')
+		  if(c == '1')
 		  {
 			 bluez_adapter_init(connection);
 			 if(bluez_adapter_power_on(true))
 				 bluez_adapter_scan_on();
 		  }
-		  else if(c == 'l')
-		  {
-			 
-		  }
-		  else if(c == 'c')
+		  else if(c == '2')
 		  {
 			 bluez_adapter_scan_off();
-			 bluez_adapter_deinit();
+	
+		  }
+		  else if(c == '3')
+		  {
+			bluetooth_device_print_all();
+		  }
+		  else if(c == '4')
+		  {
+			g_print("Enter the device number you want to pair with...\n");
+			  bluetooth_device_print_all();
+			 scanf("%s",userInput);
+			 
+			int x;
+			
+			sscanf(userInput, "%d", &x); // Using sscanf
+			 
+			 bluez_agent_init(connection);
+			 bluez_register_autopair_agent();
+			 bluez_device_init(connection);
+			 
+			 bluez_device_trust_device(bluetooth_get_device_path_at_index(x));
+			 bluez_device_pair_device(bluetooth_get_device_path_at_index(x));
+	
+		  }
+		  else if(c == '5')
+		  {
+			bluez_adapter_power_on(true);
+		  }
+		  else if(c == '6')
+		  {
+			bluez_adapter_power_off();
 		  }
 	  }
+	  
+	  bluez_adapter_deinit();
 	  
 	 // clean up thread
 	pthread_cancel(gdbusThread);
@@ -95,6 +132,19 @@ int main( int argc, char** argv )
 	return 0;
 	  
 } 
+
+
+static void printOptions()
+{
+	g_print("***\t Options \t***\n");
+	g_print(" 1:\tStart scan\n");
+	g_print(" 2:\tStop scan\n");
+	g_print(" 3:\tList Devices\n");
+	g_print(" 4:\tPair Device\n");
+	g_print(" 5:\tPower Adapter on\n");
+	g_print(" 6:\tPower Adapter off\n");
+	printFlag = false;
+}
 
 static void* gdbusMainLoopThread(void* aArg)
 {

@@ -18,6 +18,7 @@
 */ 
 #define BLUEZ_ADAPTER_INTERFACE			"org.bluez.Adapter1"
 #define BLUEZ_AGENT_INTERFACE			"org.bluez.Agent1"
+#define BLUEZ_DEVICE_INTERFACE			"org.bluez.Device1"
 #define BLUEZ_AgentManager_INTERFACE	"org.bluez.AgentManager1"
 #define BLUEZ_MediaPlayer_INTERFACE		"org.bluez.MediaPlayer1"
 #define BLUEZ_MediaTrasnport_INTERFACE	"org.bluez.MediaTransport1"

@@ -63,6 +63,28 @@ void bluetooth_device_print(BluetoothDevice * device)
 	
 }
 
+void bluetooth_device_print_all(void)
+{
+	int i;
+	
+	for(i = 0; i < mNumberOfDevices; i++)
+	{
+		g_print("Device %d:\n",i);
+		bluetooth_device_print(&mBluetoothDeviceArray[i]);
+	}
+
+}
+
+char * bluetooth_get_device_path_at_index(int index)
+{
+	if(index < MAX_NUMBER_DEVICES)
+	{
+		return &mBluetoothDeviceArray[index].PATH;
+	}
+	else
+		return NULL;
+}
+
 /*
 *	Modifiers
 */

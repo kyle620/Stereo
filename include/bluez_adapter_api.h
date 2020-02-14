@@ -96,16 +96,16 @@ struct _DiscoveryFilter{
 };
 
 typedef struct _DiscoveryFilter DiscoveryFilter;
-typedef void (*method_cb_t)(GObject *, GAsyncResult *, gpointer);
+typedef void (*bluez_call_method_callback)(GObject *, GAsyncResult *, gpointer);
 
 /*
  * Modifiers
 */
 int bluez_adapter_init(GDBusConnection * conn);
 void bluez_adapter_deinit();
-bool bluez_adapter_power_on(bool setPairable);	// powers on the adapter, user has option to make it pairable or not
-bool bluez_adapter_power_off(void);				// powers off the adapter
-bool bluez_adapter_scan_on(void);				// start scanning for devices, also makes adapter discoverable
+bool bluez_adapter_power_on(bool setPairable);		// powers on the adapter, user has option to make it pairable or not
+bool bluez_adapter_power_off(void);							// powers off the adapter
+bool bluez_adapter_scan_on(void);							// start scanning for devices, also makes adapter discoverable
 bool bluez_adapter_scan_off(void);
 bool bluez_adapter_pairable(bool value);
 void bluez_adapter_init_signals(void);
