@@ -92,8 +92,6 @@ int	bluetooth_device_add_device(BluetoothDevice * newDevice)
 {
 	// TODO implement
 	
-	bluetooth_device_print(newDevice);
-	
 	// check if we have room to add another device
 	if(mNumberOfDevices > MAX_NUMBER_DEVICES)
 		return -2;

@@ -9,11 +9,22 @@
 /*
 * Private Function Declerations
 */
+static void bluez_signal_device_changed(GDBusConnection *conn,
+                    const gchar *sender,
+                    const gchar *path,
+                    const gchar *interface,
+                    const gchar *signal,
+                    GVariant *params,
+                    void *userdata);
+
 
 /*
 *	Private Variables
 */
 GDBusConnection * mCon;
+
+// GDBUS signals
+static guint device_changed;
 
 /*
 * Accessors
@@ -24,6 +35,23 @@ GDBusConnection * mCon;
 * Modifiers
 *
 */
+void bluez_device_init_signals(void)
+{
+	device_changed = g_dbus_connection_signal_subscribe(mCon,
+						BLUEZ_BUS_NAME,						// defined in bluez_dbus_names.h
+						"org.freedesktop.DBus.Properties",
+						"PropertiesChanged",
+						NULL,
+						BLUEZ_DEVICE_INTERFACE,				// defined in bluez_dbus_names.h
+						G_DBUS_SIGNAL_FLAGS_NONE,
+						bluez_signal_device_changed,
+						NULL,
+						NULL);
+}
+void bluez_device_mute_signals(void)
+{
+	g_dbus_connection_signal_unsubscribe(mCon, device_changed);
+}
 
 /*
 * Other
@@ -105,4 +133,53 @@ bool bluez_device_pair_device(const char *objectPath)
 	}
 	
 	return succeed;
+}
+
+
+static void bluez_signal_device_changed(GDBusConnection *conn,
+                    const gchar *sender,
+                    const gchar *path,
+                    const gchar *interface,
+                    const gchar *signal,
+                    GVariant *params,
+                    void *userdata)
+{
+    (void)conn;
+    (void)sender;
+    (void)path;
+    (void)interface;
+    (void)userdata;
+	static GError *error;
+    GVariantIter *properties = NULL;
+    GVariantIter *unknown = NULL;
+    const char *iface;
+    const char *key;
+    GVariant *value = NULL;
+    const gchar *signature = g_variant_get_type_string(params);
+	
+	g_print("Path: %s\n", path);
+	g_print("Interface: %s\n", interface); 
+
+    if(strcmp(signature, "(sa{sv}as)") != 0) {
+        g_print("Invalid signature for %s: %s != %s", signal, signature, "(sa{sv}as)");
+        goto done;
+    }
+
+    g_variant_get(params, "(&sa{sv}as)", &iface, &properties, &unknown);
+    while(g_variant_iter_next(properties, "{&sv}", &key, &value)) {
+		g_print("[ Key %s  value: %s]\n", key, g_variant_print(value,TRUE));
+        if(!g_strcmp0(key, "Connected")) {
+            if(!g_variant_is_of_type(value, G_VARIANT_TYPE_BOOLEAN)) {
+                g_print("Invalid argument type for %s: %s != %s", key,
+                        g_variant_get_type_string(value), "b");
+                goto done;
+            }
+            g_print("Device is \"%s\"\n", g_variant_get_boolean(value) ? "Connected" : "Disconnected");
+        }
+    }
+done:
+    if(properties != NULL)
+        g_variant_iter_free(properties);
+    if(value != NULL)
+        g_variant_unref(value);
 }

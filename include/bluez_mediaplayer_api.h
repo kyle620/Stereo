@@ -1,4 +1,249 @@
 #ifndef BLUEZMEDIAPLAYER_H
 #define BLUEZMEDIAPLAYER_H
+/*
+ * Author Kyle Van Cleave
+ *
+ * This file implements majority of the functioanlity described in the "media-api.txt" file provided by bluez
+ * To learn more, please visit 'https://git.kernel.org/pub/scm/bluetooth/bluez.git/tree/doc/media-api.txt'
+*/
+
+
+
+#include <glib.h>
+#include <gio/gio.h>
+#include <stdbool.h>
+
+ /**
+	 * TODO need to do bound checking on size of chars
+	 * - Currenlty most properites inside MediaPlayer have set array sizes for strings
+	 *	 a track title, album title, .. etc could exceed this size
+**/
+
+/* 
+ *	According to bluez doc 'media-api.txt' here are the properties for a MediaPlayer1
+
+ * Properties	string Equalizer [readwrite]
+
+			Possible values: "off" or "on"
+
+		string Repeat [readwrite]
+
+			Possible values: "off", "singletrack", "alltracks" or
+					"group"
+
+		string Shuffle [readwrite]
+
+			Possible values: "off", "alltracks" or "group"
+
+		string Scan [readwrite]
+
+			Possible values: "off", "alltracks" or "group"
+
+		string Status [readonly]
+
+			Possible status: "playing", "stopped", "paused",
+					"forward-seek", "reverse-seek"
+					or "error"
+
+		uint32 Position [readonly]
+
+			Playback position in milliseconds. Changing the
+			position may generate additional events that will be
+			sent to the remote device. When position is 0 it means
+			the track is starting and when it's greater than or
+			equal to track's duration the track has ended. Note
+			that even if duration is not available in metadata it's
+			possible to signal its end by setting position to the
+			maximum uint32 value.
+
+		dict Track [readonly]
+
+			Track metadata.
+
+			Possible values:
+
+				string Title:
+
+					Track title name
+
+				string Artist:
+
+					Track artist name
+
+				string Album:
+
+					Track album name
+
+				string Genre:
+
+					Track genre name
+
+				uint32 NumberOfTracks:
+
+					Number of tracks in total
+
+				uint32 TrackNumber:
+
+					Track number
+
+				uint32 Duration:
+
+					Track duration in milliseconds
+
+		object Device [readonly]
+
+			Device object path.
+
+		string Name [readonly]
+
+			Player name
+
+		string Type [readonly]
+
+			Player type
+
+			Possible values:
+
+				"Audio"
+				"Video"
+				"Audio Broadcasting"
+				"Video Broadcasting"
+
+		string Subtype [readonly]
+
+			Player subtype
+
+			Possible values:
+
+				"Audio Book"
+				"Podcast"
+
+		boolean Browsable [readonly]
+
+			If present indicates the player can be browsed using
+			MediaFolder interface.
+
+			Possible values:
+
+				True: Supported and active
+				False: Supported but inactive
+
+			Note: If supported but inactive clients can enable it
+			by using MediaFolder interface but it might interfere
+			in the playback of other players.
+
+
+		boolean Searchable [readonly]
+
+			If present indicates the player can be searched using
+			MediaFolder interface.
+
+			Possible values:
+
+				True: Supported and active
+				False: Supported but inactive
+
+			Note: If supported but inactive clients can enable it
+			by using MediaFolder interface but it might interfere
+			in the playback of other players.
+
+		object Playlist
+
+			Playlist object path.
+*/
+struct _MediaPlayer{
+	char 	OBJECT_PATH[100];	// Path of the player we want to listen/exchange track data with, and control using control methods
+	char 	EQUALIZER[10];		// Possible values "off" or "on"
+	char	REPEAT[20];			// Possible values: "off", "singletrack", "alltracks" or "group"
+	char	SHUFFLE[20];		// Possible values: "off", "alltracks" or "group"
+	char	STATUS[20];			// Possible status: "playing", "stopped", "paused", "forward-seek", "reverse-seek" or "error"
+	char	PLAYER_NAME[100];	// This is the name of the player, example: Spotify, Apple Music, Amazon Music
+	char	TYPE[30];			// Possible values: "Audio" "Video" "Audio Broadcasting" "Video Broadcasting"
+	char	TRACK_TITLE[100];	// Track title Name 
+	char	TRACK_ARTIST[100];	// Artist of track
+	char	TRACK_ALBUM[100];	// Album of track
+	char	TRACK_Genre[100];	// Genre of track
+	guint32 TRACK_NUMBER;
+	guint32	TRACK_DURATION;
+	guint32 TRACK_POSITION;
+};
+
+typedef struct _MediaPlayer MediaPlayer;
+
+/* 
+*	Accessors
+*/
+
+
+/*
+* Modifiers
+*/
+int bluez_mediaplayer_init(GDBusConnection * conn);
+void bluez_mediaplayer_init_signals(void);
+void bluez_mediaplayer_mute_signals(void);
+void bluez_media_player_update_remote_device_property(const char * prop_name, const char * value);
+
+/*
+* Control Methods
+*/
+
+/*
+Methods		void Play()
+
+			Resume playback.
+
+			Possible Errors: org.bluez.Error.NotSupported
+					 org.bluez.Error.Failed
+
+		void Pause()
+
+			Pause playback.
+
+			Possible Errors: org.bluez.Error.NotSupported
+					 org.bluez.Error.Failed
+
+		void Stop()
+
+			Stop playback.
+
+			Possible Errors: org.bluez.Error.NotSupported
+					 org.bluez.Error.Failed
+
+		void Next()
+
+			Next item.
+
+			Possible Errors: org.bluez.Error.NotSupported
+					 org.bluez.Error.Failed
+
+		void Previous()
+
+			Previous item.
+
+			Possible Errors: org.bluez.Error.NotSupported
+					 org.bluez.Error.Failed
+
+		void FastForward()
+
+			Fast forward playback, this action is only stopped
+			when another method in this interface is called.
+
+			Possible Errors: org.bluez.Error.NotSupported
+					 org.bluez.Error.Failed
+
+		void Rewind()
+
+			Rewind playback, this action is only stopped
+			when another method in this interface is called.
+
+			Possible Errors: org.bluez.Error.NotSupported
+					 org.bluez.Error.Failed
+*/
+void bluez_mediaplayer_play();				// Tells remote object to start playing track
+void bluez_mediaplayer_pause();				// Tells remote object to pause
+void bluez_mediaplayer_stop();				// Tells remote object to stop
+void bluez_mediaplayer_next();				// Tells remote object to skip to next track
+void bluez_mediaplayer_previous();			// Tells remote object to jump back to previous track
+
 
 #endif

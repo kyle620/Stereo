@@ -17,6 +17,8 @@
 * Modifiers
 *
 */
+void bluez_device_init_signals(void);
+void bluez_device_mute_signals(void);
 
 /*
 * Other
