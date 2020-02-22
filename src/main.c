@@ -58,7 +58,7 @@ int main( int argc, char** argv )
 	connection = g_bus_get_sync(G_BUS_TYPE_SYSTEM,NULL,&error);
 	g_assert(connection);
 	
-	//bluez_adapter_init(connection);
+	bluez_adapter_init(connection);
 	//bluez_agent_init(connection);
 	//bluez_device_init(connection);
 	//bluez_device_init_signals();

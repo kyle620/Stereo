@@ -6,19 +6,22 @@
 */
 static int bluez_mediaplayer_call_method( const char *method, GVariant *param);
 static int bluez_mediaplayer_set_property(const char *prop, GVariant *value);
-static void bluez_mediaplayer_appeared(GDBusConnection *sig,
+static void bluez_mediaplayer_properties_changed(GDBusConnection *sig,
 				const gchar *sender_name,
 				const gchar *object_path,
 				const gchar *interface,
 				const gchar *signal_name,
 				GVariant *parameters,
 				gpointer user_data);
+static void bluez_property_value(const gchar *key, GVariant *value);
+static void bluez_mediaplayer_print_track_data(GVariant * mediadata);
 /*
  * Private Variables
 */
 static GDBusConnection *mCon;
 static MediaPlayer mDefaultPlayer;
 static guint iface_added;
+static guint prop_changed;
 
 /*
  * Accessors
@@ -46,14 +49,14 @@ static guint iface_added;
  
 void bluez_mediaplayer_init_signals(void)
 {
-	iface_added = g_dbus_connection_signal_subscribe(mCon,
+	prop_changed = g_dbus_connection_signal_subscribe(mCon,
 							BLUEZ_BUS_NAME,							// defined in bluez_dbus_names.h
 							"org.freedesktop.DBus.Properties",
 							"PropertiesChanged",
 							NULL,									// NULL so we can listen for all object paths
 							BLUEZ_MediaPlayer_INTERFACE,			// defined in bluez_dbus_names.h
 							G_DBUS_SIGNAL_FLAGS_NONE,
-							bluez_mediaplayer_appeared,
+							bluez_mediaplayer_properties_changed,
 							NULL,
 							NULL);
 }
@@ -61,6 +64,7 @@ void bluez_mediaplayer_init_signals(void)
 void bluez_mediaplayer_mute_signals(void)
 {
 	g_dbus_connection_signal_unsubscribe(mCon, iface_added);
+	g_dbus_connection_signal_unsubscribe(mCon, prop_changed);
 }
  
  void bluez_media_player_update_remote_device_property(const char * prop_name, const char * value)
@@ -159,7 +163,7 @@ static int bluez_mediaplayer_set_property(const char *prop, GVariant *value)
 	return 0;
 }
 
-static void bluez_mediaplayer_appeared(GDBusConnection *sig,
+static void bluez_mediaplayer_properties_changed(GDBusConnection *sig,
 				const gchar *sender_name,
 				const gchar *object_path,
 				const gchar *interface,
@@ -174,34 +178,78 @@ static void bluez_mediaplayer_appeared(GDBusConnection *sig,
 	(void)signal_name;
 	(void)user_data;
 
-	GVariantIter *interfaces;
+	GVariantIter *intr;
+	GVariantIter *intr2;
 	const char *object;
-	//const gchar *interface_name;
-	//GVariant *properties;
+	const char * key;
+	GVariant * unknown;
+	GVariant * value;
+	GVariant * value2;
 	
-	g_print("\n****\t MediaPlayer Appeared \t****\n");
+	g_print("\n****\t Properties Changed \t****\n");
+	
 	g_print ("\t- Object Path: %s\n", object_path);
-	g_variant_get(parameters, "(&sa{sv}as)", &object, &interfaces);
+	g_variant_get(parameters, "(&sa{sv}as)", &object, &intr,&unknown);
+	
+	g_print("U: %s\n", unknown);
 	
 	
-	/*
-	while(g_variant_iter_next(interfaces, "{&s@a{sv}}", &interface_name, &properties)) 
-	{
-		if(g_strstr_len(g_ascii_strdown(interface_name, -1), -1, "device")) 
-		{
-			g_print("[ %s ]\n", object);
-			const gchar *property_name;
-			GVariantIter i;
-			GVariant *prop_val;
-			g_variant_iter_init(&i, properties);
-			while(g_variant_iter_next(&i, "{&sv}", &property_name, &prop_val))
-				bluez_property_value(property_name, prop_val,&newDevice);
-			g_variant_unref(prop_val);
-			
-			
-		}
-		g_variant_unref(properties);
-	}
-	*/
+	
+	
+	while(g_variant_iter_next(intr, "{sv}", &key, &value)) 
+		bluez_property_value(key,value);
+		
+	//g_variant_unref(unknown);
 	return;
 }
+
+static void bluez_property_value(const gchar *key, GVariant *value)
+{
+	const gchar *type = g_variant_get_type_string(value);
+	
+	g_print("\t%s : ", key);
+	switch(*type) {
+		case 'o':
+		case 's':
+					
+			g_print("%s\n", g_variant_get_string(value, NULL));
+			
+			break;
+		case 'b':		
+			g_print("%d\n", g_variant_get_boolean(value));
+			
+			break;
+		case 'u':
+			
+			g_print("%d\n", g_variant_get_uint32(value));
+			
+			break;
+			
+		case 'n':
+			g_print("%d\n", g_variant_get_int16(value));
+			
+			break;
+		case 'a':
+		
+			bluez_mediaplayer_print_track_data(value);
+			break;
+		
+		default:
+			g_print("Other\n");
+			break;
+	}
+}
+
+static void bluez_mediaplayer_print_track_data(GVariant * mediadata)
+{
+	GVariantIter *intr;
+	GVariant * trackInfo;
+	const gchar * key;
+	
+	g_variant_get(mediadata, "a{sv}", &intr);
+	
+	while(g_variant_iter_next(intr, "{sv}", &key, &trackInfo)) 
+		bluez_property_value(key,trackInfo);
+}
+
+

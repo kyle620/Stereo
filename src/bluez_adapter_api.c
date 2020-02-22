@@ -453,6 +453,7 @@ static void bluez_device_appeared(GDBusConnection *sig,
 	
 	while(g_variant_iter_next(interfaces, "{&s@a{sv}}", &interface_name, &properties)) 
 	{
+		g_print("Interface Name: %s\n",interface_name);
 		if(g_strstr_len(g_ascii_strdown(interface_name, -1), -1, "device")) 
 		{
 			g_print("[ %s ]\n", object);
@@ -490,6 +491,8 @@ static void bluez_device_disappeared(GDBusConnection *sig,
 	const char *object;
 	const gchar *interface_name;
 	char address[BT_ADDRESS_STRING_SIZE] = {'\0'};
+	
+	g_print("\n****\t Device Disappeared \t****\n");
 
 	g_variant_get(parameters, "(&oas)", &object, &interfaces);
 	while(g_variant_iter_next(interfaces, "s", &interface_name)) {
