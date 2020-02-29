@@ -14,6 +14,10 @@
 #define MAX_NUMBER_UUIDS		100
 #define BT_ADDRESS_STRING_SIZE 	18
 
+typedef struct _BluetoothDevice BluetoothDevice;
+typedef struct _Node Node;							// structure for Double Linked List
+
+
 struct _BluetoothDevice{
 	char	PATH[MAX_DEVICE_STRING_LEN];																				// Path according to bluez, example: /org/bluez/hci0/XX_XX_XX_XX_XX_XX
 	char	SERVICE_UUIDS[MAX_NUMBER_UUIDS][37];																// List of 128-Bit UUIDs represented on device
@@ -26,7 +30,12 @@ struct _BluetoothDevice{
 	int		NUMBER_OF_UUIDS;																								// keeps track of number of UUIDs
 };
 
-typedef struct _BluetoothDevice BluetoothDevice;
+struct _Node
+{
+	BluetoothDevice device;
+	Node * next;
+	Node * prev;
+};
 
 /* 
 *	Accessors

@@ -9,10 +9,16 @@
 */
 void bluetooth_device_create_device(BluetoothDevice *device);
 
+// functions for double linked list
+void push(Node ** headRef, BluetoothDevice * newDevice);
+void append(Node ** headRef, BluetoothDevice * newDevice);
+void insertBefore(Node ** headRef, Node* nextNode, BluetoothDevice * newDevice);
+void printList(Node * node);
 /** 
 * Private Variables
 **/
 static BluetoothDevice mBluetoothDeviceArray[MAX_NUMBER_DEVICES];
+static Node * mHead = NULL;
 
 int mNumberOfDevices = 0;
 
@@ -100,7 +106,8 @@ int	bluetooth_device_add_device(BluetoothDevice * newDevice)
 	else
 	{
 		g_print("\nDevice:	\t Adding Device %s\n",newDevice->PATH);
-		bluetooth_device_create_device(newDevice);
+		//bluetooth_device_create_device(newDevice);
+		push(&mHead, newDevice);
 	}
 	
 	return 0;
@@ -139,27 +146,27 @@ bool bluetooth_device_property_add_service_UUID(int * index, const char * uuid)
 
 bool bluetooth_device_property_update_connection(int * index, bool isConnected)
 {
-	
+	return true;
 }
 
 bool bluetooth_device_property_update_paired(int * index, bool isPaired)
 {
-	
+	return true;
 }
 
 bool bluetooth_device_property_update_trusted(int index, bool isTrusted)
 {
-	
+	return true;
 }
 
 bool bluetooth_device_property_update_RSSI(int index, gint16 rssi)
 {
-	
+	return true;
 }
 
 bool bluetooth_device_property_update_alias(int index, const char * name)
 {
-	
+	return true;
 }
 
 /*
@@ -193,3 +200,125 @@ void bluetooth_device_create_device(BluetoothDevice *device)
 	mNumberOfDevices++;
 }
 
+/* Given a reference (pointer to pointer) to the head of a list  
+and an int, inserts a new node on the front of the list. */
+void push(Node** head_ref, BluetoothDevice * newDevice)  
+{  
+	g_print("Inside Push\n");
+	int i;
+
+    Node* new_node = (Node*)malloc(sizeof(Node));  
+
+	// need to copy over all contents into device array
+	strcpy(new_node->device.PATH,newDevice->PATH);
+	strcpy(new_node->device.MAC_ADDRESS,newDevice->MAC_ADDRESS);
+	strcpy(new_node->device.ALIAS,newDevice->ALIAS);
+	
+	new_node->device.PAIRED = newDevice->PAIRED;
+	new_node->device.TRUSTED = newDevice->TRUSTED;
+	new_node->device.CONNECTED = newDevice->CONNECTED;
+	new_node->device.RSSI = newDevice->RSSI;
+	new_node->device.NUMBER_OF_UUIDS = newDevice->NUMBER_OF_UUIDS;
+	
+	for(i = 0; i < new_node->device.NUMBER_OF_UUIDS; i++)
+		strcpy(new_node->device.SERVICE_UUIDS[i],newDevice->SERVICE_UUIDS[i]);
+  
+    new_node->next = (*head_ref);  
+    new_node->prev = NULL;  
+  
+    if ((*head_ref) != NULL)  
+        (*head_ref)->prev = new_node;  
+  
+    (*head_ref) = new_node;  
+	
+	mNumberOfDevices++;
+} 
+
+/* Given a reference (pointer to pointer) to the head 
+   of a DLL and an int, appends a new node at the end  */
+void append(Node** head_ref, BluetoothDevice * newDevice) 
+{ 
+    /* 1. allocate node */
+	Node* new_node = (Node*)malloc(sizeof(Node)); 
+  
+    Node* last = *head_ref; /* used in step 5*/
+  
+    /* 2. put in the data  */
+    //new_node->data = new_data; 
+  
+    /* 3. This new node is going to be the last node, so 
+          make next of it as NULL*/
+    new_node->next = NULL; 
+  
+    /* 4. If the Linked List is empty, then make the new 
+          node as head */
+    if (*head_ref == NULL) { 
+        new_node->prev = NULL; 
+        *head_ref = new_node; 
+        return; 
+    } 
+  
+    /* 5. Else traverse till the last node */
+    while (last->next != NULL) 
+        last = last->next; 
+  
+    /* 6. Change the next of last node */
+    last->next = new_node; 
+  
+    /* 7. Make last node as previous of new node */
+    new_node->prev = last; 
+  
+    return; 
+} 
+
+/* Given a node as next_node, insert a new node before the given node */
+void insertBefore(Node** head_ref, Node* next_node, BluetoothDevice * newDevice)  
+{  
+    /*1. check if the given next_node is NULL */
+    if (next_node == NULL) {  
+        g_print("The given next node cannot be NULL");  
+        return;  
+    }  
+  
+    /* 2. allocate new node */
+    Node* new_node = (Node*)malloc(sizeof(Node));  
+  
+    /* 3. put in the data */
+   // new_node->data = new_data;  
+  
+    /* 4. Make prev of new node as prev of next_node */
+    new_node->prev = next_node->prev;  
+  
+    /* 5. Make the prev of next_node as new_node */
+    next_node->prev = new_node;  
+  
+    /* 6. Make next_node as next of new_node */
+    new_node->next = next_node;  
+  
+    /* 7. Change next of new_node's previous node */
+    if (new_node->prev != NULL)  
+        new_node->prev->next = new_node;  
+    /* 8. If the prev of new_node is NULL, it will be 
+       the new head node */
+    else
+        (*head_ref) = new_node; 
+      
+}  
+  
+// This function prints contents of linked list starting from the given node  
+void printList(Node* node)  
+{  
+    Node* last;  
+	g_print("\nTraversal in forward direction \n");  
+    while (node != NULL) {  
+        //printf(" %d ", node->data);  
+        last = node;  
+        node = node->next;  
+    }  
+  
+    g_print("\nTraversal in reverse direction \n");  
+    while (last != NULL) {  
+       // printf(" %d ", last->data);  
+        last = last->prev;  
+    }  
+}  
