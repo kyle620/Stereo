@@ -221,7 +221,7 @@ static void bluez_agent_method_call(GDBusConnection *conn,
         g_dbus_method_invocation_return_value(invocation, NULL);
     }
     else if(!strcmp(method, "RequestAuthorization")) {
-        ;
+        g_print("Inside Request Authorization\n",pass);
     }
     else if(!strcmp(method, "AuthorizeService")) {
 		g_variant_get(params, "(os)", &opath, &uuid);

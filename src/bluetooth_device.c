@@ -130,6 +130,37 @@ bool bluetooth_get_device_address_at_index(int index, char * addrContainer, bool
 	
 }	
 
+// functions to update the properties of a device
+bool bluetooth_device_property_add_service_UUID(int * index, const char * uuid)
+{
+	if(&index < 0 || &index > MAX_NUMBER_DEVICES)
+		return false;
+}
+
+bool bluetooth_device_property_update_connection(int * index, bool isConnected)
+{
+	
+}
+
+bool bluetooth_device_property_update_paired(int * index, bool isPaired)
+{
+	
+}
+
+bool bluetooth_device_property_update_trusted(int index, bool isTrusted)
+{
+	
+}
+
+bool bluetooth_device_property_update_RSSI(int index, gint16 rssi)
+{
+	
+}
+
+bool bluetooth_device_property_update_alias(int index, const char * name)
+{
+	
+}
 
 /*
 * Private Functions

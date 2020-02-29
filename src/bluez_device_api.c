@@ -16,7 +16,7 @@ static void bluez_signal_device_changed(GDBusConnection *conn,
                     const gchar *signal,
                     GVariant *params,
                     void *userdata);
-
+static void bluez_device_parse_properties(const char * key, GVariant * propertyValue);
 
 /*
 *	Private Variables
@@ -157,8 +157,9 @@ static void bluez_signal_device_changed(GDBusConnection *conn,
     GVariant *value = NULL;
     const gchar *signature = g_variant_get_type_string(params);
 	
-	g_print("Path: %s\n", path);
-	g_print("Interface: %s\n", interface); 
+	g_print("***\tDevice Signal Properties Changed\t***\n");
+	g_print("- Path:\t%s\n", path);
+	g_print("- Interface:\t%s\n", interface); 
 
     if(strcmp(signature, "(sa{sv}as)") != 0) {
         g_print("Invalid signature for %s: %s != %s", signal, signature, "(sa{sv}as)");
@@ -167,19 +168,29 @@ static void bluez_signal_device_changed(GDBusConnection *conn,
 
     g_variant_get(params, "(&sa{sv}as)", &iface, &properties, &unknown);
     while(g_variant_iter_next(properties, "{&sv}", &key, &value)) {
-		g_print("[ Key %s  value: %s]\n", key, g_variant_print(value,TRUE));
-        if(!g_strcmp0(key, "Connected")) {
-            if(!g_variant_is_of_type(value, G_VARIANT_TYPE_BOOLEAN)) {
-                g_print("Invalid argument type for %s: %s != %s", key,
-                        g_variant_get_type_string(value), "b");
-                goto done;
-            }
-            g_print("Device is \"%s\"\n", g_variant_get_boolean(value) ? "Connected" : "Disconnected");
-        }
+		bluez_device_parse_properties(key, value);
+		
+		//g_print("[ Key %s  value: %s]\n", key, g_variant_print(value,TRUE));
+        //if(!g_strcmp0(key, "Connected")) {
+           // if(!g_variant_is_of_type(value, G_VARIANT_TYPE_BOOLEAN)) {
+               // g_print("Invalid argument type for %s: %s != %s", key,
+                        //g_variant_get_type_string(value), "b");
+               // goto done;
+            //}
+           // g_print("Device is \"%s\"\n", g_variant_get_boolean(value) ? "Connected" : "Disconnected");
+        //}
     }
+	g_print("***\tDevice Signal Properties Changed\t***\n");
 done:
     if(properties != NULL)
         g_variant_iter_free(properties);
     if(value != NULL)
         g_variant_unref(value);
+	
+	
+}
+
+static void bluez_device_parse_properties(const char * propertyKey, GVariant * propertyValue)
+{
+	g_print("[ Property Key %s  value: %s]\n", propertyKey, g_variant_print(propertyValue,TRUE));
 }

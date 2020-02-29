@@ -60,8 +60,8 @@ int main( int argc, char** argv )
 	
 	bluez_adapter_init(connection);
 	bluez_agent_init(connection);
-	//bluez_device_init(connection);
-	//bluez_device_init_signals();
+	bluez_device_init(connection);
+	bluez_device_init_signals();
 	//bluez_mediaplayer_init(connection);
 	
 	 
@@ -104,16 +104,16 @@ int main( int argc, char** argv )
 					bluetooth_device_print_all();
 				break;
 				case 6:
-					//g_print("Enter the device number you want to pair with...\n");
-					//bluetooth_device_print_all();
+					g_print("Enter the device number you want to pair with...\n");
+					bluetooth_device_print_all();
 					
-					//scanf("%d",&userInput);
+					scanf("%d",&userInput);
 					
 					//bluez_register_autopair_agent();
 					bluez_register_agent();
 			 
-					//bluez_device_trust_device(bluetooth_get_device_path_at_index(userInput));
-					//bluez_device_pair_device(bluetooth_get_device_path_at_index(userInput));
+					bluez_device_trust_device(bluetooth_get_device_path_at_index(userInput));
+					bluez_device_pair_device(bluetooth_get_device_path_at_index(userInput));
 				break;
 				case 7:
 					bluez_adapter_init_signals();
