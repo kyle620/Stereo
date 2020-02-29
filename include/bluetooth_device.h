@@ -15,8 +15,6 @@
 #define BT_ADDRESS_STRING_SIZE 	18
 
 typedef struct _BluetoothDevice BluetoothDevice;
-typedef struct _Node Node;							// structure for Double Linked List
-
 
 struct _BluetoothDevice{
 	char	PATH[MAX_DEVICE_STRING_LEN];																				// Path according to bluez, example: /org/bluez/hci0/XX_XX_XX_XX_XX_XX
@@ -28,13 +26,6 @@ struct _BluetoothDevice{
 	bool	TRUSTED;																													// Indicates if remote device is seen as trusted
 	gint16 	RSSI;																														// Receievd signal strength of remote device
 	int		NUMBER_OF_UUIDS;																								// keeps track of number of UUIDs
-};
-
-struct _Node
-{
-	BluetoothDevice device;
-	Node * next;
-	Node * prev;
 };
 
 /* 
@@ -55,7 +46,7 @@ char * bluetooth_get_device_path_at_index(int index);
 */
 int bluetooth_device_add_device(BluetoothDevice * newDevice);													// returns 0 on success, -1 device already exists, and -2 if device list is full
 bool bluetooth_device_remove_device(const char * address);														// returns false if device not found
-
+bool bluetooth_device_remove_all_devices();
 
 // functions to update the properites of the device
 bool bluetooth_device_property_add_service_UUID(int * index, const char * uuid);			// adds the UUID to SERVICE_UUIDS array for the device located at the specified index, reutrns false if UUID already exists, or array is full

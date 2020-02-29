@@ -138,11 +138,11 @@ void bluez_adapter_deinit()
 	int i;
 	char objectPath[MAX_DEVICE_STRING_LEN];
 	
-	for(i = 0; i < numberDevices; i++)
-	{
-		bluetooth_get_device_address_at_index(i, objectPath, true);
-		bluez_adapter_remove_device_found(objectPath);
-	}
+	//for(i = 0; i < numberDevices; i++)
+	//{
+		//bluetooth_get_device_address_at_index(i, objectPath, true);
+		//bluez_adapter_remove_device_found(objectPath);
+	//}
 	
 	bluez_adapter_power_off();
 
