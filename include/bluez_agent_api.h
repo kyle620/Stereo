@@ -8,5 +8,6 @@
 
 int bluez_agent_init(GDBusConnection *conn);
 int bluez_register_autopair_agent(void);
+int bluez_register_agent(void);
 
 #endif
