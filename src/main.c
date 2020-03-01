@@ -130,6 +130,9 @@ int main( int argc, char** argv )
 					bluetooth_device_remove_device_by_index(userInput);
 					
 				break;
+				case 10:
+					bluez_register_agent();
+				break;
 				default:
 					printf("Unsupported Command\n");
 		  }

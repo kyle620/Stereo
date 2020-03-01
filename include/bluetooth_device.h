@@ -38,6 +38,10 @@ void bluetooth_device_print_all(void);
 bool bluetooth_get_device_address_at_index(int index, char * addrContainer, bool deleteFlag);		// returns true success, deletetFlag == true, removes it from list
 char * bluetooth_get_device_path_at_index(int index);
 //int bluetooth_device_get_index(const char * path);													// returns -1 if device does not exist, ohterwise returns the array index of device
+BluetoothDevice * bluetooth_get_device_at_index(int index);
+
+// functions to get properties of the device
+bool bluetooth_device_get_property_paired(BluetoothDevice * device);
 
 // access to properties of device																						// prints the entire list out
 /*

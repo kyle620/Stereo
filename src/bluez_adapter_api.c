@@ -139,14 +139,28 @@ void bluez_adapter_deinit()
 	int numberDevices = bluetooth_device_get_number_devices();
 	int i;
 	char objectPath[MAX_DEVICE_STRING_LEN];
+	BluetoothDevice * device;
 	
-	for(i = 0; i < numberDevices; i++)
+	for(i = 1; i <= numberDevices; i++)
 	{
-		// remove the device from the double linked list
-		bluetooth_get_device_address_at_index(i, objectPath, true);
+		// grab the device from the linked list
+		device = bluetooth_get_device_at_index(i);
 		
-		// remove the device from the adapter
-		bluez_adapter_remove_device_found(objectPath);
+		if(device != NULL)
+		{
+			// dont remove the device if we paired with it
+			if(!device->PAIRED)
+			{
+				strcpy(objectPath, device->PATH);
+				
+				// remove the device from the adapter
+				bluez_adapter_remove_device_found(objectPath);
+				
+				bluetooth_device_remove_device_by_index(i);
+			}
+		}
+		
+		
 	}
 	
 	bluez_adapter_power_off();
@@ -206,11 +220,11 @@ bool bluez_adapter_scan_on(void)
 	int rc = 0;
 	bool ret = true;
 	
-	bluez_adapter_print_filter_settings();
+	//bluez_adapter_print_filter_settings();
 	
-	bluez_adapter_set_filter_default();
+	//bluez_adapter_set_filter_default();
 	
-	bluez_adapter_print_filter_settings();
+	//bluez_adapter_print_filter_settings();
 	
 	printf("Starting Scan...\n");
 	

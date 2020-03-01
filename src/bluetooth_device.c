@@ -72,6 +72,22 @@ char * bluetooth_get_device_path_at_index(int index)
 		return NULL;
 }
 
+BluetoothDevice * bluetooth_get_device_at_index(int index)
+{
+	Node * dev = scanList(mHead,index);
+	
+	if(dev != NULL)
+		return &dev->device;
+	
+	return NULL;
+}
+
+// functions to get properties of a device
+bool bluetooth_device_get_property_paired(BluetoothDevice * device)
+{
+	return device->PAIRED;
+}
+
 /*
 *	Modifiers
 */
