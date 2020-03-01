@@ -206,11 +206,11 @@ bool bluez_adapter_scan_on(void)
 	int rc = 0;
 	bool ret = true;
 	
-	//bluez_adapter_print_filter_settings();
+	bluez_adapter_print_filter_settings();
 	
-	//bluez_adapter_set_filter_default();
+	bluez_adapter_set_filter_default();
 	
-	//bluez_adapter_print_filter_settings();
+	bluez_adapter_print_filter_settings();
 	
 	printf("Starting Scan...\n");
 	

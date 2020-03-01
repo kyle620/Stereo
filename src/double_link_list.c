@@ -221,6 +221,9 @@ void printList(Node* node)
 
 Node * scanList(Node *start, int index)
 {
+	if(start == NULL)
+		return NULL;
+	
 	int count = 1;
 	
 	Node *previous, *current;
@@ -235,6 +238,19 @@ Node * scanList(Node *start, int index)
 	}
 	
 	return previous;
+}
+
+Node * scanListByPath(Node *start, const char * path)
+{
+	if(start == NULL)
+		return NULL;
+	
+	Node *current = start;
+	
+	while(current != NULL && strcmp(current->device.PATH, path) != 0)
+		current = current->next;
+	
+	return current;
 }
 
 /*

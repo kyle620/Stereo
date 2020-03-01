@@ -195,7 +195,6 @@ static void bluez_agent_method_call(GDBusConnection *conn,
     int entered;
     char *opath;
 	char * uuid;
-	char * userInput;
     GVariant *p= g_dbus_method_invocation_get_parameters(invocation);
 
     g_print("Agent method call: %s.%s()\n", interface, method);
@@ -221,12 +220,11 @@ static void bluez_agent_method_call(GDBusConnection *conn,
         g_dbus_method_invocation_return_value(invocation, NULL);
     }
     else if(!strcmp(method, "RequestAuthorization")) {
-        g_print("Inside Request Authorization\n",pass);
+        g_print("Inside Request Authorization\n");
     }
     else if(!strcmp(method, "AuthorizeService")) {
 		g_variant_get(params, "(os)", &opath, &uuid);
 		g_print("Authorize Service UUID: %s\t YES/NO\n", uuid);
-		//fscanf(stdin, "%s", userInput);
 		g_dbus_method_invocation_return_value(invocation, NULL);
         ;
     }

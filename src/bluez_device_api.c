@@ -5,6 +5,7 @@
 
 #include "bluez_device_api.h"
 #include "bluez_dbus_names.h"
+#include "bluetooth_device.h"
 
 /*
 * Private Function Declerations
@@ -16,7 +17,7 @@ static void bluez_signal_device_changed(GDBusConnection *conn,
                     const gchar *signal,
                     GVariant *params,
                     void *userdata);
-static void bluez_device_parse_properties(const char * key, GVariant * propertyValue);
+static void bluez_device_parse_properties(const char* path, const char * key, GVariant * propertyValue);
 
 /*
 *	Private Variables
@@ -167,8 +168,9 @@ static void bluez_signal_device_changed(GDBusConnection *conn,
     }
 
     g_variant_get(params, "(&sa{sv}as)", &iface, &properties, &unknown);
-    while(g_variant_iter_next(properties, "{&sv}", &key, &value)) {
-		bluez_device_parse_properties(key, value);
+    while(g_variant_iter_next(properties, "{&sv}", &key, &value))
+	{
+		bluez_device_parse_properties(path,key, value);
 		
 		//g_print("[ Key %s  value: %s]\n", key, g_variant_print(value,TRUE));
         //if(!g_strcmp0(key, "Connected")) {
@@ -181,16 +183,65 @@ static void bluez_signal_device_changed(GDBusConnection *conn,
         //}
     }
 	g_print("***\tDevice Signal Properties Changed\t***\n");
-done:
-    if(properties != NULL)
-        g_variant_iter_free(properties);
-    if(value != NULL)
-        g_variant_unref(value);
 	
-	
+	done:
+		if(properties != NULL)
+			g_variant_iter_free(properties);
+		if(value != NULL)
+			g_variant_unref(value);
 }
 
-static void bluez_device_parse_properties(const char * propertyKey, GVariant * propertyValue)
+static void bluez_device_parse_properties(const char * path, const char * propertyKey, GVariant * propertyValue)
 {
 	g_print("[ Property Key %s  value: %s]\n", propertyKey, g_variant_print(propertyValue,TRUE));
+	
+	GVariantIter iter;
+	GVariant *uuid;
+	
+	if(strcmp(propertyKey, "Connected") == 0)
+	{
+		if(!g_variant_is_of_type(propertyValue, G_VARIANT_TYPE_BOOLEAN))
+            g_print("Invalid argument type for %s: %s != %s", propertyKey,g_variant_get_type_string(propertyValue), "b");
+		else
+			bluetooth_device_property_update_connection(path,g_variant_get_boolean(propertyValue));
+	}
+	else if(strcmp(propertyKey, "Paired") == 0)
+	{
+		if(!g_variant_is_of_type(propertyValue, G_VARIANT_TYPE_BOOLEAN))
+            g_print("Invalid argument type for %s: %s != %s", propertyKey,g_variant_get_type_string(propertyValue), "b");
+		else
+			bluetooth_device_property_update_paired(path,g_variant_get_boolean(propertyValue));
+	}
+	else if(strcmp(propertyKey, "Trusted") == 0)
+	{
+		if(!g_variant_is_of_type(propertyValue, G_VARIANT_TYPE_BOOLEAN))
+            g_print("Invalid argument type for %s: %s != %s", propertyKey,g_variant_get_type_string(propertyValue), "b");
+		else
+			bluetooth_device_property_update_trusted(path,g_variant_get_boolean(propertyValue));
+	}
+	else if(strcmp(propertyKey, "Alias") == 0)
+	{
+		if(!g_variant_is_of_type(propertyValue, G_VARIANT_TYPE_STRING))
+            g_print("Invalid argument type for %s: %s != %s", propertyKey,g_variant_get_type_string(propertyValue), "s");
+		else
+			bluetooth_device_property_update_alias(path,g_variant_get_string(propertyValue,NULL));
+	}
+	else if(strcmp(propertyKey, "RSSI") == 0)
+	{
+		if(!g_variant_is_of_type(propertyValue, G_VARIANT_TYPE_INT16))
+            g_print("Invalid argument type for %s: %s != %s", propertyKey,g_variant_get_type_string(propertyValue), "n");
+		else
+			bluetooth_device_property_update_RSSI(path,g_variant_get_int16(propertyValue));
+	}
+	else if(strcmp(propertyKey, "UUIDs") == 0)
+	{
+		if(!g_variant_is_of_type(propertyValue,G_VARIANT_TYPE_STRING_ARRAY))
+            g_print("Invalid argument type for %s: %s != %s", propertyKey,g_variant_get_type_string(propertyValue), "as");
+		else
+		{
+			g_variant_iter_init(&iter, propertyValue);
+			while((uuid = g_variant_iter_next_value(&iter)))
+				bluetooth_device_property_add_service_UUID(path,g_variant_get_string(uuid,NULL));
+		}
+	}
 }

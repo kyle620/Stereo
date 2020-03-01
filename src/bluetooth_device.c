@@ -50,7 +50,14 @@ void bluetooth_device_print_properties(BluetoothDevice * device)
 
 void bluetooth_device_print_all(void)
 {
-	printList(mHead);
+	//printList(mHead);
+	Node * temp = mHead;
+	
+	while(temp != NULL)
+	{
+		bluetooth_device_print_properties(&temp->device);
+		temp = temp->next;
+	}
 }
 
 char * bluetooth_get_device_path_at_index(int index)
@@ -141,33 +148,108 @@ bool bluetooth_get_device_address_at_index(int index, char * addrContainer, bool
 }	
 
 // functions to update the properties of a device
-bool bluetooth_device_property_add_service_UUID(int * index, const char * uuid)
+bool bluetooth_device_property_add_service_UUID(const char * path, const char * uuid)
 {
+	g_print("***\t Device: Updating Property UUID\n"); 
+	Node *dev = scanListByPath(mHead, path);
+	
+	if(dev == NULL)
+		return false;		// device does not exist
+	
+	/*1. Check if we have room to add this UUID */
+	if(dev->device.NUMBER_OF_UUIDS > MAX_NUMBER_UUIDS)
+		return false;
+	
+	/*2. Check if the UUID already exists */
+	int i;
+	bool alreadyExists = false;
+	for(i = 0; i < dev->device.NUMBER_OF_UUIDS; i++)
+	{
+		if(strcmp(dev->device.SERVICE_UUIDS[i], uuid) == 0)
+		{
+			alreadyExists = true;
+			break;
+		}
+	}
+	
+	/*3. Add the UUID if it doesn't exist and update the UUID count */
+	if(!alreadyExists)
+	{
+		strcpy(dev->device.SERVICE_UUIDS[i],uuid);		// add the UUID
+		dev->device.NUMBER_OF_UUIDS += 1;				// Update the Count
+		return true;
+	}
+	
+	return false;
+}
+
+bool bluetooth_device_property_update_connection(const char * path, bool isConnected)
+{
+	g_print("***\t Device: Updating Property Connection\n"); 
+	Node *dev = scanListByPath(mHead, path);
+	
+	if(dev == NULL)
+		return false;		// device does not exist
+	
+	// update the property
+	dev->device.CONNECTED = isConnected;
+	
 	return true;
 }
 
-bool bluetooth_device_property_update_connection(int * index, bool isConnected)
+bool bluetooth_device_property_update_paired(const char * path, bool isPaired)
 {
+	g_print("***\t Device: Updating Property Paired\n"); 
+	Node *dev = scanListByPath(mHead, path);
+	
+	if(dev == NULL)
+		return false;		// device does not exist
+	
+	// update the property
+	dev->device.PAIRED = isPaired;
+	
 	return true;
 }
 
-bool bluetooth_device_property_update_paired(int * index, bool isPaired)
+bool bluetooth_device_property_update_trusted(const char * path, bool isTrusted)
 {
+	g_print("***\t Device: Updating Property Trusted\n"); 
+	Node *dev = scanListByPath(mHead, path);
+	
+	if(dev == NULL)
+		return false;		// device does not exist
+	
+	// update the property
+	dev->device.TRUSTED = isTrusted;
+	
 	return true;
 }
 
-bool bluetooth_device_property_update_trusted(int index, bool isTrusted)
+bool bluetooth_device_property_update_RSSI(const char * path, gint16 rssi)
 {
+	g_print("***\t Device: Updating Property RSSI\n"); 
+	Node *dev = scanListByPath(mHead, path);
+	
+	if(dev == NULL)
+		return false;		// device does not exist
+	
+	// update the property
+	dev->device.RSSI = rssi;
+	
 	return true;
 }
 
-bool bluetooth_device_property_update_RSSI(int index, gint16 rssi)
+bool bluetooth_device_property_update_alias(const char * path, const char * name)
 {
-	return true;
-}
-
-bool bluetooth_device_property_update_alias(int index, const char * name)
-{
+	g_print("***\t Device: Updating Property Alias\n"); 
+	Node *dev = scanListByPath(mHead, path);
+	
+	if(dev == NULL)
+		return false;		// device does not exist
+	
+	// update the property
+	strcpy(dev->device.ALIAS,name);
+	
 	return true;
 }
 

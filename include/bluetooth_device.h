@@ -49,10 +49,10 @@ bool bluetooth_device_remove_device_by_path(const char * path);														// 
 bool bluetooth_device_remove_all_devices();
 
 // functions to update the properites of the device
-bool bluetooth_device_property_add_service_UUID(int * index, const char * uuid);			// adds the UUID to SERVICE_UUIDS array for the device located at the specified index, reutrns false if UUID already exists, or array is full
-bool bluetooth_device_property_update_connection(int * index, bool isConnected);			// updates the connection status of the device located at the index, returns false if device cannot be found
-bool bluetooth_device_property_update_paired(int * index, bool isPaired);					// updates the paired status of the device located at the index, true = is paired, false = not paired, returns false if device canot be found
-bool bluetooth_device_property_update_trusted(int index, bool isTrusted);					// updates the trusted status of the device located at the index, true = is trusted, fasle, not trusted, returns false if device cannot be found
-bool bluetooth_device_property_update_RSSI(int index, gint16 rssi);							// updates the rssi value of the device located at the index, returns false if device cannot be found
-bool bluetooth_device_property_update_alias(int index, const char * name);					// updates the alias name of the device located at the index, returns false if device cannot be found (NOTE: name is truncated if it exceeds MAX_DEVICE_STRING_LEN
+bool bluetooth_device_property_add_service_UUID(const char * path, const char * uuid);			// adds the UUID to SERVICE_UUIDS array for the device located at the specified index, reutrns false if UUID already exists, or array is full
+bool bluetooth_device_property_update_connection(const char * path, bool isConnected);			// updates the connection status of the device located at the index, returns false if device cannot be found
+bool bluetooth_device_property_update_paired(const char * path, bool isPaired);					// updates the paired status of the device located at the index, true = is paired, false = not paired, returns false if device canot be found
+bool bluetooth_device_property_update_trusted(const char * path, bool isTrusted);					// updates the trusted status of the device located at the index, true = is trusted, fasle, not trusted, returns false if device cannot be found
+bool bluetooth_device_property_update_RSSI(const char * path, gint16 rssi);							// updates the rssi value of the device located at the index, returns false if device cannot be found
+bool bluetooth_device_property_update_alias(const char * path, const char * name);					// updates the alias name of the device located at the index, returns false if device cannot be found (NOTE: name is truncated if it exceeds MAX_DEVICE_STRING_LEN
 #endif

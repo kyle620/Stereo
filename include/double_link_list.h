@@ -33,5 +33,6 @@ bool clearList(Node **start);
 void printList(Node * node);
 Node * doesNodeExist(Node *head, const char * path);				// scans the list starting from given node, returns the Node whose path matches the one we are looking for, or NULL
 Node * scanList(Node *start, int index);							// traverses the list from start to end, returns the node whose index in the list matches the specified parameter
+Node * scanListByPath(Node *start, const char * path);				// traverses the list from start to end, returns the node whose path in the list matches the specified parameter
 #endif
 
