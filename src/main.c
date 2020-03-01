@@ -122,6 +122,13 @@ int main( int argc, char** argv )
 					bluez_adapter_mute_signals();
 				break;
 				case 9:
+					g_print("Enter the device number you want to remove...\n");
+					bluetooth_device_print_all();
+					
+					scanf("%d",&userInput);
+					
+					bluetooth_device_remove_device(userInput);
+					
 				break;
 				default:
 					printf("Unsupported Command\n");

@@ -121,43 +121,51 @@ bool insertBefore(Node** head_ref, Node* next_node, BluetoothDevice * newDevice)
 	
 	return true; 
 }  
- bool deleteNode(Node * start, const char * path)
+
+ bool deleteNode(Node ** start, const char * path)
  {
 	 // removes the Node that the device->Path matches the path given as parameter
 	 g_print("Double Linked List Delete Method %s\n",path);
 	 
 	 /*1. The list is empty */
-	 if(start == NULL)
+	 if(*start == NULL)
 		 return false;
 	 
 	 /*2. The node we want to remove is the head node */
-	 if(strcmp(start->device.PATH,path) == 0)
+	 if(strcmp((*start)->device.PATH,path) == 0)
 	 {
-		 // hold on to the next node
-		 Node * newHead = start->next;
+		 g_print("Remove Head\n");
+		 // Move head pointer to next node
+		 Node * temp = *start;
+		 *start = (*start)->next;
+		 
+		 // set the new head prev to NULL
+		 (*start)->prev = NULL;
 		 
 		 // unallocate the memory
-		 free(start);
+		 free(temp);
 		 
-		 // set the newHead prev to NULL
-		 newHead->prev = NULL;
-		 
-		 // set the new head
-		 start = newHead;
+		 return true;
 	 }
 	 
+	 g_print("Remove Node in List\n");
 	 /* 3. The node we want to remove is not at the front */
-	 Node * current = start->next;
-	 Node * previous = start;
+	 Node * current = (*start)->next;
+	 Node * previous = *start;
 	 
 	 while(current != NULL)
 	 {
 		 if(strcmp(current->device.PATH,path) == 0)
 		 {
+			 g_print("1\n");
 			 // found the node to delete
-			 previous->next = current->next;
-			current->next->prev = previous;
+			previous->next = current->next;
 			
+			// change the next only if node to be deleted is not the last node
+			if(previous->next != NULL)
+				current->next->prev = previous->next;
+			
+			g_print("2\n");
 			free(current);
 			
 			return true;
@@ -168,26 +176,76 @@ bool insertBefore(Node** head_ref, Node* next_node, BluetoothDevice * newDevice)
 	 
 	 return false;
  }
+
+/* unallocates all the memory of the list */
+bool clearList(Node **start)
+ {
+	  g_print("Double Linked List Clear List\n");
+	  
+	 if(*start == NULL)
+		 return false;
+	 
+	 Node * current = (*start)->next;
+	 Node * temp = NULL;
+	 
+	 g_print("***\tRemoving %s\n",(*start)->device.PATH);
+	 
+	 free(*start);
+	 
+	 while(current != NULL)
+	 {
+		temp = current->next;
+		g_print("***\tRemoving %s\n",current->device.PATH);
+		free(current);
+		current = temp;
+	 }
+	
+	*start = NULL;
+	
+	 return true;
+	 
+ }
+ 
  /*
   * Accessors
 */
 // This function prints contents of linked list starting from the given node  
 void printList(Node* node)  
 {  
+	int index = 1;
     Node* last;  
-	g_print("\nTraversal in forward direction \n");  
+	g_print("\nList of devices\n");  
     while (node != NULL) {  
-        g_print(" %s ", node->device.PATH);  
+        g_print("%d. %s\n", index, node->device.PATH);  
         last = node;  
-        node = node->next;  
+        node = node->next;
+		index++;
     }  
   
-    g_print("\nTraversal in reverse direction \n");  
-    while (last != NULL) {  
-		g_print(" %s ", node->device.PATH);   
-		last = last->prev;  
-    }  
+   // g_print("\nTraversal in reverse direction \n");  
+   // while (last != NULL) {  
+	//	g_print(" %s ", last->device.PATH);   
+	//	last = last->prev;  
+   // }
 }  
+
+Node * scanList(Node *start, int index)
+{
+	int count = 1;
+	
+	Node *previous, *current;
+	current = start->next;
+	previous = start;
+	
+	while(current != NULL && count != index)
+	{
+		previous = current;
+		current = current->next;
+		count++;
+	}
+	
+	return previous;
+}
 
 /*
  * Private Helpers

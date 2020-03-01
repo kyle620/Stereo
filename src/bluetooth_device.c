@@ -66,13 +66,14 @@ void bluetooth_device_print(BluetoothDevice * device)
 
 void bluetooth_device_print_all(void)
 {
-	int i;
+	//int i;
 	
-	for(i = 0; i < mNumberOfDevices; i++)
-	{
-		g_print("Device %d:\n",i);
-		bluetooth_device_print(&mBluetoothDeviceArray[i]);
-	}
+	//for(i = 0; i < mNumberOfDevices; i++)
+	//{
+	//	g_print("Device %d:\n",i);
+	//	bluetooth_device_print(&mBluetoothDeviceArray[i]);
+	//}
+	printList(mHead);
 
 }
 
@@ -109,14 +110,29 @@ int	bluetooth_device_add_device(BluetoothDevice * newDevice)
 	return 0;
 }
 
-bool bluetooth_device_remove_device(const char * path)
+bool bluetooth_device_remove_device(int index)
 {
-		return deleteNode(mHead,path);
+		Node * nodeToDelete = scanList(mHead,index);
+		if(nodeToDelete != NULL)
+		{
+			g_print("***\t List before delete\n");
+			printList(mHead);
+			deleteNode(&mHead,nodeToDelete->device.PATH);
+			g_print("***\t List After delete\n");
+			printList(mHead);
+			return true;
+		}
+	return false;
 }
 
 bool bluetooth_device_remove_all_devices()
 {
-		return deleteNode(mHead,path);
+		g_print("***\t List before delete\n");
+		printList(mHead);
+		clearList(&mHead);
+		g_print("***\t List After delete\n");
+		printList(mHead);
+		return true;
 }
 
 bool bluetooth_get_device_address_at_index(int index, char * addrContainer, bool deleteFlag)

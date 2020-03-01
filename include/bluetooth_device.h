@@ -45,7 +45,7 @@ char * bluetooth_get_device_path_at_index(int index);
 *	Modifiers
 */
 int bluetooth_device_add_device(BluetoothDevice * newDevice);													// returns 0 on success, -1 device already exists, and -2 if device list is full
-bool bluetooth_device_remove_device(const char * address);														// returns false if device not found
+bool bluetooth_device_remove_device(int index);														// returns false if device not found
 bool bluetooth_device_remove_all_devices();
 
 // functions to update the properites of the device
