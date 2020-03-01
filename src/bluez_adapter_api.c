@@ -262,19 +262,6 @@ bool bluez_adapter_pairable(bool value)
 
 void bluez_adapter_init_signals(void)
 {
-	/* TODO move to appropiate file, doesnt belong to adapter
-		guint pro_changed = g_dbus_connection_signal_subscribe(mCon,
-						"org.bluez",
-						"org.freedesktop.DBus.Properties",
-						"PropertiesChanged",
-						NULL,
-						"org.bluez.MediaPlayer1",
-						G_DBUS_SIGNAL_FLAGS_NONE,
-						bluez_signal_device_changed,
-						NULL,
-						NULL);
-						*/
-	
 	prop_changed = g_dbus_connection_signal_subscribe(mCon,
 						BLUEZ_BUS_NAME,						// defined in bluez_dbus_names.h
 						"org.freedesktop.DBus.Properties",
@@ -498,8 +485,12 @@ static void bluez_device_disappeared(GDBusConnection *sig,
 	char address[BT_ADDRESS_STRING_SIZE] = {'\0'};
 	
 	g_print("\n****\t Device Disappeared \t****\n");
-
+	
 	g_variant_get(parameters, "(&oas)", &object, &interfaces);
+	
+	// remove the device from the double linked list
+	bluetooth_device_remove_device_by_path(object);
+	
 	while(g_variant_iter_next(interfaces, "s", &interface_name)) {
 		if(g_strstr_len(g_ascii_strdown(interface_name, -1), -1, "device")) {
 			int i;

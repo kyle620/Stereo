@@ -33,7 +33,6 @@ struct _BluetoothDevice{
 */
 
 int bluetooth_device_get_number_devices(void);
-bool bluetooth_device_already_exists(const char * address);
 void bluetooth_device_print_properties(BluetoothDevice * device);																// Prints the information out
 void bluetooth_device_print_all(void);
 bool bluetooth_get_device_address_at_index(int index, char * addrContainer, bool deleteFlag);		// returns true success, deletetFlag == true, removes it from list

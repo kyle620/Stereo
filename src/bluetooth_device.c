@@ -85,19 +85,37 @@ bool bluetooth_device_remove_device_by_index(int index)
 	Node * nodeToDelete = scanList(mHead,index);
 	
 	if(nodeToDelete != NULL)
-		return deleteNode(&mHead,nodeToDelete->device.PATH);
+	{
+		if(deleteNode(&mHead,nodeToDelete->device.PATH))
+		{
+			mNumberOfDevices--;		// decrement the number of devices
+			return true;
+		}
+	}
 
 	return false;
 }
 
 bool bluetooth_device_remove_device_by_path(const char * path)
 {
-	return deleteNode(&mHead,path);
+	if(deleteNode(&mHead,path))
+	{
+		mNumberOfDevices--;			// Decrement the number of devices
+		return true;
+	}
+	else
+		return false;
 }
 
 bool bluetooth_device_remove_all_devices()
 {
-	return clearList(&mHead);
+	if(clearList(&mHead))
+	{
+		mNumberOfDevices = 0;
+		return true;
+	}
+	
+	return false;
 }
 
 bool bluetooth_get_device_address_at_index(int index, char * addrContainer, bool deleteFlag)
@@ -112,7 +130,8 @@ bool bluetooth_get_device_address_at_index(int index, char * addrContainer, bool
 		strcpy(addrContainer, dev->device.PATH);
 		
 		if(deleteFlag)
-			result = deleteNode(&mHead, dev->device.PATH);
+			if(deleteNode(&mHead, dev->device.PATH))
+				mNumberOfDevices--;
 	}
 	else
 		result = false;

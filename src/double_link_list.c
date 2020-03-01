@@ -134,8 +134,6 @@ bool insertBefore(Node** head_ref, Node* next_node, BluetoothDevice * newDevice)
 	 /*2. The node we want to remove is the head node */
 	 if(strcmp((*start)->device.PATH,path) == 0)
 	 {
-		 g_print("Remove Head\n");
-		 
 		 // Move head pointer to next node
 		 Node * temp = *start;
 		 *start = (*start)->next;
@@ -150,7 +148,6 @@ bool insertBefore(Node** head_ref, Node* next_node, BluetoothDevice * newDevice)
 		 return true;
 	 }
 	 
-	 g_print("Remove Node in List\n");
 	 /* 3. The node we want to remove is not at the front */
 	 Node * current = (*start)->next;
 	 Node * previous = *start;
@@ -159,7 +156,6 @@ bool insertBefore(Node** head_ref, Node* next_node, BluetoothDevice * newDevice)
 	 {
 		 if(strcmp(current->device.PATH,path) == 0)
 		 {
-			 g_print("1\n");
 			 // found the node to delete
 			previous->next = current->next;
 			
@@ -167,7 +163,6 @@ bool insertBefore(Node** head_ref, Node* next_node, BluetoothDevice * newDevice)
 			if(previous->next != NULL)
 				current->next->prev = previous->next;
 			
-			g_print("2\n");
 			free(current);
 			
 			return true;
