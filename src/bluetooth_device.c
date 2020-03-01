@@ -7,12 +7,11 @@
 /**
 * Private Function Declerations
 */
-void bluetooth_device_create_device(BluetoothDevice *device);
+
 
 /** 
 * Private Variables
 **/
-static BluetoothDevice mBluetoothDeviceArray[MAX_NUMBER_DEVICES];
 static Node * mHead = NULL;
 
 int mNumberOfDevices = 0;
@@ -27,25 +26,10 @@ int bluetooth_device_get_number_devices(void)
 	return mNumberOfDevices;
 }
 
-bool bluetooth_device_already_exists(const gchar * path)
+void bluetooth_device_print_properties(BluetoothDevice * device)
 {
 	int i;
-	bool result = false;
-	for(i = 0; i < mNumberOfDevices; i++)
-	{
-		if(strcmp(mBluetoothDeviceArray[i].PATH, path) == 0)
-		{
-			result = true;
-			break;
-		}
-	}
-	
-	return result;
-}
-
-void bluetooth_device_print(BluetoothDevice * device)
-{
-	int i;
+	 
 	g_print("\n***\t\t Device Properties \t\t***\n\n");
 	g_print("\t-Path:\t %s\n",device->PATH);
 	g_print("\t-Alias:\t %s\n",device->ALIAS);
@@ -66,22 +50,16 @@ void bluetooth_device_print(BluetoothDevice * device)
 
 void bluetooth_device_print_all(void)
 {
-	//int i;
-	
-	//for(i = 0; i < mNumberOfDevices; i++)
-	//{
-	//	g_print("Device %d:\n",i);
-	//	bluetooth_device_print(&mBluetoothDeviceArray[i]);
-	//}
 	printList(mHead);
-
 }
 
 char * bluetooth_get_device_path_at_index(int index)
 {
-	if(index < MAX_NUMBER_DEVICES)
+	Node * dev = scanList(mHead,index);
+	
+	if(dev != NULL)
 	{
-		return &mBluetoothDeviceArray[index].PATH;
+		return dev->device.PATH;
 	}
 	else
 		return NULL;
@@ -92,73 +70,61 @@ char * bluetooth_get_device_path_at_index(int index)
 */
 int	bluetooth_device_add_device(BluetoothDevice * newDevice)
 {
-	// TODO implement
-	
-	// check if we have room to add another device
-	if(mNumberOfDevices > MAX_NUMBER_DEVICES)
-		return -2;
-	else if(bluetooth_device_already_exists(newDevice->PATH))
-		return -1;
-	else
+	if(append(&mHead, newDevice))
 	{
-		g_print("\nDevice:	\t Adding Device %s\n",newDevice->PATH);
-		//bluetooth_device_create_device(newDevice);
-		if(append(&mHead, newDevice))
-			mNumberOfDevices++;
+		g_print("\nDevice:\t Adding Device %s\n",newDevice->PATH);
+		mNumberOfDevices++;
+		return 0;
 	}
 	
-	return 0;
+	return -1;
 }
 
-bool bluetooth_device_remove_device(int index)
+bool bluetooth_device_remove_device_by_index(int index)
 {
-		Node * nodeToDelete = scanList(mHead,index);
-		if(nodeToDelete != NULL)
-		{
-			g_print("***\t List before delete\n");
-			printList(mHead);
-			deleteNode(&mHead,nodeToDelete->device.PATH);
-			g_print("***\t List After delete\n");
-			printList(mHead);
-			return true;
-		}
+	Node * nodeToDelete = scanList(mHead,index);
+	
+	if(nodeToDelete != NULL)
+		return deleteNode(&mHead,nodeToDelete->device.PATH);
+
 	return false;
+}
+
+bool bluetooth_device_remove_device_by_path(const char * path)
+{
+	return deleteNode(&mHead,path);
 }
 
 bool bluetooth_device_remove_all_devices()
 {
-		g_print("***\t List before delete\n");
-		printList(mHead);
-		clearList(&mHead);
-		g_print("***\t List After delete\n");
-		printList(mHead);
-		return true;
+	return clearList(&mHead);
 }
 
 bool bluetooth_get_device_address_at_index(int index, char * addrContainer, bool deleteFlag)
 {
-	/** TODO need to implement a delete operation
-	* 	Costly operation due to nature of arrays
-	*	- dynamically need to readjust the size of the arrays
-	*		- copy all devices but the one we are removing into a temp array 
-	*		- move back over to array
-	*	- Investigate using a different storage container that isn't an array
-	**/
-	if(index < MAX_NUMBER_DEVICES)
+	bool result = true;
+	
+	/*1. Grab the node with the device we want */
+	Node * dev = scanList(mHead,index);
+	
+	if(dev != NULL)
 	{
-		strcpy(addrContainer, mBluetoothDeviceArray[index].PATH);
-		return true;
+		strcpy(addrContainer, dev->device.PATH);
+		
+		if(deleteFlag)
+			result = deleteNode(&mHead, dev->device.PATH);
 	}
 	else
-		return false;
+		result = false;
+	
+	return result;
 	
 }	
 
 // functions to update the properties of a device
 bool bluetooth_device_property_add_service_UUID(int * index, const char * uuid)
 {
-	if(&index < 0 || &index > MAX_NUMBER_DEVICES)
-		return false;
+	return true;
 }
 
 bool bluetooth_device_property_update_connection(int * index, bool isConnected)
@@ -189,30 +155,3 @@ bool bluetooth_device_property_update_alias(int index, const char * name)
 /*
 * Private Functions
 */
-
-/**
-*	This function will store the newley created device into this classes device array
-*	The reason we store this in this file is so that the program does not have
-* 	to create multiple device arrays. This is the one place that holds them
-**/
-void bluetooth_device_create_device(BluetoothDevice *device)
-{
-	int i;
-	// need to copy over all contents into device array
-	strcpy(mBluetoothDeviceArray[mNumberOfDevices].PATH,device->PATH);
-	strcpy(mBluetoothDeviceArray[mNumberOfDevices].MAC_ADDRESS,device->MAC_ADDRESS);
-	strcpy(mBluetoothDeviceArray[mNumberOfDevices].ALIAS,device->ALIAS);
-	
-	mBluetoothDeviceArray[mNumberOfDevices].PAIRED = device->PAIRED;
-	mBluetoothDeviceArray[mNumberOfDevices].TRUSTED = device->TRUSTED;
-	mBluetoothDeviceArray[mNumberOfDevices].CONNECTED = device->CONNECTED;
-	mBluetoothDeviceArray[mNumberOfDevices].RSSI = device->RSSI;
-	mBluetoothDeviceArray[mNumberOfDevices].NUMBER_OF_UUIDS = device->NUMBER_OF_UUIDS;
-	
-	for(i = 0; i < mBluetoothDeviceArray[mNumberOfDevices].NUMBER_OF_UUIDS; i++)
-		strcpy(mBluetoothDeviceArray[mNumberOfDevices].SERVICE_UUIDS[i],device->SERVICE_UUIDS[i]);
-	
-	bluetooth_device_print(&mBluetoothDeviceArray[mNumberOfDevices]);
-	
-	mNumberOfDevices++;
-}

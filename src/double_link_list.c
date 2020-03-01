@@ -135,12 +135,14 @@ bool insertBefore(Node** head_ref, Node* next_node, BluetoothDevice * newDevice)
 	 if(strcmp((*start)->device.PATH,path) == 0)
 	 {
 		 g_print("Remove Head\n");
+		 
 		 // Move head pointer to next node
 		 Node * temp = *start;
 		 *start = (*start)->next;
 		 
-		 // set the new head prev to NULL
-		 (*start)->prev = NULL;
+		 // set the new head prev to NULL if not NULL
+		 if(*start != NULL)
+			(*start)->prev = NULL;
 		 
 		 // unallocate the memory
 		 free(temp);
@@ -212,21 +214,14 @@ bool clearList(Node **start)
 // This function prints contents of linked list starting from the given node  
 void printList(Node* node)  
 {  
-	int index = 1;
-    Node* last;  
+	int index = 1; 
 	g_print("\nList of devices\n");  
-    while (node != NULL) {  
+    while (node != NULL) 
+	{  
         g_print("%d. %s\n", index, node->device.PATH);  
-        last = node;  
         node = node->next;
 		index++;
     }  
-  
-   // g_print("\nTraversal in reverse direction \n");  
-   // while (last != NULL) {  
-	//	g_print(" %s ", last->device.PATH);   
-	//	last = last->prev;  
-   // }
 }  
 
 Node * scanList(Node *start, int index)

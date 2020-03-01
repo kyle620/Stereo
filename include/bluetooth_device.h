@@ -34,7 +34,7 @@ struct _BluetoothDevice{
 
 int bluetooth_device_get_number_devices(void);
 bool bluetooth_device_already_exists(const char * address);
-void bluetooth_device_print(BluetoothDevice * device);																// Prints the information out
+void bluetooth_device_print_properties(BluetoothDevice * device);																// Prints the information out
 void bluetooth_device_print_all(void);
 bool bluetooth_get_device_address_at_index(int index, char * addrContainer, bool deleteFlag);		// returns true success, deletetFlag == true, removes it from list
 char * bluetooth_get_device_path_at_index(int index);
@@ -45,7 +45,8 @@ char * bluetooth_get_device_path_at_index(int index);
 *	Modifiers
 */
 int bluetooth_device_add_device(BluetoothDevice * newDevice);													// returns 0 on success, -1 device already exists, and -2 if device list is full
-bool bluetooth_device_remove_device(int index);														// returns false if device not found
+bool bluetooth_device_remove_device_by_index(int index);
+bool bluetooth_device_remove_device_by_path(const char * path);														// returns false if device not found
 bool bluetooth_device_remove_all_devices();
 
 // functions to update the properites of the device

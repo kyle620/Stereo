@@ -128,9 +128,11 @@ int bluez_adapter_init(GDBusConnection * conn)
 
 void bluez_adapter_deinit()
 {
-	//TODO handle cleanup
 	
 	g_print("Adapter Deinitializing...\n");
+	
+	if(!mAdapterOn)
+		return;
 	
 	bluez_adapter_mute_signals();
 	
@@ -138,12 +140,15 @@ void bluez_adapter_deinit()
 	int i;
 	char objectPath[MAX_DEVICE_STRING_LEN];
 	
-	//for(i = 0; i < numberDevices; i++)
-	//{
-		//bluetooth_get_device_address_at_index(i, objectPath, true);
-		//bluez_adapter_remove_device_found(objectPath);
-	//}
-	bluetooth_device_remove_all_devices();
+	for(i = 0; i < numberDevices; i++)
+	{
+		// remove the device from the double linked list
+		bluetooth_get_device_address_at_index(i, objectPath, true);
+		
+		// remove the device from the adapter
+		bluez_adapter_remove_device_found(objectPath);
+	}
+	
 	bluez_adapter_power_off();
 
 }

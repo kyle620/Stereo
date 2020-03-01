@@ -127,7 +127,7 @@ int main( int argc, char** argv )
 					
 					scanf("%d",&userInput);
 					
-					bluetooth_device_remove_device(userInput);
+					bluetooth_device_remove_device_by_index(userInput);
 					
 				break;
 				default:
