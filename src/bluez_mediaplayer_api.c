@@ -171,35 +171,30 @@ static void bluez_mediaplayer_properties_changed(GDBusConnection *sig,
 				GVariant *parameters,
 				gpointer user_data)
 {
-	(void)sig;
-	(void)sender_name;
+	//(void)sig;
+	//(void)sender_name;
 	(void)object_path;
-	(void)interface;
-	(void)signal_name;
-	(void)user_data;
+	//(void)interface;
+	//(void)signal_name;
+	//(void)user_data;
 
 	GVariantIter *intr;
-	GVariantIter *intr2;
 	const char *object;
 	const char * key;
 	GVariant * unknown;
 	GVariant * value;
-	GVariant * value2;
 	
 	g_print("\n****\t Properties Changed \t****\n");
 	
 	g_print ("\t- Object Path: %s\n", object_path);
 	g_variant_get(parameters, "(&sa{sv}as)", &object, &intr,&unknown);
 	
-	g_print("U: %s\n", unknown);
-	
-	
-	
+	g_print("Unkown: %s\n", g_variant_get_string(unknown,NULL));
 	
 	while(g_variant_iter_next(intr, "{sv}", &key, &value)) 
 		bluez_property_value(key,value);
 		
-	//g_variant_unref(unknown);
+	g_variant_unref(unknown);
 	return;
 }
 

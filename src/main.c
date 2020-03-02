@@ -37,7 +37,7 @@ static void* gdbusMainLoopThread(void* aArg);
 * Private Variables
 */
 static GDBusConnection * connection;
-static GDBusProxy *deviceProxy;		/* Must be freed with g_object_unref when done with it */
+//static GDBusProxy *deviceProxy;		/* Must be freed with g_object_unref when done with it */
 static GError *error;
 
 int main( int argc, char** argv )
@@ -46,8 +46,8 @@ int main( int argc, char** argv )
 	bool run = true;
 	int userInput = 99;
 	//int option = 99;
-	char path[100];
-	char fileArray[MAX_NUMBER_FILES][MAX_STRING_LEN];		// defined in file_reader.h
+	//char path[100];
+	//char fileArray[MAX_NUMBER_FILES][MAX_STRING_LEN];		// defined in file_reader.h
 	
 	//sprintf(path,"%s","/var/lib/bluetooth/DC:A6:32:36:5C:D2/cache");
 	//listFiles(path, fileArray,false);

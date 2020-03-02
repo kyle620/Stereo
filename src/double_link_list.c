@@ -11,7 +11,7 @@
  * Private Helpers
 */
 // transfers the BluetoothDevice data into the new node
-void static transfer_bluetooth_device_data(Node * new_node, BluetoothDevice * newDevice);
+static void transfer_bluetooth_device_data(Node * new_node, BluetoothDevice * newDevice);
 
 /* Given a reference (pointer to pointer) to the head of a list  
 and an int, inserts a new node on the front of the list. */
@@ -256,7 +256,7 @@ Node * scanListByPath(Node *start, const char * path)
 /*
  * Private Helpers
 */
-void static transfer_bluetooth_device_data(Node * new_node, BluetoothDevice * newDevice)
+static void transfer_bluetooth_device_data(Node * new_node, BluetoothDevice * newDevice)
 {
 	int i;
 	

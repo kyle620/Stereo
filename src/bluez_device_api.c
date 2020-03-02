@@ -145,12 +145,11 @@ static void bluez_signal_device_changed(GDBusConnection *conn,
                     GVariant *params,
                     void *userdata)
 {
-    (void)conn;
-    (void)sender;
+    //(void)conn;
+    //(void)sender;
     (void)path;
     (void)interface;
-    (void)userdata;
-	static GError *error;
+    //(void)userdata;
     GVariantIter *properties = NULL;
     GVariantIter *unknown = NULL;
     const char *iface;
@@ -169,19 +168,8 @@ static void bluez_signal_device_changed(GDBusConnection *conn,
 
     g_variant_get(params, "(&sa{sv}as)", &iface, &properties, &unknown);
     while(g_variant_iter_next(properties, "{&sv}", &key, &value))
-	{
 		bluez_device_parse_properties(path,key, value);
-		
-		//g_print("[ Key %s  value: %s]\n", key, g_variant_print(value,TRUE));
-        //if(!g_strcmp0(key, "Connected")) {
-           // if(!g_variant_is_of_type(value, G_VARIANT_TYPE_BOOLEAN)) {
-               // g_print("Invalid argument type for %s: %s != %s", key,
-                        //g_variant_get_type_string(value), "b");
-               // goto done;
-            //}
-           // g_print("Device is \"%s\"\n", g_variant_get_boolean(value) ? "Connected" : "Disconnected");
-        //}
-    }
+
 	g_print("***\tDevice Signal Properties Changed\t***\n");
 	
 	done:

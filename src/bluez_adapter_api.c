@@ -487,11 +487,12 @@ static void bluez_device_disappeared(GDBusConnection *sig,
 				GVariant *parameters,
 				gpointer user_data)
 {
-	(void)sig;
-	(void)sender_name;
-	(void)object_path;
-	(void)interface;
-	(void)signal_name;
+	//(void)sig;
+	//(void)sender_name;
+	//(void)object_path;
+	//(void)interface;
+	//(void)signal_name;
+	//(void)user_data;
 
 	GVariantIter *interfaces;
 	const char *object;

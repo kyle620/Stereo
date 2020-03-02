@@ -195,7 +195,8 @@ static void bluez_agent_method_call(GDBusConnection *conn,
     int entered;
     char *opath;
 	char * uuid;
-    GVariant *p= g_dbus_method_invocation_get_parameters(invocation);
+   
+	//GVariant *p = g_dbus_method_invocation_get_parameters(invocation);
 
     g_print("Agent method call: %s.%s()\n", interface, method);
     if(!strcmp(method, "RequestPinCode")) {
@@ -206,9 +207,8 @@ static void bluez_agent_method_call(GDBusConnection *conn,
     }
     else if(!strcmp(method, "RequestPasskey")) {
         g_print("Getting the Pin from user: ");
-        fscanf(stdin, "%d", &pass);
-        g_print("\n");
-        g_dbus_method_invocation_return_value(invocation, g_variant_new("(u)", pass));
+        if(fscanf(stdin, "%d", &pass) > 0)
+			g_dbus_method_invocation_return_value(invocation, g_variant_new("(u)", pass));
     }
     else if(!strcmp(method, "DisplayPasskey")) {
         g_variant_get(params, "(ouq)", &opath, &pass, &entered);
