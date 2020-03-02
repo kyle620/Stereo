@@ -181,28 +181,27 @@ static void bluez_mediaplayer_properties_changed(GDBusConnection *sig,
 	GVariantIter *intr;
 	const char *object;
 	const char * key;
-	GVariant * unknown;
 	GVariant * value;
+	GVariant * unknown;
 	
-	g_print("\n****\t Properties Changed \t****\n");
+	g_print("\n****\t MediaPlayer Properties Changed \t****\n");
 	
 	g_print ("\t- Object Path: %s\n", object_path);
-	g_variant_get(parameters, "(&sa{sv}as)", &object, &intr,&unknown);
-	
-	g_print("Unkown: %s\n", g_variant_get_string(unknown,NULL));
-	
+	g_variant_get(parameters, "(&sa{sv}as)", &object, &intr, &unknown);
+
 	while(g_variant_iter_next(intr, "{sv}", &key, &value)) 
 		bluez_property_value(key,value);
-		
-	g_variant_unref(unknown);
-	return;
+	
+	/* Do not unref, it gets cleaned up on its own */
+	//g_variant_unref(intr);
+	//g_variant_unref(value);
 }
 
 static void bluez_property_value(const gchar *key, GVariant *value)
 {
 	const gchar *type = g_variant_get_type_string(value);
 	
-	g_print("\t%s : ", key);
+	g_print("\t- %s: ", key);
 	switch(*type) {
 		case 'o':
 		case 's':
@@ -243,8 +242,11 @@ static void bluez_mediaplayer_print_track_data(GVariant * mediadata)
 	
 	g_variant_get(mediadata, "a{sv}", &intr);
 	
-	while(g_variant_iter_next(intr, "{sv}", &key, &trackInfo)) 
+	while(g_variant_iter_next(intr, "{sv}", &key, &trackInfo))
+	{
+		g_print("\n\t");
 		bluez_property_value(key,trackInfo);
+	}
 }
 
 

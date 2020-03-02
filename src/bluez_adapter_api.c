@@ -121,7 +121,7 @@ int bluez_adapter_init(GDBusConnection * conn)
 		return -3;
 	}
 	
-	bluez_adapter_init_signals();
+	//bluez_adapter_init_signals();
 	
 	return 0;
 }
@@ -220,11 +220,11 @@ bool bluez_adapter_scan_on(void)
 	int rc = 0;
 	bool ret = true;
 	
-	//bluez_adapter_print_filter_settings();
+	bluez_adapter_print_filter_settings();
 	
-	//bluez_adapter_set_filter_default();
+	bluez_adapter_set_filter_default();
 	
-	//bluez_adapter_print_filter_settings();
+	bluez_adapter_print_filter_settings();
 	
 	printf("Starting Scan...\n");
 	

@@ -18,7 +18,8 @@ static void bluez_signal_device_changed(GDBusConnection *conn,
                     GVariant *params,
                     void *userdata);
 static void bluez_device_parse_properties(const char* path, const char * key, GVariant * propertyValue);
-
+static int bluez_device_read_property(const char * path, const char *property);
+static void bluez_device_get_property_cb(GObject *con,GAsyncResult *res,gpointer data);
 /*
 *	Private Variables
 */
@@ -136,7 +137,9 @@ bool bluez_device_pair_device(const char *objectPath)
 	return succeed;
 }
 
-
+/*
+ * Private Functions
+*/
 static void bluez_signal_device_changed(GDBusConnection *conn,
                     const gchar *sender,
                     const gchar *path,
@@ -179,6 +182,45 @@ static void bluez_signal_device_changed(GDBusConnection *conn,
 			g_variant_unref(value);
 }
 
+static int bluez_device_read_property(const char * path, const char *property)
+{
+
+	GError *error = NULL;
+
+	g_dbus_connection_call(mCon,
+					     BLUEZ_BUS_NAME,						// defined in bluez_dbus_names.h
+					     path,						// defined in bluez_dbus_names.h
+					     "org.freedesktop.DBus.Properties",
+					     "Get",
+					     g_variant_new("(ss)", BLUEZ_DEVICE_INTERFACE, property),
+					     NULL,
+					     G_DBUS_CALL_FLAGS_NONE,
+					     -1,
+						 NULL,
+					     bluez_device_get_property_cb,
+					     &error);
+	if(error != NULL)
+		return -1;
+
+	return 0;
+}
+
+static void bluez_device_get_property_cb(GObject *con,GAsyncResult *res,gpointer data)
+{
+	(void)data;
+	GVariant *result = NULL;
+	result = g_dbus_connection_call_finish((GDBusConnection *)con, res, NULL);
+	if(result == NULL)
+		g_print("Unable to get result for GetDiscoveryFilter\n");
+
+	if(result) {
+		result = g_variant_get_child_value(result, 0);
+		g_print("Property Value %s\n",g_variant_print(result,true));
+	
+	}
+	g_variant_unref(result);
+}
+
 static void bluez_device_parse_properties(const char * path, const char * propertyKey, GVariant * propertyValue)
 {
 	g_print("[ Property Key %s  value: %s]\n", propertyKey, g_variant_print(propertyValue,TRUE));
@@ -191,7 +233,13 @@ static void bluez_device_parse_properties(const char * path, const char * proper
 		if(!g_variant_is_of_type(propertyValue, G_VARIANT_TYPE_BOOLEAN))
             g_print("Invalid argument type for %s: %s != %s", propertyKey,g_variant_get_type_string(propertyValue), "b");
 		else
+		{
+			// Trust the device if we have paired with it
+			if(g_variant_get_boolean(propertyValue))
+				bluez_device_trust_device(path);
+			
 			bluetooth_device_property_update_connection(path,g_variant_get_boolean(propertyValue));
+		}
 	}
 	else if(strcmp(propertyKey, "Paired") == 0)
 	{
@@ -232,4 +280,6 @@ static void bluez_device_parse_properties(const char * path, const char * proper
 				bluetooth_device_property_add_service_UUID(path,g_variant_get_string(uuid,NULL));
 		}
 	}
+	
+	bluez_device_read_property(path, "Icon");
 }
