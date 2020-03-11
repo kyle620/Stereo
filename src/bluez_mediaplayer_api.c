@@ -13,6 +13,13 @@ static void bluez_mediaplayer_properties_changed(GDBusConnection *sig,
 				const gchar *signal_name,
 				GVariant *parameters,
 				gpointer user_data);
+static void bluez_mediaplayer_mediacontrol_properties_changed(GDBusConnection *sig,
+				const gchar *sender_name,
+				const gchar *object_path,
+				const gchar *interface,
+				const gchar *signal_name,
+				GVariant *parameters,
+				gpointer user_data);
 static void bluez_property_value(const gchar *key, GVariant *value);
 static void bluez_mediaplayer_print_track_data(GVariant * mediadata);
 /*
@@ -22,6 +29,7 @@ static GDBusConnection *mCon;
 static MediaPlayer mDefaultPlayer;
 static guint iface_added;
 static guint prop_changed;
+static guint prop_changed_control;
 
 /*
  * Accessors
@@ -59,12 +67,24 @@ void bluez_mediaplayer_init_signals(void)
 							bluez_mediaplayer_properties_changed,
 							NULL,
 							NULL);
+							
+	prop_changed_control = g_dbus_connection_signal_subscribe(mCon,
+							BLUEZ_BUS_NAME,							// defined in bluez_dbus_names.h
+							"org.freedesktop.DBus.Properties",
+							"PropertiesChanged",
+							NULL,									// NULL so we can listen for all object paths
+							BLUEZ_MediaController_INTERFACE,			// defined in bluez_dbus_names.h
+							G_DBUS_SIGNAL_FLAGS_NONE,
+							bluez_mediaplayer_mediacontrol_properties_changed,
+							NULL,
+							NULL);
 }
 
 void bluez_mediaplayer_mute_signals(void)
 {
 	g_dbus_connection_signal_unsubscribe(mCon, iface_added);
 	g_dbus_connection_signal_unsubscribe(mCon, prop_changed);
+	g_dbus_connection_signal_unsubscribe(mCon, prop_changed_control);
 }
  
  void bluez_media_player_update_remote_device_property(const char * prop_name, const char * value)
@@ -132,7 +152,7 @@ static int bluez_mediaplayer_call_method( const char *method, GVariant *param)
 					     &error);
 	if(error != NULL)
 	{
-		g_print("Method Call Error: %s",error->message);
+		g_print("***\tMediaPlayer Method Call Error: %s",error->message);
 		return -1;
 	}
 
@@ -185,6 +205,41 @@ static void bluez_mediaplayer_properties_changed(GDBusConnection *sig,
 	GVariant * unknown;
 	
 	g_print("\n****\t MediaPlayer Properties Changed \t****\n");
+	
+	g_print ("\t- Object Path: %s\n", object_path);
+	g_variant_get(parameters, "(&sa{sv}as)", &object, &intr, &unknown);
+
+	while(g_variant_iter_next(intr, "{sv}", &key, &value)) 
+		bluez_property_value(key,value);
+	
+	/* Do not unref, it gets cleaned up on its own */
+	//g_variant_unref(intr);
+	//g_variant_unref(value);
+}
+
+static void bluez_mediaplayer_mediacontrol_properties_changed(GDBusConnection *sig,
+				const gchar *sender_name,
+				const gchar *object_path,
+				const gchar *interface,
+				const gchar *signal_name,
+				GVariant *parameters,
+				gpointer user_data)
+{
+	//(void)sig;
+	//(void)sender_name;
+	(void)object_path;
+	//(void)interface;
+	//(void)signal_name;
+	//(void)user_data;
+
+	GVariantIter *intr;
+	const char *object;
+	const char * key;
+	GVariant * value;
+	GVariant * unknown;
+	
+	g_print("\n****\t MediaPlayer\tMedia Controller Properties Changed \t****\n");
+	//g_print("Type: %s\n", g_variant_get_type_string(parameters));
 	
 	g_print ("\t- Object Path: %s\n", object_path);
 	g_variant_get(parameters, "(&sa{sv}as)", &object, &intr, &unknown);

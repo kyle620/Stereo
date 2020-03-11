@@ -91,16 +91,16 @@ bool bluetooth_device_get_property_paired(BluetoothDevice * device)
 /*
 *	Modifiers
 */
-int	bluetooth_device_add_device(BluetoothDevice * newDevice)
+bool bluetooth_device_add_device(BluetoothDevice * newDevice)
 {
 	if(append(&mHead, newDevice))
 	{
 		g_print("\nDevice:\t Adding Device %s\n",newDevice->PATH);
 		mNumberOfDevices++;
-		return 0;
+		return true;
 	}
 	
-	return -1;
+	return false;
 }
 
 bool bluetooth_device_remove_device_by_index(int index)

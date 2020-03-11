@@ -47,7 +47,7 @@ bool bluetooth_device_get_property_paired(BluetoothDevice * device);
 /*
 *	Modifiers
 */
-int bluetooth_device_add_device(BluetoothDevice * newDevice);													// returns 0 on success, -1 device already exists, and -2 if device list is full
+bool bluetooth_device_add_device(BluetoothDevice * newDevice);													// returns 0 on success, -1 device already exists, and -2 if device list is full
 bool bluetooth_device_remove_device_by_index(int index);
 bool bluetooth_device_remove_device_by_path(const char * path);														// returns false if device not found
 bool bluetooth_device_remove_all_devices();

@@ -21,6 +21,7 @@
 #define BLUEZ_DEVICE_INTERFACE			"org.bluez.Device1"
 #define BLUEZ_AgentManager_INTERFACE	"org.bluez.AgentManager1"
 #define BLUEZ_MediaPlayer_INTERFACE		"org.bluez.MediaPlayer1"
+#define BLUEZ_MediaController_INTERFACE "org.bluez.MediaControl1"
 #define BLUEZ_MediaTrasnport_INTERFACE	"org.bluez.MediaTransport1"
 
 /*
