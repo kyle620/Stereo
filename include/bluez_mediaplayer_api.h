@@ -13,6 +13,21 @@
 #include <gio/gio.h>
 #include <stdbool.h>
 
+// Defines for the properties we can ask for according to the org.bluez.MediaPlayer1 interface
+#define PROPERTY_EQUALIZER		"Equalizer\0"
+#define PROPERTY_REPEAT			"Repeat"
+#define PROPERTY_SHUFFLE		"Shuffle"
+#define PROPERTY_STATUS			"Status"
+#define PROPERTY_NAME			"Name"
+#define PROPERTY_TYPE			"Type"
+#define PROPERTY_POSITION		"Position"
+#define PROPERTY_DURATION 		"Duration"
+#define PROPERTY_TRACK_NUMBER	"TrackNumber"
+#define PROPERTY_TRACK_TITLE	"Title"
+#define PROPERTY_TRACK_ARTIST	"Artist"
+#define PROPERTY_TRACK_ALBUM	"Album"
+#define PROPERTY_TRACK_GENRE	"Genre"
+
  /**
 	 * TODO need to do bound checking on size of chars
 	 * - Currenlty most properites inside MediaPlayer have set array sizes for strings
@@ -152,7 +167,8 @@
 			Playlist object path.
 */
 struct _MediaPlayer{
-	char 	OBJECT_PATH[100];	// Path of the player we want to listen/exchange track data with, and control using control methods
+	char	OBJECT_PATH[100];	// Path of the device we are connected to: example: /org/bluez/hci0/dev_XX_XX_XX_XX_XX_XX
+	char 	PLAYER_PATH[100];	// Path of the player we want to listen/exchange track data with, and control using control methods
 	char 	EQUALIZER[10];		// Possible values "off" or "on"
 	char	REPEAT[20];			// Possible values: "off", "singletrack", "alltracks" or "group"
 	char	SHUFFLE[20];		// Possible values: "off", "alltracks" or "group"
@@ -162,7 +178,8 @@ struct _MediaPlayer{
 	char	TRACK_TITLE[100];	// Track title Name 
 	char	TRACK_ARTIST[100];	// Artist of track
 	char	TRACK_ALBUM[100];	// Album of track
-	char	TRACK_Genre[100];	// Genre of track
+	char	TRACK_GENRE[100];	// Genre of track
+	bool	CONNECTED;			// True if medai player exists
 	guint32 TRACK_NUMBER;
 	guint32	TRACK_DURATION;
 	guint32 TRACK_POSITION;
@@ -178,10 +195,12 @@ typedef struct _MediaPlayer MediaPlayer;
 /*
 * Modifiers
 */
-int bluez_mediaplayer_init(GDBusConnection * conn);
-void bluez_mediaplayer_init_signals(void);
-void bluez_mediaplayer_mute_signals(void);
+int bluez_media_player_init(GDBusConnection * conn);
+void bluez_media_player_set_default_properties(void);
+void bluez_media_player_init_signals(void);
+void bluez_media_player_mute_signals(void);
 void bluez_media_player_update_remote_device_property(const char * prop_name, const char * value);
+void bluez_media_player_read_remote_player_properties();
 
 /*
 * Control Methods

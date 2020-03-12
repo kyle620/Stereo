@@ -60,9 +60,9 @@ int main( int argc, char** argv )
 	
 	bluez_adapter_init(connection);
 	bluez_agent_init(connection);
-	bluez_device_init(connection);
-	bluez_device_init_signals();
-	bluez_mediaplayer_init(connection);
+	//bluez_device_init(connection);
+	//bluez_device_init_signals();
+	bluez_media_player_init(connection);
 	
 	 
 	  

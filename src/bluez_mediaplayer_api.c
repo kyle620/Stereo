@@ -4,23 +4,26 @@
 /*
  * Private Function Declerations
 */
-static int bluez_mediaplayer_call_method( const char *method, GVariant *param);
-static int bluez_mediaplayer_set_property(const char *prop, GVariant *value);
-static void bluez_mediaplayer_properties_changed(GDBusConnection *sig,
+static int bluez_media_player_call_method( const char *method, GVariant *param);
+static int bluez_media_player_set_property(const char *prop, GVariant *value);
+static int bluez_media_player_read_property(const char * path, const char *property);
+static void bluez_media_player_properties_changed(GDBusConnection *sig,
 				const gchar *sender_name,
 				const gchar *object_path,
 				const gchar *interface,
 				const gchar *signal_name,
 				GVariant *parameters,
 				gpointer user_data);
-static void bluez_mediaplayer_mediacontrol_properties_changed(GDBusConnection *sig,
+static void bluez_media_control_properties_changed(GDBusConnection *sig,
 				const gchar *sender_name,
 				const gchar *object_path,
 				const gchar *interface,
 				const gchar *signal_name,
 				GVariant *parameters,
 				gpointer user_data);
-static void bluez_property_value(const gchar *key, GVariant *value);
+static void bluez_media_player_read_property_cb(GObject *con,GAsyncResult *res,gpointer data);
+static void bluez_media_player_parse_property_value(const gchar *key, GVariant *value);
+static void bluez_media_control_parse_property_value(const gchar *key, GVariant *value);
 static void bluez_mediaplayer_print_track_data(GVariant * mediadata);
 /*
  * Private Variables
@@ -38,7 +41,7 @@ static guint prop_changed_control;
  /*
   * Modifiers
  */ 
- int bluez_mediaplayer_init(GDBusConnection * conn)
+ int bluez_media_player_init(GDBusConnection * conn)
  {
 	g_print("Initializing MediaPlayer...\n");
 	
@@ -50,12 +53,35 @@ static guint prop_changed_control;
 		return -3;
 	}
 	
-	bluez_mediaplayer_init_signals();
+	// initialize our mediaplayer object with values
+	bluez_media_player_set_default_properties();
+	
+	bluez_media_player_init_signals();
 	
 	return 0;
  }
  
-void bluez_mediaplayer_init_signals(void)
+ void bluez_media_player_set_default_properties()
+ {
+	 // initialize our mediaplayer object with values
+	strcpy(mDefaultPlayer.OBJECT_PATH,"NULL");
+	strcpy(mDefaultPlayer.PLAYER_PATH,"NULL");
+	strcpy(mDefaultPlayer.EQUALIZER,"off");
+	strcpy(mDefaultPlayer.REPEAT,"off");
+	strcpy(mDefaultPlayer.STATUS,"stopped");
+	strcpy(mDefaultPlayer.PLAYER_NAME,"NULL");
+	strcpy(mDefaultPlayer.TYPE,"Audio");
+	strcpy(mDefaultPlayer.TRACK_TITLE,"--.--");
+	strcpy(mDefaultPlayer.TRACK_ARTIST,"--.--");
+	strcpy(mDefaultPlayer.TRACK_ALBUM,"--.--");
+	strcpy(mDefaultPlayer.TRACK_GENRE,"NULL");
+	mDefaultPlayer.CONNECTED = false;
+	mDefaultPlayer.TRACK_NUMBER = 0;
+	mDefaultPlayer.TRACK_DURATION = 0;
+	mDefaultPlayer.TRACK_POSITION = 0;
+ }
+ 
+void bluez_media_player_init_signals(void)
 {
 	prop_changed = g_dbus_connection_signal_subscribe(mCon,
 							BLUEZ_BUS_NAME,							// defined in bluez_dbus_names.h
@@ -64,7 +90,7 @@ void bluez_mediaplayer_init_signals(void)
 							NULL,									// NULL so we can listen for all object paths
 							BLUEZ_MediaPlayer_INTERFACE,			// defined in bluez_dbus_names.h
 							G_DBUS_SIGNAL_FLAGS_NONE,
-							bluez_mediaplayer_properties_changed,
+							bluez_media_player_properties_changed,
 							NULL,
 							NULL);
 							
@@ -75,12 +101,12 @@ void bluez_mediaplayer_init_signals(void)
 							NULL,									// NULL so we can listen for all object paths
 							BLUEZ_MediaController_INTERFACE,			// defined in bluez_dbus_names.h
 							G_DBUS_SIGNAL_FLAGS_NONE,
-							bluez_mediaplayer_mediacontrol_properties_changed,
+							bluez_media_control_properties_changed,
 							NULL,
 							NULL);
 }
 
-void bluez_mediaplayer_mute_signals(void)
+void bluez_media_player_mute_signals(void)
 {
 	g_dbus_connection_signal_unsubscribe(mCon, iface_added);
 	g_dbus_connection_signal_unsubscribe(mCon, prop_changed);
@@ -99,7 +125,17 @@ void bluez_mediaplayer_mute_signals(void)
 		 strcpy(mDefaultPlayer.SHUFFLE, value);
 	 
 	 // Send command to remote device
-	 bluez_mediaplayer_set_property(prop_name, g_variant_new("s", value));
+	 bluez_media_player_set_property(prop_name, g_variant_new("s", value));
+ }
+ 
+ void bluez_media_player_read_remote_player_properties()
+ {
+	 bluez_media_player_read_property(mDefaultPlayer.PLAYER_PATH,PROPERTY_EQUALIZER);
+	 bluez_media_player_read_property(mDefaultPlayer.PLAYER_PATH,PROPERTY_REPEAT);
+	 bluez_media_player_read_property(mDefaultPlayer.PLAYER_PATH,PROPERTY_SHUFFLE);
+	 bluez_media_player_read_property(mDefaultPlayer.PLAYER_PATH,PROPERTY_STATUS);
+	 bluez_media_player_read_property(mDefaultPlayer.PLAYER_PATH,PROPERTY_NAME);
+	 bluez_media_player_read_property(mDefaultPlayer.PLAYER_PATH,PROPERTY_TYPE);
  }
  
  /*
@@ -107,34 +143,34 @@ void bluez_mediaplayer_mute_signals(void)
  */
 void bluez_mediaplayer_play()
 {
-	bluez_mediaplayer_call_method("Play",NULL);
+	bluez_media_player_call_method("Play",NULL);
 }
 
 void bluez_mediaplayer_pause()
 {
-	bluez_mediaplayer_call_method("Pause",NULL);
+	bluez_media_player_call_method("Pause",NULL);
 }
 
 void bluez_mediaplayer_stop()
 {
-	bluez_mediaplayer_call_method("Stop",NULL);
+	bluez_media_player_call_method("Stop",NULL);
 }
 
 void bluez_mediaplayer_next()
 {
-	bluez_mediaplayer_call_method("Next",NULL);
+	bluez_media_player_call_method("Next",NULL);
 }
 
 void bluez_mediaplayer_previous()
 {
-	bluez_mediaplayer_call_method("Previous",NULL);
+	bluez_media_player_call_method("Previous",NULL);
 }
 
 /*
  * Private Method
 */
 
-static int bluez_mediaplayer_call_method( const char *method, GVariant *param)
+static int bluez_media_player_call_method( const char *method, GVariant *param)
 {
 	GVariant *result;
 	GError *error = NULL;
@@ -160,7 +196,7 @@ static int bluez_mediaplayer_call_method( const char *method, GVariant *param)
 	return 0;
 }
 
-static int bluez_mediaplayer_set_property(const char *prop, GVariant *value)
+static int bluez_media_player_set_property(const char *prop, GVariant *value)
 {
 	GVariant *result;
 	GError *error = NULL;
@@ -183,7 +219,35 @@ static int bluez_mediaplayer_set_property(const char *prop, GVariant *value)
 	return 0;
 }
 
-static void bluez_mediaplayer_properties_changed(GDBusConnection *sig,
+
+static int bluez_media_player_read_property(const char * path, const char *property)
+{
+
+	if(strcmp(mDefaultPlayer.PLAYER_PATH, "NULL") == 0)
+	{
+		g_print("***\tMedia Player Read Propery Error: Player Path is NULL\n");
+		return -3;
+	}
+	
+	g_print("Reading Property: %s\tfrom Object: %s\n",property,mDefaultPlayer.PLAYER_PATH);
+	
+	g_dbus_connection_call(mCon,
+					     BLUEZ_BUS_NAME,							// defined in bluez_dbus_names.h
+					     mDefaultPlayer.PLAYER_PATH,				// defined in bluez_dbus_names.h
+					     "org.freedesktop.DBus.Properties",
+					     "Get",
+					     g_variant_new("(ss)", BLUEZ_MediaPlayer_INTERFACE, (char *)property),
+					     NULL,
+					     G_DBUS_CALL_FLAGS_NONE,
+					     -1,
+						 NULL,
+					     bluez_media_player_read_property_cb,
+					     property);
+
+	return 0;
+}
+
+static void bluez_media_player_properties_changed(GDBusConnection *sig,
 				const gchar *sender_name,
 				const gchar *object_path,
 				const gchar *interface,
@@ -210,14 +274,14 @@ static void bluez_mediaplayer_properties_changed(GDBusConnection *sig,
 	g_variant_get(parameters, "(&sa{sv}as)", &object, &intr, &unknown);
 
 	while(g_variant_iter_next(intr, "{sv}", &key, &value)) 
-		bluez_property_value(key,value);
+		bluez_media_player_parse_property_value(key,value);
 	
 	/* Do not unref, it gets cleaned up on its own */
 	//g_variant_unref(intr);
 	//g_variant_unref(value);
 }
 
-static void bluez_mediaplayer_mediacontrol_properties_changed(GDBusConnection *sig,
+static void bluez_media_control_properties_changed(GDBusConnection *sig,
 				const gchar *sender_name,
 				const gchar *object_path,
 				const gchar *interface,
@@ -238,21 +302,21 @@ static void bluez_mediaplayer_mediacontrol_properties_changed(GDBusConnection *s
 	GVariant * value;
 	GVariant * unknown;
 	
-	g_print("\n****\t MediaPlayer\tMedia Controller Properties Changed \t****\n");
+	g_print("\n****\tMedia Controller Properties Changed \t****\n");
 	//g_print("Type: %s\n", g_variant_get_type_string(parameters));
 	
 	g_print ("\t- Object Path: %s\n", object_path);
 	g_variant_get(parameters, "(&sa{sv}as)", &object, &intr, &unknown);
 
 	while(g_variant_iter_next(intr, "{sv}", &key, &value)) 
-		bluez_property_value(key,value);
+		bluez_media_control_parse_property_value(key,value);
 	
 	/* Do not unref, it gets cleaned up on its own */
 	//g_variant_unref(intr);
 	//g_variant_unref(value);
 }
 
-static void bluez_property_value(const gchar *key, GVariant *value)
+static void bluez_media_player_parse_property_value(const gchar *key, GVariant *value)
 {
 	const gchar *type = g_variant_get_type_string(value);
 	
@@ -262,10 +326,89 @@ static void bluez_property_value(const gchar *key, GVariant *value)
 		case 's':
 					
 			g_print("%s\n", g_variant_get_string(value, NULL));
+			if(strcmp(key,PROPERTY_EQUALIZER) == 0)
+				strcpy(mDefaultPlayer.EQUALIZER, g_variant_get_string(value,NULL));
+			else if(strcmp(key,PROPERTY_REPEAT) == 0)
+				strcpy(mDefaultPlayer.REPEAT, g_variant_get_string(value,NULL));
+			else if(strcmp(key,PROPERTY_SHUFFLE) == 0)
+				strcpy(mDefaultPlayer.SHUFFLE, g_variant_get_string(value,NULL));
+			else if(strcmp(key,PROPERTY_STATUS) == 0)
+				strcpy(mDefaultPlayer.STATUS, g_variant_get_string(value,NULL));
+			else if(strcmp(key,PROPERTY_NAME) == 0)
+				strcpy(mDefaultPlayer.PLAYER_NAME, g_variant_get_string(value,NULL));
+			else if(strcmp(key,PROPERTY_TYPE) == 0)
+				strcpy(mDefaultPlayer.TYPE, g_variant_get_string(value,NULL));
+			else if(strcmp(key,PROPERTY_TRACK_TITLE) == 0)
+				strcpy(mDefaultPlayer.TRACK_TITLE, g_variant_get_string(value,NULL));
+			else if(strcmp(key,PROPERTY_TRACK_ARTIST) == 0)
+				strcpy(mDefaultPlayer.TRACK_ARTIST, g_variant_get_string(value,NULL));
+			else if(strcmp(key,PROPERTY_TRACK_ALBUM) == 0)
+				strcpy(mDefaultPlayer.TRACK_ALBUM, g_variant_get_string(value,NULL));
+			else if(strcmp(key,PROPERTY_TRACK_GENRE) == 0)
+				strcpy(mDefaultPlayer.TRACK_GENRE, g_variant_get_string(value,NULL));
 			
 			break;
 		case 'b':		
 			g_print("%d\n", g_variant_get_boolean(value));
+			
+			break;
+		case 'u':
+			
+			g_print("%d\n", g_variant_get_uint32(value));
+			if(strcmp(key,PROPERTY_POSITION) == 0)
+				mDefaultPlayer.TRACK_POSITION = g_variant_get_uint32(value);
+			else if(strcmp(key,PROPERTY_DURATION) == 0)
+				mDefaultPlayer.TRACK_DURATION = g_variant_get_uint32(value);
+			else if(strcmp(key,PROPERTY_TRACK_NUMBER) == 0)
+				mDefaultPlayer.TRACK_NUMBER = g_variant_get_uint32(value);
+			break;
+			
+		case 'n':
+			g_print("%d\n", g_variant_get_int16(value));
+			
+			break;
+		case 'a':
+		
+			bluez_mediaplayer_print_track_data(value);
+			break;
+		
+		default:
+			g_print("Other\n");
+			break;
+	}
+}
+
+static void bluez_media_control_parse_property_value(const gchar *key, GVariant *value)
+{
+	const gchar *type = g_variant_get_type_string(value);
+	
+	g_print("\t- %s: ", key);
+	switch(*type) {
+		case 'o':
+		case 's':
+					
+			g_print("%s\n", g_variant_get_string(value, NULL));
+			if(strcmp(key,"Player") == 0)
+				strcpy(mDefaultPlayer.PLAYER_PATH, g_variant_get_string(value,NULL));
+			
+			break;
+		case 'b':		
+			g_print("%d\n", g_variant_get_boolean(value));
+			
+			if(strcmp(key, "Connected") == 0)
+			{
+				if(g_variant_get_boolean(value))
+				{
+					// media player has connected!
+					mDefaultPlayer.CONNECTED = true;
+					
+					// not every property is set during a propertychange signal, therefore we can ask for them
+					bluez_media_player_read_remote_player_properties();
+				}
+				else
+					bluez_media_player_set_default_properties();
+			}
+				
 			
 			break;
 		case 'u':
@@ -300,8 +443,41 @@ static void bluez_mediaplayer_print_track_data(GVariant * mediadata)
 	while(g_variant_iter_next(intr, "{sv}", &key, &trackInfo))
 	{
 		g_print("\n\t");
-		bluez_property_value(key,trackInfo);
+		bluez_media_player_parse_property_value(key,trackInfo);
 	}
 }
 
+static void bluez_media_player_read_property_cb(GObject *con,GAsyncResult *res,gpointer userData)
+{
+	GVariant *result = NULL;
+	GVariant * propertyValue = NULL;
+	char propertyName[100];
+
+	g_print("***\t Media Player Inside Property Callback\t***\n");
+	
+	// copy the name of the property we asked for
+	strcpy(propertyName,userData);
+	
+	// was the call successful?
+	result = g_dbus_connection_call_finish((GDBusConnection *)con, res, NULL);
+	if(result == NULL)
+	{
+		g_print("\t- Unable to get result for Property: %s\n", propertyName);
+		return;
+	}
+	
+	// okay lets update the property we asked for
+	if(result) {
+		result = g_variant_get_child_value(result, 0);
+		if(g_variant_n_children(result) > 0)
+			propertyValue = g_variant_get_child_value(result,0);
+		
+		if(propertyValue)
+		{
+			g_print("\t- Updating <%s>, Value <%s>\n",propertyName,g_variant_print(propertyValue,FALSE));
+			bluez_media_player_parse_property_value(propertyName, propertyValue);
+		}
+	}
+	g_variant_unref(result);	
+}
 
