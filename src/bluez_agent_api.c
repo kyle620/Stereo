@@ -1,12 +1,16 @@
-/*
- * 	bluez_agent_pair_device_.c - Pair with a device found after discovering it. 
- * 	- This file pairs with a device after it had scaned for new devices after 
- *	  powering the adapter, if any devices
- * 	  appeared in /org/hciX/dev_XX_YY_ZZ_AA_BB_CC, it is monitered using "InterfaceAdded"
- *	  signal and all the properties of the device is printed
- *	- Scanning continues to run until any device is disappered, this happens after 180 seconds
- *	  automatically if the device is not used.
- * gcc `pkg-config --cflags glib-2.0 gio-2.0` -Wall -Wextra -o ./bin/bluez_adapter_scan ./bluez_adapter_scan.c `pkg-config --libs glib-2.0 gio-2.0`
+/**
+	* @file bluez_agent_api.c
+	* @author Kyle Van Cleave
+	* @date March 14,2020
+	* @brief Used to Pair with a Bluetooth Device.
+	* 	 
+	* 	- This file pairs with a device after it had scaned for new devices after 
+	*	  powering the adapter, if any devices
+	* 	  appeared in /org/hciX/dev_XX_YY_ZZ_AA_BB_CC, it is monitered using "InterfaceAdded"
+	*	  signal and all the properties of the device is printed
+	*	- Scanning continues to run until any device is disappered, this happens after 180 seconds
+	*	  automatically if the device is not used.
+	* gcc `pkg-config --cflags glib-2.0 gio-2.0` -Wall -Wextra -o ./bin/bluez_adapter_scan ./bluez_adapter_scan.c `pkg-config --libs glib-2.0 gio-2.0`
  */
 #include <stdio.h>
 #include "bluez_agent_api.h"

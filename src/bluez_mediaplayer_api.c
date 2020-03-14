@@ -1,3 +1,17 @@
+/**
+	* @file bluez_mediaplayer_api.c
+	* @author Kyle Van Cleave
+	* @date March 14,2020
+	* @brief Is meant to implement the funcionality of the media-api.txt file that is described by bluez.org
+	*
+	* 	- The main purpose of this file is to control the audio connected bluetooth device.
+	*	Functions like play, pause, next, previous exist.
+	*	The mediaplayer object holds Track meta-data information
+	*	  
+	*	- Required flags, and libs for compiling
+	* 		gcc `pkg-config --cflags glib-2.0 gio-2.0` `pkg-config --libs glib-2.0 gio-2.0`
+	*/
+
 #include "bluez_mediaplayer_api.h"
 #include "bluez_dbus_names.h"
 

@@ -1,36 +1,41 @@
+/**
+	* @file bluez_mediaplayer_api.h
+	* @author Kyle Van Cleave
+	* @date March 14, 2020
+	* 
+	* @brief This file implements majority of the functioanlity described in the "media-api.txt" file provided by bluez.
+	* To learn more, please visit 'https://git.kernel.org/pub/scm/bluetooth/bluez.git/tree/doc/media-api.txt'.
+**/
+
 #ifndef BLUEZMEDIAPLAYER_H
 #define BLUEZMEDIAPLAYER_H
-/*
- * Author Kyle Van Cleave
- *
- * This file implements majority of the functioanlity described in the "media-api.txt" file provided by bluez
- * To learn more, please visit 'https://git.kernel.org/pub/scm/bluetooth/bluez.git/tree/doc/media-api.txt'
-*/
-
 
 
 #include <glib.h>
 #include <gio/gio.h>
 #include <stdbool.h>
 
-// Defines for the properties we can ask for according to the org.bluez.MediaPlayer1 interface
-#define PROPERTY_REPEAT			"Repeat"
-#define PROPERTY_SHUFFLE		"Shuffle"
-#define PROPERTY_STATUS			"Status"
-#define PROPERTY_NAME			"Name"
-#define PROPERTY_TYPE			"Type"
-#define PROPERTY_POSITION		"Position"
-#define PROPERTY_DURATION 		"Duration"
-#define PROPERTY_TRACK_NUMBER	"TrackNumber"
-#define PROPERTY_TRACK_TITLE	"Title"
-#define PROPERTY_TRACK_ARTIST	"Artist"
-#define PROPERTY_TRACK_ALBUM	"Album"
-#define PROPERTY_TRACK_GENRE	"Genre"
+/**
+	*@brief Defines for the properties we can ask for according to the org.bluez.MediaPlayer1 interface
+**/
+#define PROPERTY_REPEAT			"Repeat"		/**< Boolean */
+#define PROPERTY_SHUFFLE		"Shuffle"		/**< Boolean */
+#define PROPERTY_STATUS			"Status"		/**< String */
+#define PROPERTY_NAME			"Name"			/**< String */
+#define PROPERTY_TYPE			"Type"			/**< String */
+#define PROPERTY_POSITION		"Position"		/**< UINT32 */
+#define PROPERTY_DURATION 		"Duration"		/**< UINT32 */
+#define PROPERTY_TRACK_NUMBER	"TrackNumber"	/**< UINT32 */
+#define PROPERTY_TRACK_TITLE	"Title"			/**< String */
+#define PROPERTY_TRACK_ARTIST	"Artist"		/**< String */
+#define PROPERTY_TRACK_ALBUM	"Album"			/**< String */
+#define PROPERTY_TRACK_GENRE	"Genre"			/**< String */
 
  /**
 	 * TODO need to do bound checking on size of chars
 	 * - Currenlty most properites inside MediaPlayer have set array sizes for strings
-	 *	 a track title, album title, .. etc could exceed this size
+	 *	 such as player path, player name, track title, album title, ..., etc 
+	 * 	 the set size has possiblity of being exceeded
 **/
 
 /* 
@@ -166,21 +171,21 @@
 			Playlist object path.
 */
 struct _MediaPlayer{
-	char	OBJECT_PATH[100];	// Path of the device we are connected to: example: /org/bluez/hci0/dev_XX_XX_XX_XX_XX_XX
-	char 	PLAYER_PATH[100];	// Path of the player we want to listen/exchange track data with, and control using control methods
-	char	REPEAT[20];			// Possible values: "off", "singletrack", "alltracks" or "group"
-	char	SHUFFLE[20];		// Possible values: "off", "alltracks" or "group"
-	char	STATUS[20];			// Possible status: "playing", "stopped", "paused", "forward-seek", "reverse-seek" or "error"
-	char	PLAYER_NAME[100];	// This is the name of the player, example: Spotify, Apple Music, Amazon Music
-	char	TYPE[30];			// Possible values: "Audio" "Video" "Audio Broadcasting" "Video Broadcasting"
-	char	TRACK_TITLE[100];	// Track title Name 
-	char	TRACK_ARTIST[100];	// Artist of track
-	char	TRACK_ALBUM[100];	// Album of track
-	char	TRACK_GENRE[100];	// Genre of track
-	bool	CONNECTED;			// True if medai player exists
-	guint32 TRACK_NUMBER;
-	guint32	TRACK_DURATION;
-	guint32 TRACK_POSITION;
+	char	OBJECT_PATH[100];	/**< Path of the device we are connected to: example: /org/bluez/hci0/dev_XX_XX_XX_XX_XX_XX */
+	char 	PLAYER_PATH[100];	/**< Path of the player we want to listen/exchange track data with, and control using control methods */
+	char	REPEAT[20];			/**< Possible values: "off", "singletrack", "alltracks" or "group" */
+	char	SHUFFLE[20];		/**< Possible values: "off", "alltracks" or "group" */
+	char	STATUS[20];			/**< Possible status: "playing", "stopped", "paused", "forward-seek", "reverse-seek" or "error" */
+	char	PLAYER_NAME[100];	/**< This is the name of the player, example: Spotify, Apple Music, Amazon Music */
+	char	TYPE[30];			/**< Possible values: "Audio" "Video" "Audio Broadcasting" "Video Broadcasting" */
+	char	TRACK_TITLE[100];	/**< Track title Name */
+	char	TRACK_ARTIST[100];	/**< Artist of track */
+	char	TRACK_ALBUM[100];	/**< Album of track */
+	char	TRACK_GENRE[100];	/**< Genre of track */
+	bool	CONNECTED;			/**< True if media player exists */
+	guint32 TRACK_NUMBER;		/**< Current Track Number */
+	guint32	TRACK_DURATION;		/**< Track Duration in ms */
+	guint32 TRACK_POSITION;		/**< Current Track Position */
 };
 
 typedef struct _MediaPlayer MediaPlayer;

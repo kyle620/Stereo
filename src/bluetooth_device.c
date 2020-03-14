@@ -97,7 +97,18 @@ bool bluetooth_device_get_property_paired(BluetoothDevice * device)
 {
 	return device->PAIRED;
 }
-
+bool bluetooth_device_get_property_trusted(BluetoothDevice * device)
+{
+	return device->TRUSTED;
+}
+const char * bluetooth_device_get_property_alias(BluetoothDevice * device)
+{
+	return device->ALIAS;
+}
+const char * bluetooth_device_get_property_address(BluetoothDevice * device)
+{
+	return device->MAC_ADDRESS;
+}
 /*
 *	Modifiers
 */
@@ -275,6 +286,20 @@ bool bluetooth_device_property_update_alias(const char * path, const char * name
 	
 	// update the property
 	strcpy(dev->device.ALIAS,name);
+	
+	return true;
+}
+
+bool bluetooth_device_property_update_address(const char *path, const char * address)
+{
+	g_print("***\t Device: Updating Property Address\n"); 
+	Node *dev = scanListByPath(mHead, path);
+	
+	if(dev == NULL)
+		return false;		// device does not exist
+	
+	// update the property
+	strcpy(dev->device.MAC_ADDRESS,address);
 	
 	return true;
 }

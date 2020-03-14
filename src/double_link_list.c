@@ -1,6 +1,14 @@
 /* 
  *Author: Kyle Van Cleave
 */
+/**
+	* @file double_link_list.c
+	* @author Kyle Van Cleave
+	* @date March 14,2020
+	* @brief Is meant to implement the funcionality of the doube linked list
+	*
+	*/
+
 #include <glib.h>
 #include <gio/gio.h>
 #include <stdbool.h>
@@ -13,8 +21,10 @@
 // transfers the BluetoothDevice data into the new node
 static void transfer_bluetooth_device_data(Node * new_node, BluetoothDevice * newDevice);
 
-/* Given a reference (pointer to pointer) to the head of a list  
-and an int, inserts a new node on the front of the list. */
+/* 
+	* Given a reference (pointer to pointer) to the head of a list  
+	* inserts a new node on the front of the list. 
+ */
 bool push(Node** head_ref, BluetoothDevice * newDevice)  
 {  
 	g_print("Double Linked List Push Method\n");
@@ -207,14 +217,14 @@ bool clearList(Node **start)
   * Accessors
 */
 // This function prints contents of linked list starting from the given node  
-void printList(Node* node)  
+void printList(Node* start)  
 {  
 	int index = 1; 
 	g_print("\nList of devices\n");  
-    while (node != NULL) 
+    while (start != NULL) 
 	{  
-        g_print("%d. %s\n", index, node->device.PATH);  
-        node = node->next;
+        g_print("%d. %s\n", index, start->device.PATH);  
+        start = start->next;
 		index++;
     }  
 }  
@@ -236,6 +246,10 @@ Node * scanList(Node *start, int index)
 		current = current->next;
 		count++;
 	}
+	
+	// did we find the node we were looking for?
+	if(count != index)
+		previous = NULL;
 	
 	return previous;
 }

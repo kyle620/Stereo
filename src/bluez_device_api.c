@@ -1,6 +1,17 @@
 /**
-* Author: Kyle Van Cleae
-*/
+	* @file bluez_device_api.c
+	* @author Kyle Van Cleave
+	* @date March 14,2020
+	* @brief Is meant to implement the functionality of the device-api.txt file that is described by bluez.org
+	*
+	* 	- The main purpose of this file is to pair, trust, and connect to new devices after powering the adapter, if any devices
+	* 	  appeared in /org/hciX/dev_XX_YY_ZZ_AA_BB_CC, it is monitered using "InterfaceAdded"
+	*	  signal and all the properties of the device are printed
+	*	- Once a device connects a bluetooth_device is created which stores alot of properties about the remote device
+	*	  
+	*	- Required flags, and libs for compiling
+	* 		gcc `pkg-config --cflags glib-2.0 gio-2.0` `pkg-config --libs glib-2.0 gio-2.0`
+	*/
 #include <stdio.h>
 
 #include "bluez_device_api.h"
@@ -293,22 +304,26 @@ static void bluez_device_parse_properties(const char * path, const char * proper
             g_print("Invalid argument type for %s: %s != %s", propertyKey,g_variant_get_type_string(propertyValue), "b");
 		else
 		{
-			if(bluetooth_device_add_device(&currentDevice))
+			// Did we receive a disconnect event
+			if(!g_variant_get_boolean(propertyValue))
 			{
-				// new device, not currenlty in our double link list
-				// is it connected?
-				if(g_variant_get_boolean(propertyValue))
-				{
-					bluetooth_device_property_update_connection(path,true);
-					bluez_device_read_remote_device_properties(path);
-				}
-				else
-					bluetooth_device_property_update_connection(path,false);
+				bluetooth_device_remove_device_by_path(path);		
 			}
-			
 			else
-				bluetooth_device_property_update_connection(path,g_variant_get_boolean(propertyValue));
+			{
+				// device will only get appended if it is new, and currenlty does not exist
+				bluetooth_device_add_device(&currentDevice);
+				bluetooth_device_property_update_connection(path,true);
+				bluez_device_read_remote_device_properties(path);
+			}
 		}
+	}
+	else if(strcmp(propertyKey, "Address") == 0)
+	{
+		if(!g_variant_is_of_type(propertyValue, G_VARIANT_TYPE_STRING))
+            g_print("Invalid argument type for %s: %s != %s", propertyKey,g_variant_get_type_string(propertyValue), "s");
+		else
+			bluetooth_device_property_update_address(path,g_variant_get_string(propertyValue,NULL));
 	}
 	else if(strcmp(propertyKey, "Paired") == 0)
 	{

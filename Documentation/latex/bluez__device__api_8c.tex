@@ -1,0 +1,66 @@
+\hypertarget{bluez__device__api_8c}{}\doxysection{/home/pi/\+Bluetooth\+Test/\+Stereo/src/bluez\+\_\+device\+\_\+api.c File Reference}
+\label{bluez__device__api_8c}\index{/home/pi/BluetoothTest/Stereo/src/bluez\_device\_api.c@{/home/pi/BluetoothTest/Stereo/src/bluez\_device\_api.c}}
+
+
+Is meant to implement the functionality of the device-\/api.\+txt file that is described by bluez.\+org.  
+
+
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}bluez\+\_\+device\+\_\+api.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}bluez\+\_\+dbus\+\_\+names.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}bluetooth\+\_\+device.\+h\char`\"{}}\newline
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{bluez__device__api_8c_ad501756eb28d7869278ec88cfe0d6cda}\label{bluez__device__api_8c_ad501756eb28d7869278ec88cfe0d6cda}} 
+void {\bfseries bluez\+\_\+device\+\_\+read\+\_\+remote\+\_\+device\+\_\+properties} (const char $\ast$device\+Path)
+\item 
+\mbox{\Hypertarget{bluez__device__api_8c_a161364595a5070e9a6b8a0508e27a617}\label{bluez__device__api_8c_a161364595a5070e9a6b8a0508e27a617}} 
+void {\bfseries bluez\+\_\+device\+\_\+init\+\_\+signals} (void)
+\item 
+\mbox{\Hypertarget{bluez__device__api_8c_a2f9b21f1ba93ee5db2ba3c57f0138d76}\label{bluez__device__api_8c_a2f9b21f1ba93ee5db2ba3c57f0138d76}} 
+void {\bfseries bluez\+\_\+device\+\_\+mute\+\_\+signals} (void)
+\item 
+int \mbox{\hyperlink{bluez__device__api_8c_a7f4150bda609a92d4f0d4c3aba7bab85}{bluez\+\_\+device\+\_\+init}} (G\+D\+Bus\+Connection $\ast$conn)
+\item 
+\mbox{\Hypertarget{bluez__device__api_8c_a5fa4e037364332952e64265ef2805cc3}\label{bluez__device__api_8c_a5fa4e037364332952e64265ef2805cc3}} 
+bool {\bfseries bluez\+\_\+device\+\_\+trust\+\_\+device} (const char $\ast$object\+Path)
+\item 
+\mbox{\Hypertarget{bluez__device__api_8c_a4bbef674ade29aabdcfcc74545d06467}\label{bluez__device__api_8c_a4bbef674ade29aabdcfcc74545d06467}} 
+bool {\bfseries bluez\+\_\+device\+\_\+pair\+\_\+device} (const char $\ast$object\+Path)
+\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{bluez__device__api_8c_a43a01321301d59bd95763063b590b619}\label{bluez__device__api_8c_a43a01321301d59bd95763063b590b619}} 
+G\+D\+Bus\+Connection $\ast$ {\bfseries m\+Con}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Is meant to implement the functionality of the device-\/api.\+txt file that is described by bluez.\+org. 
+
+\begin{DoxyAuthor}{Author}
+Kyle Van Cleave 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+March 14,2020 \begin{DoxyVerb}- The main purpose of this file is to pair, trust, and connect to new devices after powering the adapter, if any devices
+  appeared in /org/hciX/dev_XX_YY_ZZ_AA_BB_CC, it is monitered using "InterfaceAdded"
+signal and all the properties of the device are printed
+\end{DoxyVerb}
+
+\begin{DoxyItemize}
+\item Once a device connects a bluetooth\+\_\+device is created which stores alot of properties about the remote device
+\item Required flags, and libs for compiling gcc {\ttfamily pkg-\/config -\/-\/cflags glib-\/2.\+0 gio-\/2.\+0} {\ttfamily pkg-\/config -\/-\/libs glib-\/2.\+0 gio-\/2.\+0} 
+\end{DoxyItemize}
+\end{DoxyDate}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{bluez__device__api_8c_a7f4150bda609a92d4f0d4c3aba7bab85}\label{bluez__device__api_8c_a7f4150bda609a92d4f0d4c3aba7bab85}} 
+\index{bluez\_device\_api.c@{bluez\_device\_api.c}!bluez\_device\_init@{bluez\_device\_init}}
+\index{bluez\_device\_init@{bluez\_device\_init}!bluez\_device\_api.c@{bluez\_device\_api.c}}
+\doxysubsubsection{\texorpdfstring{bluez\_device\_init()}{bluez\_device\_init()}}
+{\footnotesize\ttfamily int bluez\+\_\+device\+\_\+init (\begin{DoxyParamCaption}\item[{G\+D\+Bus\+Connection $\ast$}]{conn }\end{DoxyParamCaption})}
+
+T\+O\+DO Need to organize Error Codes

@@ -1,11 +1,17 @@
 #ifndef BLUEZDBUSNAMES_H
 #define BLUEZDBUSNAMES_H
 
-/* 
- * To find out more about Bluez and the why the defines 
- * below are used refer to http://www.bluez.org/bluez-5-api-introduction-and-porting-guide/
- *
- */
+/**
+	* @file bluez_dbus_names.h
+	* @author Kyle Van Cleave
+	* @date March 14, 2020
+	* 
+	* @brief This file holds defines used throught the project.
+	* 
+	* To find out more about Bluez and the why the defines. 
+	* below are used please refer to http://www.bluez.org/bluez-5-api-introduction-and-porting-guide/)
+**/
+
 #define BLUEZ_BUS_NAME		"org.bluez"
 #define BLUEZ_ROOT_PATH		"/"
 #define BLUEZ_BASE_PATH		"/org/bluez"

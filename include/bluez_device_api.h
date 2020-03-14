@@ -1,8 +1,15 @@
 #ifndef BLUEZDEVICEAPI_H
 #define BLUEZDEVICEAPI_H
+
+
 /**
-* Author: Kyle Van Cleae
-*/
+	* @file bluez_device_api.h
+	* @author Kyle Van Cleave
+	* @date March 14, 2020
+	* 
+	* @brief This file defines the methods and properties of Bluez's device-api.txt.
+	* To find out more visit https://git.kernel.org/pub/scm/bluetooth/bluez.git/tree/doc/device-api.txt
+**/
 
 #include <glib.h>
 #include <gio/gio.h>

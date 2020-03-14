@@ -1,0 +1,72 @@
+\hypertarget{bluez__device__api_8h}{}\doxysection{/home/pi/\+Bluetooth\+Test/\+Stereo/include/bluez\+\_\+device\+\_\+api.h File Reference}
+\label{bluez__device__api_8h}\index{/home/pi/BluetoothTest/Stereo/include/bluez\_device\_api.h@{/home/pi/BluetoothTest/Stereo/include/bluez\_device\_api.h}}
+
+
+This file defines the methods and properties of Bluez\textquotesingle{}s device-\/api.\+txt. To find out more visit \href{https://git.kernel.org/pub/scm/bluetooth/bluez.git/tree/doc/device-api.txt}{\texttt{ https\+://git.\+kernel.\+org/pub/scm/bluetooth/bluez.\+git/tree/doc/device-\/api.\+txt}}.  
+
+
+{\ttfamily \#include $<$glib.\+h$>$}\newline
+{\ttfamily \#include $<$gio/gio.\+h$>$}\newline
+{\ttfamily \#include $<$stdbool.\+h$>$}\newline
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{bluez__device__api_8h_a831a79a14f90daa08c77781446cd1e4d}\label{bluez__device__api_8h_a831a79a14f90daa08c77781446cd1e4d}} 
+\#define {\bfseries P\+R\+O\+P\+E\+R\+T\+Y\+\_\+\+A\+D\+D\+R\+E\+SS}~\char`\"{}Address\char`\"{}
+\item 
+\mbox{\Hypertarget{bluez__device__api_8h_ac93ca458341ee17edd9e9f8e1f8cd782}\label{bluez__device__api_8h_ac93ca458341ee17edd9e9f8e1f8cd782}} 
+\#define {\bfseries P\+R\+O\+P\+E\+R\+T\+Y\+\_\+\+N\+A\+ME}~\char`\"{}Name\char`\"{}
+\item 
+\mbox{\Hypertarget{bluez__device__api_8h_a3a1e873db91e6c7e4db2ed2415b3b969}\label{bluez__device__api_8h_a3a1e873db91e6c7e4db2ed2415b3b969}} 
+\#define {\bfseries P\+R\+O\+P\+E\+R\+T\+Y\+\_\+\+I\+C\+ON}~\char`\"{}Icon\char`\"{}
+\item 
+\mbox{\Hypertarget{bluez__device__api_8h_a13dd7cb454f4573f606d4b21549ed269}\label{bluez__device__api_8h_a13dd7cb454f4573f606d4b21549ed269}} 
+\#define {\bfseries P\+R\+O\+P\+E\+R\+T\+Y\+\_\+\+P\+A\+I\+R\+ED}~\char`\"{}Paired\char`\"{}
+\item 
+\mbox{\Hypertarget{bluez__device__api_8h_a9ae7af0181b6c5fd5c83d98e80045344}\label{bluez__device__api_8h_a9ae7af0181b6c5fd5c83d98e80045344}} 
+\#define {\bfseries P\+R\+O\+P\+E\+R\+T\+Y\+\_\+\+T\+R\+U\+S\+T\+ED}~\char`\"{}Trusted\char`\"{}
+\item 
+\mbox{\Hypertarget{bluez__device__api_8h_a8ea19da4fbd30a5c3ac8fdd26de6de6d}\label{bluez__device__api_8h_a8ea19da4fbd30a5c3ac8fdd26de6de6d}} 
+\#define {\bfseries P\+R\+O\+P\+E\+R\+T\+Y\+\_\+\+A\+L\+I\+AS}~\char`\"{}Alias\char`\"{}
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{bluez__device__api_8h_ad501756eb28d7869278ec88cfe0d6cda}\label{bluez__device__api_8h_ad501756eb28d7869278ec88cfe0d6cda}} 
+void {\bfseries bluez\+\_\+device\+\_\+read\+\_\+remote\+\_\+device\+\_\+properties} (const char $\ast$device\+Path)
+\item 
+\mbox{\Hypertarget{bluez__device__api_8h_a161364595a5070e9a6b8a0508e27a617}\label{bluez__device__api_8h_a161364595a5070e9a6b8a0508e27a617}} 
+void {\bfseries bluez\+\_\+device\+\_\+init\+\_\+signals} (void)
+\item 
+\mbox{\Hypertarget{bluez__device__api_8h_a2f9b21f1ba93ee5db2ba3c57f0138d76}\label{bluez__device__api_8h_a2f9b21f1ba93ee5db2ba3c57f0138d76}} 
+void {\bfseries bluez\+\_\+device\+\_\+mute\+\_\+signals} (void)
+\item 
+int \mbox{\hyperlink{bluez__device__api_8h_a7f4150bda609a92d4f0d4c3aba7bab85}{bluez\+\_\+device\+\_\+init}} (G\+D\+Bus\+Connection $\ast$conn)
+\item 
+\mbox{\Hypertarget{bluez__device__api_8h_aeb544b8333516f01520e26e36ddae824}\label{bluez__device__api_8h_aeb544b8333516f01520e26e36ddae824}} 
+bool {\bfseries bluez\+\_\+device\+\_\+trust\+\_\+device} (const char $\ast$path)
+\item 
+\mbox{\Hypertarget{bluez__device__api_8h_ac9be16ddd1469d9eacb9f656386571f7}\label{bluez__device__api_8h_ac9be16ddd1469d9eacb9f656386571f7}} 
+bool {\bfseries bluez\+\_\+device\+\_\+pair\+\_\+device} (const char $\ast$path)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+This file defines the methods and properties of Bluez\textquotesingle{}s device-\/api.\+txt. To find out more visit \href{https://git.kernel.org/pub/scm/bluetooth/bluez.git/tree/doc/device-api.txt}{\texttt{ https\+://git.\+kernel.\+org/pub/scm/bluetooth/bluez.\+git/tree/doc/device-\/api.\+txt}}. 
+
+\begin{DoxyAuthor}{Author}
+Kyle Van Cleave 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+March 14, 2020 
+\end{DoxyDate}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{bluez__device__api_8h_a7f4150bda609a92d4f0d4c3aba7bab85}\label{bluez__device__api_8h_a7f4150bda609a92d4f0d4c3aba7bab85}} 
+\index{bluez\_device\_api.h@{bluez\_device\_api.h}!bluez\_device\_init@{bluez\_device\_init}}
+\index{bluez\_device\_init@{bluez\_device\_init}!bluez\_device\_api.h@{bluez\_device\_api.h}}
+\doxysubsubsection{\texorpdfstring{bluez\_device\_init()}{bluez\_device\_init()}}
+{\footnotesize\ttfamily int bluez\+\_\+device\+\_\+init (\begin{DoxyParamCaption}\item[{G\+D\+Bus\+Connection $\ast$}]{conn }\end{DoxyParamCaption})}
+
+T\+O\+DO Need to organize Error Codes

@@ -1,0 +1,72 @@
+\hypertarget{struct__MediaPlayer}{}\doxysection{\+\_\+\+Media\+Player Struct Reference}
+\label{struct__MediaPlayer}\index{\_MediaPlayer@{\_MediaPlayer}}
+
+
+T\+O\+DO need to do bound checking on size of chars.  
+
+
+
+
+{\ttfamily \#include $<$bluez\+\_\+mediaplayer\+\_\+api.\+h$>$}
+
+\doxysubsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{struct__MediaPlayer_a6c3850ef0f4521365cd8141bb84973d7}\label{struct__MediaPlayer_a6c3850ef0f4521365cd8141bb84973d7}} 
+char \mbox{\hyperlink{struct__MediaPlayer_a6c3850ef0f4521365cd8141bb84973d7}{O\+B\+J\+E\+C\+T\+\_\+\+P\+A\+TH}} \mbox{[}100\mbox{]}
+\begin{DoxyCompactList}\small\item\em Path of the device we are connected to\+: example\+: /org/bluez/hci0/dev\+\_\+\+X\+X\+\_\+\+X\+X\+\_\+\+X\+X\+\_\+\+X\+X\+\_\+\+X\+X\+\_\+\+XX. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct__MediaPlayer_a685c15b230580b5bd811ab6b557facd6}\label{struct__MediaPlayer_a685c15b230580b5bd811ab6b557facd6}} 
+char \mbox{\hyperlink{struct__MediaPlayer_a685c15b230580b5bd811ab6b557facd6}{P\+L\+A\+Y\+E\+R\+\_\+\+P\+A\+TH}} \mbox{[}100\mbox{]}
+\begin{DoxyCompactList}\small\item\em Path of the player we want to listen/exchange track data with, and control using control methods. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct__MediaPlayer_a6e8d647cf8a00b18fc2c5b6584df47e5}\label{struct__MediaPlayer_a6e8d647cf8a00b18fc2c5b6584df47e5}} 
+char \mbox{\hyperlink{struct__MediaPlayer_a6e8d647cf8a00b18fc2c5b6584df47e5}{R\+E\+P\+E\+AT}} \mbox{[}20\mbox{]}
+\begin{DoxyCompactList}\small\item\em Possible values\+: \char`\"{}off\char`\"{}, \char`\"{}singletrack\char`\"{}, \char`\"{}alltracks\char`\"{} or \char`\"{}group\char`\"{}. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct__MediaPlayer_a164cca6c49428cbbe42f9d554c49f615}\label{struct__MediaPlayer_a164cca6c49428cbbe42f9d554c49f615}} 
+char \mbox{\hyperlink{struct__MediaPlayer_a164cca6c49428cbbe42f9d554c49f615}{S\+H\+U\+F\+F\+LE}} \mbox{[}20\mbox{]}
+\begin{DoxyCompactList}\small\item\em Possible values\+: \char`\"{}off\char`\"{}, \char`\"{}alltracks\char`\"{} or \char`\"{}group\char`\"{}. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct__MediaPlayer_a03165e6a44a1de263d59ffd58c5c5b0c}\label{struct__MediaPlayer_a03165e6a44a1de263d59ffd58c5c5b0c}} 
+char \mbox{\hyperlink{struct__MediaPlayer_a03165e6a44a1de263d59ffd58c5c5b0c}{S\+T\+A\+T\+US}} \mbox{[}20\mbox{]}
+\begin{DoxyCompactList}\small\item\em Possible status\+: \char`\"{}playing\char`\"{}, \char`\"{}stopped\char`\"{}, \char`\"{}paused\char`\"{}, \char`\"{}forward-\/seek\char`\"{}, \char`\"{}reverse-\/seek\char`\"{} or \char`\"{}error\char`\"{}. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct__MediaPlayer_ae7ec5906d39072bfbd7ac100740a340e}\label{struct__MediaPlayer_ae7ec5906d39072bfbd7ac100740a340e}} 
+char \mbox{\hyperlink{struct__MediaPlayer_ae7ec5906d39072bfbd7ac100740a340e}{P\+L\+A\+Y\+E\+R\+\_\+\+N\+A\+ME}} \mbox{[}100\mbox{]}
+\begin{DoxyCompactList}\small\item\em This is the name of the player, example\+: Spotify, Apple Music, Amazon Music. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct__MediaPlayer_a3c33267f077a65e9123dbb4876623ca7}\label{struct__MediaPlayer_a3c33267f077a65e9123dbb4876623ca7}} 
+char \mbox{\hyperlink{struct__MediaPlayer_a3c33267f077a65e9123dbb4876623ca7}{T\+Y\+PE}} \mbox{[}30\mbox{]}
+\begin{DoxyCompactList}\small\item\em Possible values\+: \char`\"{}\+Audio\char`\"{} \char`\"{}\+Video\char`\"{} \char`\"{}\+Audio Broadcasting\char`\"{} \char`\"{}\+Video Broadcasting\char`\"{}. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct__MediaPlayer_ae247454d4785444394437c080bb31869}\label{struct__MediaPlayer_ae247454d4785444394437c080bb31869}} 
+char \mbox{\hyperlink{struct__MediaPlayer_ae247454d4785444394437c080bb31869}{T\+R\+A\+C\+K\+\_\+\+T\+I\+T\+LE}} \mbox{[}100\mbox{]}
+\begin{DoxyCompactList}\small\item\em Track title Name. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct__MediaPlayer_a0170a9509e2ba8fb1f6f3d56e766899c}\label{struct__MediaPlayer_a0170a9509e2ba8fb1f6f3d56e766899c}} 
+char \mbox{\hyperlink{struct__MediaPlayer_a0170a9509e2ba8fb1f6f3d56e766899c}{T\+R\+A\+C\+K\+\_\+\+A\+R\+T\+I\+ST}} \mbox{[}100\mbox{]}
+\begin{DoxyCompactList}\small\item\em Artist of track. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct__MediaPlayer_affb4d3548955950e6412f927159d75f2}\label{struct__MediaPlayer_affb4d3548955950e6412f927159d75f2}} 
+char \mbox{\hyperlink{struct__MediaPlayer_affb4d3548955950e6412f927159d75f2}{T\+R\+A\+C\+K\+\_\+\+A\+L\+B\+UM}} \mbox{[}100\mbox{]}
+\begin{DoxyCompactList}\small\item\em Album of track. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct__MediaPlayer_a0d29a73139286fd061d8564250b07447}\label{struct__MediaPlayer_a0d29a73139286fd061d8564250b07447}} 
+char \mbox{\hyperlink{struct__MediaPlayer_a0d29a73139286fd061d8564250b07447}{T\+R\+A\+C\+K\+\_\+\+G\+E\+N\+RE}} \mbox{[}100\mbox{]}
+\begin{DoxyCompactList}\small\item\em Genre of track. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct__MediaPlayer_a95821a0550c81357486bc03e775e4632}\label{struct__MediaPlayer_a95821a0550c81357486bc03e775e4632}} 
+bool \mbox{\hyperlink{struct__MediaPlayer_a95821a0550c81357486bc03e775e4632}{C\+O\+N\+N\+E\+C\+T\+ED}}
+\begin{DoxyCompactList}\small\item\em True if media player exists. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct__MediaPlayer_a9ad7776ca39dc72212172a0b59b9deb9}\label{struct__MediaPlayer_a9ad7776ca39dc72212172a0b59b9deb9}} 
+guint32 \mbox{\hyperlink{struct__MediaPlayer_a9ad7776ca39dc72212172a0b59b9deb9}{T\+R\+A\+C\+K\+\_\+\+N\+U\+M\+B\+ER}}
+\begin{DoxyCompactList}\small\item\em Current Track Number. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct__MediaPlayer_ae7fc51d3f0a793e0b5cd64d7a309dacf}\label{struct__MediaPlayer_ae7fc51d3f0a793e0b5cd64d7a309dacf}} 
+guint32 \mbox{\hyperlink{struct__MediaPlayer_ae7fc51d3f0a793e0b5cd64d7a309dacf}{T\+R\+A\+C\+K\+\_\+\+D\+U\+R\+A\+T\+I\+ON}}
+\begin{DoxyCompactList}\small\item\em Track Duration in ms. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{struct__MediaPlayer_a282cc37c6f599456869e146f38a59daf}\label{struct__MediaPlayer_a282cc37c6f599456869e146f38a59daf}} 
+guint32 \mbox{\hyperlink{struct__MediaPlayer_a282cc37c6f599456869e146f38a59daf}{T\+R\+A\+C\+K\+\_\+\+P\+O\+S\+I\+T\+I\+ON}}
+\begin{DoxyCompactList}\small\item\em Current Track Position. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+T\+O\+DO need to do bound checking on size of chars. 
+
+
+\begin{DoxyItemize}
+\item Currenlty most properites inside Media\+Player have set array sizes for strings such as player path, player name, track title, album title, ..., etc the set size has possiblity of being exceeded 
+\end{DoxyItemize}
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+/home/pi/\+Bluetooth\+Test/\+Stereo/include/\mbox{\hyperlink{bluez__mediaplayer__api_8h}{bluez\+\_\+mediaplayer\+\_\+api.\+h}}\end{DoxyCompactItemize}

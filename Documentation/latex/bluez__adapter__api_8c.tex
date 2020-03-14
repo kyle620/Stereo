@@ -1,0 +1,84 @@
+\hypertarget{bluez__adapter__api_8c}{}\doxysection{/home/pi/\+Bluetooth\+Test/\+Stereo/src/bluez\+\_\+adapter\+\_\+api.c File Reference}
+\label{bluez__adapter__api_8c}\index{/home/pi/BluetoothTest/Stereo/src/bluez\_adapter\_api.c@{/home/pi/BluetoothTest/Stereo/src/bluez\_adapter\_api.c}}
+
+
+Is meant to implement the funcionality of the adapter-\/api.\+txt file that is described by bluez.\+org.  
+
+
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}bluez\+\_\+adapter\+\_\+api.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}bluez\+\_\+dbus\+\_\+names.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}bluetooth\+\_\+device.\+h\char`\"{}}\newline
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{bluez__adapter__api_8c_ac053a2f11f74e245c0769d0453a3ff7d}\label{bluez__adapter__api_8c_ac053a2f11f74e245c0769d0453a3ff7d}} 
+bool \mbox{\hyperlink{bluez__adapter__api_8c_ac053a2f11f74e245c0769d0453a3ff7d}{bluez\+\_\+adapter\+\_\+set\+\_\+filter\+\_\+default}} (void)
+\begin{DoxyCompactList}\small\item\em Modifiers. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{bluez__adapter__api_8c_adb9b2b78bc4c55f48f0dce0de77fd357}\label{bluez__adapter__api_8c_adb9b2b78bc4c55f48f0dce0de77fd357}} 
+bool {\bfseries bluez\+\_\+adapter\+\_\+set\+\_\+filter} (\mbox{\hyperlink{struct__DiscoveryFilter}{Discovery\+Filter}} $\ast$filter\+Settings)
+\item 
+int \mbox{\hyperlink{bluez__adapter__api_8c_af3d6a69cfea299e5a6b66fe8a15d8966}{bluez\+\_\+adapter\+\_\+init}} (G\+D\+Bus\+Connection $\ast$conn)
+\item 
+\mbox{\Hypertarget{bluez__adapter__api_8c_a16834189c47da49f4d43b031bc264086}\label{bluez__adapter__api_8c_a16834189c47da49f4d43b031bc264086}} 
+void {\bfseries bluez\+\_\+adapter\+\_\+deinit} ()
+\item 
+\mbox{\Hypertarget{bluez__adapter__api_8c_ac790b5c4dcac6665a9271d95ff164306}\label{bluez__adapter__api_8c_ac790b5c4dcac6665a9271d95ff164306}} 
+bool {\bfseries bluez\+\_\+adapter\+\_\+power\+\_\+on} (bool set\+Pairable)
+\item 
+\mbox{\Hypertarget{bluez__adapter__api_8c_a8c2f41543f055c44aee83d0c8e4a4b10}\label{bluez__adapter__api_8c_a8c2f41543f055c44aee83d0c8e4a4b10}} 
+bool {\bfseries bluez\+\_\+adapter\+\_\+power\+\_\+off} (void)
+\item 
+\mbox{\Hypertarget{bluez__adapter__api_8c_a30665c87edfd3eb06b300cb58bcd333c}\label{bluez__adapter__api_8c_a30665c87edfd3eb06b300cb58bcd333c}} 
+bool {\bfseries bluez\+\_\+adapter\+\_\+scan\+\_\+on} (void)
+\item 
+\mbox{\Hypertarget{bluez__adapter__api_8c_abcb2bccce1556dee9683d22fa30daf92}\label{bluez__adapter__api_8c_abcb2bccce1556dee9683d22fa30daf92}} 
+bool {\bfseries bluez\+\_\+adapter\+\_\+scan\+\_\+off} (void)
+\item 
+\mbox{\Hypertarget{bluez__adapter__api_8c_aa2832ef7dd4fc58a7be0e300f35c0b2a}\label{bluez__adapter__api_8c_aa2832ef7dd4fc58a7be0e300f35c0b2a}} 
+bool {\bfseries bluez\+\_\+adapter\+\_\+pairable} (bool value)
+\item 
+\mbox{\Hypertarget{bluez__adapter__api_8c_af4cb4aa6635f47233351d7601bd4a98d}\label{bluez__adapter__api_8c_af4cb4aa6635f47233351d7601bd4a98d}} 
+void {\bfseries bluez\+\_\+adapter\+\_\+init\+\_\+signals} (void)
+\item 
+\mbox{\Hypertarget{bluez__adapter__api_8c_adaf5124867ca716e61c26154dab33844}\label{bluez__adapter__api_8c_adaf5124867ca716e61c26154dab33844}} 
+void {\bfseries bluez\+\_\+adapter\+\_\+mute\+\_\+signals} (void)
+\item 
+\mbox{\Hypertarget{bluez__adapter__api_8c_a8b3b00c0e1c1ca334f545e4ea9caacdc}\label{bluez__adapter__api_8c_a8b3b00c0e1c1ca334f545e4ea9caacdc}} 
+void {\bfseries bluez\+\_\+adapter\+\_\+remove\+\_\+device\+\_\+found} (const char $\ast$object\+Path)
+\item 
+\mbox{\Hypertarget{bluez__adapter__api_8c_a55bc8155cdafcb92a4289a4cbd1bb215}\label{bluez__adapter__api_8c_a55bc8155cdafcb92a4289a4cbd1bb215}} 
+bool {\bfseries bluez\+\_\+is\+\_\+adapter\+\_\+on} (void)
+\item 
+\mbox{\Hypertarget{bluez__adapter__api_8c_af75757195134380c604178dab23133a2}\label{bluez__adapter__api_8c_af75757195134380c604178dab23133a2}} 
+bool {\bfseries bluez\+\_\+adapter\+\_\+print\+\_\+filter\+\_\+settings} (void)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Is meant to implement the funcionality of the adapter-\/api.\+txt file that is described by bluez.\+org. 
+
+\begin{DoxyAuthor}{Author}
+Kyle Van Cleave 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+March 14,2020 \begin{DoxyVerb}- The main purpose of this file is to scan for new devices after powering the adapter, if any devices
+  appeared in /org/hciX/dev_XX_YY_ZZ_AA_BB_CC, it is monitered using "InterfaceAdded"
+signal and all the properties of the device are printed
+\end{DoxyVerb}
+
+\begin{DoxyItemize}
+\item Once a device is found a bluetooth\+\_\+device is created which stores alot of properties aboutthe remote device
+\item Required flags, and libs for compiling gcc {\ttfamily pkg-\/config -\/-\/cflags glib-\/2.\+0 gio-\/2.\+0} {\ttfamily pkg-\/config -\/-\/libs glib-\/2.\+0 gio-\/2.\+0} 
+\end{DoxyItemize}
+\end{DoxyDate}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{bluez__adapter__api_8c_af3d6a69cfea299e5a6b66fe8a15d8966}\label{bluez__adapter__api_8c_af3d6a69cfea299e5a6b66fe8a15d8966}} 
+\index{bluez\_adapter\_api.c@{bluez\_adapter\_api.c}!bluez\_adapter\_init@{bluez\_adapter\_init}}
+\index{bluez\_adapter\_init@{bluez\_adapter\_init}!bluez\_adapter\_api.c@{bluez\_adapter\_api.c}}
+\doxysubsubsection{\texorpdfstring{bluez\_adapter\_init()}{bluez\_adapter\_init()}}
+{\footnotesize\ttfamily int bluez\+\_\+adapter\+\_\+init (\begin{DoxyParamCaption}\item[{G\+D\+Bus\+Connection $\ast$}]{conn }\end{DoxyParamCaption})}
+
+T\+O\+DO Need to organize Error Codes

@@ -1,0 +1,56 @@
+\hypertarget{bluez__agent__api_8c}{}\doxysection{/home/pi/\+Bluetooth\+Test/\+Stereo/src/bluez\+\_\+agent\+\_\+api.c File Reference}
+\label{bluez__agent__api_8c}\index{/home/pi/BluetoothTest/Stereo/src/bluez\_agent\_api.c@{/home/pi/BluetoothTest/Stereo/src/bluez\_agent\_api.c}}
+
+
+Used to Pair with a Bluetooth Device.  
+
+
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}bluez\+\_\+agent\+\_\+api.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}bluez\+\_\+dbus\+\_\+names.\+h\char`\"{}}\newline
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{bluez__agent__api_8c_a9f7827bb081460e8f99e1e3f3cad600e}\label{bluez__agent__api_8c_a9f7827bb081460e8f99e1e3f3cad600e}} 
+\#define {\bfseries A\+G\+E\+N\+T\+\_\+\+P\+A\+TH}~\char`\"{}/org/bluez/Auto\+Pin\+Agent\char`\"{}
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{bluez__agent__api_8c_ae25fc06917166924bfc1a92d4db1f8ee}{bluez\+\_\+agent\+\_\+init}} (G\+D\+Bus\+Connection $\ast$conn)
+\item 
+\mbox{\Hypertarget{bluez__agent__api_8c_a8339bc97a67e2ad57338b18a1bf9b335}\label{bluez__agent__api_8c_a8339bc97a67e2ad57338b18a1bf9b335}} 
+int {\bfseries bluez\+\_\+register\+\_\+autopair\+\_\+agent} (void)
+\item 
+\mbox{\Hypertarget{bluez__agent__api_8c_a8c5842b2f46b46ab06c9df490121072c}\label{bluez__agent__api_8c_a8c5842b2f46b46ab06c9df490121072c}} 
+int {\bfseries bluez\+\_\+register\+\_\+agent} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Used to Pair with a Bluetooth Device. 
+
+\begin{DoxyAuthor}{Author}
+Kyle Van Cleave 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+March 14,2020 \begin{DoxyVerb}- This file pairs with a device after it had scaned for new devices after 
+powering the adapter, if any devices
+  appeared in /org/hciX/dev_XX_YY_ZZ_AA_BB_CC, it is monitered using "InterfaceAdded"
+signal and all the properties of the device is printed
+\end{DoxyVerb}
+
+\begin{DoxyItemize}
+\item Scanning continues to run until any device is disappered, this happens after 180 seconds automatically if the device is not used. gcc {\ttfamily pkg-\/config -\/-\/cflags glib-\/2.\+0 gio-\/2.\+0} -\/Wall -\/Wextra -\/o ./bin/bluez\+\_\+adapter\+\_\+scan ./bluez\+\_\+adapter\+\_\+scan.c {\ttfamily pkg-\/config -\/-\/libs glib-\/2.\+0 gio-\/2.\+0} 
+\end{DoxyItemize}
+\end{DoxyDate}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{bluez__agent__api_8c_ae25fc06917166924bfc1a92d4db1f8ee}\label{bluez__agent__api_8c_ae25fc06917166924bfc1a92d4db1f8ee}} 
+\index{bluez\_agent\_api.c@{bluez\_agent\_api.c}!bluez\_agent\_init@{bluez\_agent\_init}}
+\index{bluez\_agent\_init@{bluez\_agent\_init}!bluez\_agent\_api.c@{bluez\_agent\_api.c}}
+\doxysubsubsection{\texorpdfstring{bluez\_agent\_init()}{bluez\_agent\_init()}}
+{\footnotesize\ttfamily int bluez\+\_\+agent\+\_\+init (\begin{DoxyParamCaption}\item[{G\+D\+Bus\+Connection $\ast$}]{conn }\end{DoxyParamCaption})}
+
+T\+O\+DO Need to organize Error Codes

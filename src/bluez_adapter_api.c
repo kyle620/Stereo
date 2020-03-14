@@ -1,15 +1,17 @@
-/*
- * Author: Kyle Van Cleave
- * 	bluez_adapter_api.c - Is meant to implement the funcionality of the adapter-api.txt file
- * 	that is described by bluez.org
- * 	- The main purpose of this file is to scan for new devices after powering the adapter, if any devices
- * 	  appeared in /org/hciX/dev_XX_YY_ZZ_AA_BB_CC, it is monitered using "InterfaceAdded"
- *	  signal and all the properties of the device are printed
- *	- Once a device is found a bluetooth_device is created which stores alot of properties aboutthe remote device
- *	  
- *	- Required flags, and libs for compiling
- * 		gcc `pkg-config --cflags glib-2.0 gio-2.0` `pkg-config --libs glib-2.0 gio-2.0`
- */
+/**
+	* @file bluez_adapter_api.c
+	* @author Kyle Van Cleave
+	* @date March 14,2020
+	* @brief Is meant to implement the funcionality of the adapter-api.txt file that is described by bluez.org
+	*
+	* 	- The main purpose of this file is to scan for new devices after powering the adapter, if any devices
+	* 	  appeared in /org/hciX/dev_XX_YY_ZZ_AA_BB_CC, it is monitered using "InterfaceAdded"
+	*	  signal and all the properties of the device are printed
+	*	- Once a device is found a bluetooth_device is created which stores alot of properties aboutthe remote device
+	*	  
+	*	- Required flags, and libs for compiling
+	* 		gcc `pkg-config --cflags glib-2.0 gio-2.0` `pkg-config --libs glib-2.0 gio-2.0`
+	*/
 
 #include <stdio.h>
 #include "bluez_adapter_api.h"

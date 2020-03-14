@@ -1,0 +1,120 @@
+\hypertarget{bluez__adapter__api_8h}{}\doxysection{/home/pi/\+Bluetooth\+Test/\+Stereo/include/bluez\+\_\+adapter\+\_\+api.h File Reference}
+\label{bluez__adapter__api_8h}\index{/home/pi/BluetoothTest/Stereo/include/bluez\_adapter\_api.h@{/home/pi/BluetoothTest/Stereo/include/bluez\_adapter\_api.h}}
+
+
+This file defines the methods and properties of Bluez\textquotesingle{}s adapter-\/api.\+txt.  
+
+
+{\ttfamily \#include $<$glib.\+h$>$}\newline
+{\ttfamily \#include $<$gio/gio.\+h$>$}\newline
+{\ttfamily \#include $<$stdbool.\+h$>$}\newline
+\doxysubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct__DiscoveryFilter}{\+\_\+\+Discovery\+Filter}}
+\begin{DoxyCompactList}\small\item\em array\{string\} U\+U\+I\+Ds \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{bluez__adapter__api_8h_aa488ccc166541b657d2aa1670f6a7e82}\label{bluez__adapter__api_8h_aa488ccc166541b657d2aa1670f6a7e82}} 
+\#define {\bfseries M\+A\+X\+\_\+\+D\+E\+V\+I\+C\+E\+\_\+\+S\+T\+R\+I\+N\+G\+\_\+\+L\+EN}~100
+\item 
+\mbox{\Hypertarget{bluez__adapter__api_8h_a2849ba14899917376e3f05bd8e43c801}\label{bluez__adapter__api_8h_a2849ba14899917376e3f05bd8e43c801}} 
+\#define {\bfseries M\+A\+X\+\_\+\+N\+U\+M\+B\+E\+R\+\_\+\+D\+E\+V\+I\+C\+ES}~100
+\item 
+\#define \mbox{\hyperlink{bluez__adapter__api_8h_a32aaa67e1432b2e2cdf049bb67fd72ae}{U\+U\+I\+D\+\_\+\+A\+U\+D\+I\+O\+\_\+\+S\+O\+U\+R\+CE}}~\char`\"{}0000110a-\/0000-\/1000-\/8000-\/00805f9b34fb\char`\"{}
+\begin{DoxyCompactList}\small\item\em Helpful U\+U\+ID\textquotesingle{}s used to filter which devices we scan for. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{bluez__adapter__api_8h_aab29773b6da2cd6ff4f1878f9237262a}\label{bluez__adapter__api_8h_aab29773b6da2cd6ff4f1878f9237262a}} 
+\#define \mbox{\hyperlink{bluez__adapter__api_8h_aab29773b6da2cd6ff4f1878f9237262a}{U\+U\+I\+D\+\_\+\+H\+E\+A\+D\+S\+ET}}~\char`\"{}00001108-\/0000-\/1000-\/8000-\/00805f9b34fb\char`\"{}
+\begin{DoxyCompactList}\small\item\em Headset Profile H\+SP Defined by Bluetooth Sig. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{bluez__adapter__api_8h_acdc08142dea7bed7299575d5237f00d0}\label{bluez__adapter__api_8h_acdc08142dea7bed7299575d5237f00d0}} 
+typedef struct \mbox{\hyperlink{struct__DiscoveryFilter}{\+\_\+\+Discovery\+Filter}} {\bfseries Discovery\+Filter}
+\item 
+\mbox{\Hypertarget{bluez__adapter__api_8h_a4ab1a54141cc5c3acdd8be718d4805e1}\label{bluez__adapter__api_8h_a4ab1a54141cc5c3acdd8be718d4805e1}} 
+typedef void($\ast$ {\bfseries bluez\+\_\+call\+\_\+method\+\_\+callback}) (G\+Object $\ast$, G\+Async\+Result $\ast$, gpointer)
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{bluez__adapter__api_8h_af3d6a69cfea299e5a6b66fe8a15d8966}{bluez\+\_\+adapter\+\_\+init}} (G\+D\+Bus\+Connection $\ast$conn)
+\item 
+\mbox{\Hypertarget{bluez__adapter__api_8h_a16834189c47da49f4d43b031bc264086}\label{bluez__adapter__api_8h_a16834189c47da49f4d43b031bc264086}} 
+void {\bfseries bluez\+\_\+adapter\+\_\+deinit} ()
+\item 
+\mbox{\Hypertarget{bluez__adapter__api_8h_ac790b5c4dcac6665a9271d95ff164306}\label{bluez__adapter__api_8h_ac790b5c4dcac6665a9271d95ff164306}} 
+bool {\bfseries bluez\+\_\+adapter\+\_\+power\+\_\+on} (bool set\+Pairable)
+\item 
+\mbox{\Hypertarget{bluez__adapter__api_8h_a8c2f41543f055c44aee83d0c8e4a4b10}\label{bluez__adapter__api_8h_a8c2f41543f055c44aee83d0c8e4a4b10}} 
+bool {\bfseries bluez\+\_\+adapter\+\_\+power\+\_\+off} (void)
+\item 
+\mbox{\Hypertarget{bluez__adapter__api_8h_a30665c87edfd3eb06b300cb58bcd333c}\label{bluez__adapter__api_8h_a30665c87edfd3eb06b300cb58bcd333c}} 
+bool {\bfseries bluez\+\_\+adapter\+\_\+scan\+\_\+on} (void)
+\item 
+\mbox{\Hypertarget{bluez__adapter__api_8h_abcb2bccce1556dee9683d22fa30daf92}\label{bluez__adapter__api_8h_abcb2bccce1556dee9683d22fa30daf92}} 
+bool {\bfseries bluez\+\_\+adapter\+\_\+scan\+\_\+off} (void)
+\item 
+\mbox{\Hypertarget{bluez__adapter__api_8h_aa2832ef7dd4fc58a7be0e300f35c0b2a}\label{bluez__adapter__api_8h_aa2832ef7dd4fc58a7be0e300f35c0b2a}} 
+bool {\bfseries bluez\+\_\+adapter\+\_\+pairable} (bool value)
+\item 
+\mbox{\Hypertarget{bluez__adapter__api_8h_af4cb4aa6635f47233351d7601bd4a98d}\label{bluez__adapter__api_8h_af4cb4aa6635f47233351d7601bd4a98d}} 
+void {\bfseries bluez\+\_\+adapter\+\_\+init\+\_\+signals} (void)
+\item 
+\mbox{\Hypertarget{bluez__adapter__api_8h_adaf5124867ca716e61c26154dab33844}\label{bluez__adapter__api_8h_adaf5124867ca716e61c26154dab33844}} 
+void {\bfseries bluez\+\_\+adapter\+\_\+mute\+\_\+signals} (void)
+\item 
+\mbox{\Hypertarget{bluez__adapter__api_8h_a351479ac2100a3acfcf7a6a166713b29}\label{bluez__adapter__api_8h_a351479ac2100a3acfcf7a6a166713b29}} 
+void {\bfseries bluez\+\_\+adapter\+\_\+remove\+\_\+device\+\_\+found} (const char $\ast$address)
+\item 
+\mbox{\Hypertarget{bluez__adapter__api_8h_adb9b2b78bc4c55f48f0dce0de77fd357}\label{bluez__adapter__api_8h_adb9b2b78bc4c55f48f0dce0de77fd357}} 
+bool {\bfseries bluez\+\_\+adapter\+\_\+set\+\_\+filter} (\mbox{\hyperlink{struct__DiscoveryFilter}{Discovery\+Filter}} $\ast$filter\+Settings)
+\item 
+\mbox{\Hypertarget{bluez__adapter__api_8h_ac053a2f11f74e245c0769d0453a3ff7d}\label{bluez__adapter__api_8h_ac053a2f11f74e245c0769d0453a3ff7d}} 
+bool \mbox{\hyperlink{bluez__adapter__api_8h_ac053a2f11f74e245c0769d0453a3ff7d}{bluez\+\_\+adapter\+\_\+set\+\_\+filter\+\_\+default}} (void)
+\begin{DoxyCompactList}\small\item\em Modifiers. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{bluez__adapter__api_8h_a55bc8155cdafcb92a4289a4cbd1bb215}\label{bluez__adapter__api_8h_a55bc8155cdafcb92a4289a4cbd1bb215}} 
+bool {\bfseries bluez\+\_\+is\+\_\+adapter\+\_\+on} (void)
+\item 
+\mbox{\Hypertarget{bluez__adapter__api_8h_af75757195134380c604178dab23133a2}\label{bluez__adapter__api_8h_af75757195134380c604178dab23133a2}} 
+bool {\bfseries bluez\+\_\+adapter\+\_\+print\+\_\+filter\+\_\+settings} (void)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+This file defines the methods and properties of Bluez\textquotesingle{}s adapter-\/api.\+txt. 
+
+\begin{DoxyAuthor}{Author}
+Kyle Van Cleave 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+March 14, 2020
+\end{DoxyDate}
+For more information please refer to \href{https://git.kernel.org/pub/scm/bluetooth/bluez.git/tree/doc/adapter-api.txt}{\texttt{ https\+://git.\+kernel.\+org/pub/scm/bluetooth/bluez.\+git/tree/doc/adapter-\/api.\+txt}} 
+
+\doxysubsection{Macro Definition Documentation}
+\mbox{\Hypertarget{bluez__adapter__api_8h_a32aaa67e1432b2e2cdf049bb67fd72ae}\label{bluez__adapter__api_8h_a32aaa67e1432b2e2cdf049bb67fd72ae}} 
+\index{bluez\_adapter\_api.h@{bluez\_adapter\_api.h}!UUID\_AUDIO\_SOURCE@{UUID\_AUDIO\_SOURCE}}
+\index{UUID\_AUDIO\_SOURCE@{UUID\_AUDIO\_SOURCE}!bluez\_adapter\_api.h@{bluez\_adapter\_api.h}}
+\doxysubsubsection{\texorpdfstring{UUID\_AUDIO\_SOURCE}{UUID\_AUDIO\_SOURCE}}
+{\footnotesize\ttfamily \#define U\+U\+I\+D\+\_\+\+A\+U\+D\+I\+O\+\_\+\+S\+O\+U\+R\+CE~\char`\"{}0000110a-\/0000-\/1000-\/8000-\/00805f9b34fb\char`\"{}}
+
+
+
+Helpful U\+U\+ID\textquotesingle{}s used to filter which devices we scan for. 
+
+
+\begin{DoxyItemize}
+\item U\+U\+ID\textquotesingle{}s are 128 bits (32 Bytes) More info here \href{https://www.bluetooth.com/specifications/assigned-numbers/service-discovery/}{\texttt{ https\+://www.\+bluetooth.\+com/specifications/assigned-\/numbers/service-\/discovery/}}
+\item Base 00000000-\/0000-\/1000-\/8000-\/00805F9\+B34\+FB Advanced Autio Distribution Profile Sink Defined by Bluetooth S\+IG 
+\end{DoxyItemize}
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{bluez__adapter__api_8h_af3d6a69cfea299e5a6b66fe8a15d8966}\label{bluez__adapter__api_8h_af3d6a69cfea299e5a6b66fe8a15d8966}} 
+\index{bluez\_adapter\_api.h@{bluez\_adapter\_api.h}!bluez\_adapter\_init@{bluez\_adapter\_init}}
+\index{bluez\_adapter\_init@{bluez\_adapter\_init}!bluez\_adapter\_api.h@{bluez\_adapter\_api.h}}
+\doxysubsubsection{\texorpdfstring{bluez\_adapter\_init()}{bluez\_adapter\_init()}}
+{\footnotesize\ttfamily int bluez\+\_\+adapter\+\_\+init (\begin{DoxyParamCaption}\item[{G\+D\+Bus\+Connection $\ast$}]{conn }\end{DoxyParamCaption})}
+
+T\+O\+DO Need to organize Error Codes

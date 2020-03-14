@@ -1,9 +1,15 @@
 #ifndef BLUEZADAPTERAPI_H
 #define BLUEZADAPTERAPI_H
 
-/*
- * Author Kyle Van Cleave
-*/
+/**
+	* @file bluez_adapter_api.h
+	* @author Kyle Van Cleave
+	* @date March 14, 2020
+	* 
+	* @brief This file defines the methods and properties of Bluez's adapter-api.txt.
+	* 
+	* For more information please refer to https://git.kernel.org/pub/scm/bluetooth/bluez.git/tree/doc/adapter-api.txt
+**/
 
 #include <glib.h>
 #include <gio/gio.h>
@@ -12,15 +18,17 @@
 #define MAX_DEVICE_STRING_LEN 	100
 #define MAX_NUMBER_DEVICES 		100
 
-/*
+/**
  * 	Helpful UUID's used to filter which devices we scan for
  *	- UUID's are 128 bits (32 Bytes) More info here https://www.bluetooth.com/specifications/assigned-numbers/service-discovery/
  *	- Base 	00000000-0000-1000-8000-00805F9B34FB
 */
-#define UUID_AUDIO_SOURCE 	"0000110a-0000-1000-8000-00805f9b34fb"
-#define UUID_HEADSET		"00001108-0000-1000-8000-00805f9b34fb"
 
-/*
+
+#define UUID_AUDIO_SOURCE 	"0000110a-0000-1000-8000-00805f9b34fb" /**< Advanced Autio Distribution Profile Sink Defined by Bluetooth SIG*/
+#define UUID_HEADSET		"00001108-0000-1000-8000-00805f9b34fb" /**< Headset Profile HSP Defined by Bluetooth Sig*/
+
+/**
  * array{string} UUIDs
  *
  *				Filter by service UUIDs, empty means match
@@ -87,12 +95,12 @@
  *				this filter won't do anything.
 */
 struct _DiscoveryFilter{
-	char 	UUID_ARRAY[10][37];
-	char 	TRANSPORT[10];		// Default 'auto'
-	bool	DUPLICATE_DATA;		// Default 'true'
-	bool	DISCOVERABLE;
-	gint16 	RSSI;
-	int		NUM_OF_UUIDS;
+	char 	UUID_ARRAY[10][37]; /**< Array of UUIDs to use to filter by */
+	char 	TRANSPORT[10];		/**< Default 'auto' */
+	bool	DUPLICATE_DATA;		/**< Default 'true' */
+	bool	DISCOVERABLE;		/**< Default 'true' */
+	gint16 	RSSI;				/**< RSSI Threshold value */
+	int		NUM_OF_UUIDS;		/**< Keeps track of number of uuids we set */
 };
 
 typedef struct _DiscoveryFilter DiscoveryFilter;

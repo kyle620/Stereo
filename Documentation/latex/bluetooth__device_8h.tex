@@ -1,0 +1,472 @@
+\hypertarget{bluetooth__device_8h}{}\doxysection{/home/pi/\+Bluetooth\+Test/\+Stereo/include/bluetooth\+\_\+device.h File Reference}
+\label{bluetooth__device_8h}\index{/home/pi/BluetoothTest/Stereo/include/bluetooth\_device.h@{/home/pi/BluetoothTest/Stereo/include/bluetooth\_device.h}}
+
+
+This file holds information about remote bluetooth devices.  
+
+
+{\ttfamily \#include $<$glib.\+h$>$}\newline
+{\ttfamily \#include $<$gio/gio.\+h$>$}\newline
+{\ttfamily \#include $<$stdbool.\+h$>$}\newline
+\doxysubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct__BluetoothDevice}{\+\_\+\+Bluetooth\+Device}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{bluetooth__device_8h_aa488ccc166541b657d2aa1670f6a7e82}\label{bluetooth__device_8h_aa488ccc166541b657d2aa1670f6a7e82}} 
+\#define \mbox{\hyperlink{bluetooth__device_8h_aa488ccc166541b657d2aa1670f6a7e82}{M\+A\+X\+\_\+\+D\+E\+V\+I\+C\+E\+\_\+\+S\+T\+R\+I\+N\+G\+\_\+\+L\+EN}}~100
+\begin{DoxyCompactList}\small\item\em M\+AX Buffer size for Strings. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{bluetooth__device_8h_a2466da0df29a314b327949f6563dc993}\label{bluetooth__device_8h_a2466da0df29a314b327949f6563dc993}} 
+\#define \mbox{\hyperlink{bluetooth__device_8h_a2466da0df29a314b327949f6563dc993}{M\+A\+X\+\_\+\+N\+U\+M\+B\+E\+R\+\_\+\+U\+U\+I\+DS}}~100
+\begin{DoxyCompactList}\small\item\em M\+AX Buffer size for number of U\+U\+I\+Ds to hold. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{bluetooth__device_8h_afcb1ef5700c11714b2b4740700244891}\label{bluetooth__device_8h_afcb1ef5700c11714b2b4740700244891}} 
+\#define \mbox{\hyperlink{bluetooth__device_8h_afcb1ef5700c11714b2b4740700244891}{B\+T\+\_\+\+A\+D\+D\+R\+E\+S\+S\+\_\+\+S\+T\+R\+I\+N\+G\+\_\+\+S\+I\+ZE}}~18
+\begin{DoxyCompactList}\small\item\em Buffer size for deivce M\+AC A\+D\+D\+R\+E\+SS \textquotesingle{}X\+X\+:\+X\+X\+:\+X\+X\+:\+X\+X\+:\+XX\+:XX\textquotesingle{} includes room for N\+U\+LL termintating character. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{bluetooth__device_8h_a95d0f8e190274e801c377d2b855398f7}\label{bluetooth__device_8h_a95d0f8e190274e801c377d2b855398f7}} 
+typedef struct \mbox{\hyperlink{struct__BluetoothDevice}{\+\_\+\+Bluetooth\+Device}} {\bfseries Bluetooth\+Device}
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{bluetooth__device_8h_a0780249e4e0646ebab5738a58f8036f4}{bluetooth\+\_\+device\+\_\+get\+\_\+number\+\_\+devices}} (void)
+\begin{DoxyCompactList}\small\item\em Accessors. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{bluetooth__device_8h_a67bf40a282d0cd4e352fa3c051164762}{bluetooth\+\_\+device\+\_\+print\+\_\+properties}} (\mbox{\hyperlink{struct__BluetoothDevice}{Bluetooth\+Device}} $\ast$device)
+\begin{DoxyCompactList}\small\item\em Print all members inside the struct Bluetooth\+Device. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{bluetooth__device_8h_a1395c3826a60d34139d856a8fc76c753}\label{bluetooth__device_8h_a1395c3826a60d34139d856a8fc76c753}} 
+void \mbox{\hyperlink{bluetooth__device_8h_a1395c3826a60d34139d856a8fc76c753}{bluetooth\+\_\+device\+\_\+print\+\_\+all}} (void)
+\begin{DoxyCompactList}\small\item\em Prints out every Bluetooth\+Device and their properties inside the linkedlist. \end{DoxyCompactList}\item 
+char $\ast$ \mbox{\hyperlink{bluetooth__device_8h_a5f99844ca182d587a39a58a225bd40d2}{bluetooth\+\_\+get\+\_\+device\+\_\+path\+\_\+at\+\_\+index}} (int index)
+\begin{DoxyCompactList}\small\item\em Gets the Bluetooth\+Device path at specified index from linkedlist ~\newline
+ \end{DoxyCompactList}\item 
+\mbox{\hyperlink{struct__BluetoothDevice}{Bluetooth\+Device}} $\ast$ \mbox{\hyperlink{bluetooth__device_8h_a0a0374cb0d46f1f91b316202fa2745e9}{bluetooth\+\_\+get\+\_\+device\+\_\+at\+\_\+index}} (int index)
+\begin{DoxyCompactList}\small\item\em Gets the Bluetooth\+Device path at specified index from linkedlist ~\newline
+ \end{DoxyCompactList}\item 
+\mbox{\hyperlink{struct__BluetoothDevice}{Bluetooth\+Device}} $\ast$ \mbox{\hyperlink{bluetooth__device_8h_a4e15784c134f3466960047a701322c61}{bluetooth\+\_\+get\+\_\+device\+\_\+by\+\_\+path}} (const char $\ast$path)
+\begin{DoxyCompactList}\small\item\em Retrieves the Bluetooth\+Device with matching path from linkedlist ~\newline
+ \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{bluetooth__device_8h_a436a9f8380fbdec2f8de84a1fda707a2}{bluetooth\+\_\+device\+\_\+get\+\_\+property\+\_\+paired}} (\mbox{\hyperlink{struct__BluetoothDevice}{Bluetooth\+Device}} $\ast$device)
+\begin{DoxyCompactList}\small\item\em Returns attribute \textquotesingle{}paired\textquotesingle{} of Bluetooth\+Device ~\newline
+ \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{bluetooth__device_8h_a87b0d5b4327af259e939255cd728c796}{bluetooth\+\_\+device\+\_\+get\+\_\+property\+\_\+trusted}} (\mbox{\hyperlink{struct__BluetoothDevice}{Bluetooth\+Device}} $\ast$device)
+\begin{DoxyCompactList}\small\item\em Returns attribute \textquotesingle{}trusted\textquotesingle{} of Bluetooth\+Device ~\newline
+ \end{DoxyCompactList}\item 
+const char $\ast$ \mbox{\hyperlink{bluetooth__device_8h_a487993bbe8b50e1cbbbe3187ffc1fe40}{bluetooth\+\_\+device\+\_\+get\+\_\+property\+\_\+alias}} (\mbox{\hyperlink{struct__BluetoothDevice}{Bluetooth\+Device}} $\ast$device)
+\begin{DoxyCompactList}\small\item\em Returns attribute \textquotesingle{}alias\textquotesingle{} of Bluetooth\+Device ~\newline
+ \end{DoxyCompactList}\item 
+const char $\ast$ \mbox{\hyperlink{bluetooth__device_8h_a3762fc42de22a06f0039689d09ecbd57}{bluetooth\+\_\+device\+\_\+get\+\_\+property\+\_\+address}} (\mbox{\hyperlink{struct__BluetoothDevice}{Bluetooth\+Device}} $\ast$device)
+\begin{DoxyCompactList}\small\item\em Returns attribute \textquotesingle{}mac address\textquotesingle{} of Bluetooth\+Device ~\newline
+ \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{bluetooth__device_8h_ae69d29a2cc307679afb7d32d29fb6a40}{bluetooth\+\_\+device\+\_\+add\+\_\+device}} (\mbox{\hyperlink{struct__BluetoothDevice}{Bluetooth\+Device}} $\ast$new\+Device)
+\begin{DoxyCompactList}\small\item\em Adds a Bluetooth\+Device . \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{bluetooth__device_8h_a98434bb71cd07e2016efc826a93f3d03}{bluetooth\+\_\+device\+\_\+remove\+\_\+device\+\_\+by\+\_\+index}} (int index)
+\begin{DoxyCompactList}\small\item\em Removes Bluetooth\+Device at specified index. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{bluetooth__device_8h_a256e1a62f9b1645b9414c2e0144f2276}{bluetooth\+\_\+device\+\_\+remove\+\_\+device\+\_\+by\+\_\+path}} (const char $\ast$path)
+\begin{DoxyCompactList}\small\item\em Removes a Bluetooth\+Device with specified path It uses \mbox{\hyperlink{struct__BluetoothDevice_a8da4442177eed85b86d72370fc0ef82f}{Bluetooth\+Device.\+P\+A\+TH}} to compare against. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{bluetooth__device_8h_a1f8fd26d63892bdc37ccd48aeceddbc6}{bluetooth\+\_\+device\+\_\+remove\+\_\+all\+\_\+devices}} ()
+\begin{DoxyCompactList}\small\item\em Removes Bluetooth\+Devices in linkedlist. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{bluetooth__device_8h_a9fbcbdf63591997dba589fcc27973fa6}{bluetooth\+\_\+device\+\_\+property\+\_\+add\+\_\+service\+\_\+\+U\+U\+ID}} (const char $\ast$path, const char $\ast$uuid)
+\begin{DoxyCompactList}\small\item\em Adds the specified U\+U\+ID to the Bluetooth\+Device that has matching path adds the U\+U\+ID to S\+E\+R\+V\+I\+C\+E\+\_\+\+U\+U\+I\+DS array for the device located at the specified path, reutrns false if U\+U\+ID already exists, or array is full. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{bluetooth__device_8h_ab4791bc9d2cf2053ab6126ef8326be7a}{bluetooth\+\_\+device\+\_\+property\+\_\+update\+\_\+connection}} (const char $\ast$path, bool is\+Connected)
+\begin{DoxyCompactList}\small\item\em Updates the attribute connected of the Bluetooth\+Device that has matching path Updates the connection status of the device located at the path, returns false if device cannot be found. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{bluetooth__device_8h_a30412b7b1eadc15a50a7a912cf00ec4e}{bluetooth\+\_\+device\+\_\+property\+\_\+update\+\_\+paired}} (const char $\ast$path, bool is\+Paired)
+\begin{DoxyCompactList}\small\item\em Updates the attribute paired of the Bluetooth\+Device that has matching path Updates the paired status of the device located at the path, true = is paired, false = not paired, returns false if device canot be found. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{bluetooth__device_8h_a527845f2038957af2271af10a642a76e}{bluetooth\+\_\+device\+\_\+property\+\_\+update\+\_\+trusted}} (const char $\ast$path, bool is\+Trusted)
+\begin{DoxyCompactList}\small\item\em Updates the attribute trusted of the Bluetooth\+Device that has matching path Updates the trusted status of the device located at the path, true = is trusted, fasle, not trusted, returns false if device cannot be found. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{bluetooth__device_8h_a0d427bc07dde9265e40ddda05da50900}{bluetooth\+\_\+device\+\_\+property\+\_\+update\+\_\+\+R\+S\+SI}} (const char $\ast$path, gint16 rssi)
+\begin{DoxyCompactList}\small\item\em Adds the atrribtue R\+S\+SI of the Bluetooth\+Device that has matching path Updates the rssi value of the device located at the path, returns false if device cannot be found. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{bluetooth__device_8h_ab064cc2d41430ea19b325b9d1f6d9e5c}{bluetooth\+\_\+device\+\_\+property\+\_\+update\+\_\+alias}} (const char $\ast$path, const char $\ast$name)
+\begin{DoxyCompactList}\small\item\em Updates the attribute alias of the Bluetooth\+Device that has matching path Updates the alias name of the device located at the path, returns false if device cannot be found (N\+O\+TE\+: name is truncated if it exceeds M\+A\+X\+\_\+\+D\+E\+V\+I\+C\+E\+\_\+\+S\+T\+R\+I\+N\+G\+\_\+\+L\+EN. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{bluetooth__device_8h_a135edecd99a31a1f40d05cc55305a139}{bluetooth\+\_\+device\+\_\+property\+\_\+update\+\_\+address}} (const char $\ast$path, const char $\ast$address)
+\begin{DoxyCompactList}\small\item\em Updates the attribute address of the Bluetooth\+Device that has matching path Updates the mac address of the device located at the path, returns false if device cannot be found. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+This file holds information about remote bluetooth devices. 
+
+\begin{DoxyAuthor}{Author}
+Kyle Van Cleave 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+March 14, 2020
+\end{DoxyDate}
+This file keeps track of devices found during a bluetooth scan, and any device that connects to the raspberry pi. It can update the Bluetooth device properties Files that use this file are
+\begin{DoxyItemize}
+\item \mbox{\hyperlink{bluez__adapter__api_8h}{bluez\+\_\+adapter\+\_\+api.\+h}} (adds devices found during scan)
+\item \mbox{\hyperlink{bluez__device__api_8h}{bluez\+\_\+device\+\_\+api.\+h}} (adds devices when connections are made) 
+\end{DoxyItemize}
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{bluetooth__device_8h_ae69d29a2cc307679afb7d32d29fb6a40}\label{bluetooth__device_8h_ae69d29a2cc307679afb7d32d29fb6a40}} 
+\index{bluetooth\_device.h@{bluetooth\_device.h}!bluetooth\_device\_add\_device@{bluetooth\_device\_add\_device}}
+\index{bluetooth\_device\_add\_device@{bluetooth\_device\_add\_device}!bluetooth\_device.h@{bluetooth\_device.h}}
+\doxysubsubsection{\texorpdfstring{bluetooth\_device\_add\_device()}{bluetooth\_device\_add\_device()}}
+{\footnotesize\ttfamily bool bluetooth\+\_\+device\+\_\+add\+\_\+device (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct__BluetoothDevice}{Bluetooth\+Device}} $\ast$}]{new\+Device }\end{DoxyParamCaption})}
+
+
+
+Adds a Bluetooth\+Device . 
+
+Increments Number of devices It uses \mbox{\hyperlink{struct__BluetoothDevice_a8da4442177eed85b86d72370fc0ef82f}{Bluetooth\+Device.\+P\+A\+TH}} to determine if device already exists. 
+\begin{DoxyParams}{Parameters}
+{\em Bluetooth\+Device} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+boolean True if succeed, false if device already exists 
+\end{DoxyReturn}
+\mbox{\Hypertarget{bluetooth__device_8h_a0780249e4e0646ebab5738a58f8036f4}\label{bluetooth__device_8h_a0780249e4e0646ebab5738a58f8036f4}} 
+\index{bluetooth\_device.h@{bluetooth\_device.h}!bluetooth\_device\_get\_number\_devices@{bluetooth\_device\_get\_number\_devices}}
+\index{bluetooth\_device\_get\_number\_devices@{bluetooth\_device\_get\_number\_devices}!bluetooth\_device.h@{bluetooth\_device.h}}
+\doxysubsubsection{\texorpdfstring{bluetooth\_device\_get\_number\_devices()}{bluetooth\_device\_get\_number\_devices()}}
+{\footnotesize\ttfamily int bluetooth\+\_\+device\+\_\+get\+\_\+number\+\_\+devices (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Accessors. 
+
+Returns the number of devices in the Linked\+List \begin{DoxyReturn}{Returns}
+int number of devices 
+\end{DoxyReturn}
+\mbox{\Hypertarget{bluetooth__device_8h_a3762fc42de22a06f0039689d09ecbd57}\label{bluetooth__device_8h_a3762fc42de22a06f0039689d09ecbd57}} 
+\index{bluetooth\_device.h@{bluetooth\_device.h}!bluetooth\_device\_get\_property\_address@{bluetooth\_device\_get\_property\_address}}
+\index{bluetooth\_device\_get\_property\_address@{bluetooth\_device\_get\_property\_address}!bluetooth\_device.h@{bluetooth\_device.h}}
+\doxysubsubsection{\texorpdfstring{bluetooth\_device\_get\_property\_address()}{bluetooth\_device\_get\_property\_address()}}
+{\footnotesize\ttfamily const char$\ast$ bluetooth\+\_\+device\+\_\+get\+\_\+property\+\_\+address (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct__BluetoothDevice}{Bluetooth\+Device}} $\ast$}]{device }\end{DoxyParamCaption})}
+
+
+
+Returns attribute \textquotesingle{}mac address\textquotesingle{} of Bluetooth\+Device ~\newline
+ 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Bluetooth\+Device} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+string M\+AC Address of device 
+\end{DoxyReturn}
+\mbox{\Hypertarget{bluetooth__device_8h_a487993bbe8b50e1cbbbe3187ffc1fe40}\label{bluetooth__device_8h_a487993bbe8b50e1cbbbe3187ffc1fe40}} 
+\index{bluetooth\_device.h@{bluetooth\_device.h}!bluetooth\_device\_get\_property\_alias@{bluetooth\_device\_get\_property\_alias}}
+\index{bluetooth\_device\_get\_property\_alias@{bluetooth\_device\_get\_property\_alias}!bluetooth\_device.h@{bluetooth\_device.h}}
+\doxysubsubsection{\texorpdfstring{bluetooth\_device\_get\_property\_alias()}{bluetooth\_device\_get\_property\_alias()}}
+{\footnotesize\ttfamily const char$\ast$ bluetooth\+\_\+device\+\_\+get\+\_\+property\+\_\+alias (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct__BluetoothDevice}{Bluetooth\+Device}} $\ast$}]{device }\end{DoxyParamCaption})}
+
+
+
+Returns attribute \textquotesingle{}alias\textquotesingle{} of Bluetooth\+Device ~\newline
+ 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Bluetooth\+Device} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+string Alias of device 
+\end{DoxyReturn}
+\mbox{\Hypertarget{bluetooth__device_8h_a436a9f8380fbdec2f8de84a1fda707a2}\label{bluetooth__device_8h_a436a9f8380fbdec2f8de84a1fda707a2}} 
+\index{bluetooth\_device.h@{bluetooth\_device.h}!bluetooth\_device\_get\_property\_paired@{bluetooth\_device\_get\_property\_paired}}
+\index{bluetooth\_device\_get\_property\_paired@{bluetooth\_device\_get\_property\_paired}!bluetooth\_device.h@{bluetooth\_device.h}}
+\doxysubsubsection{\texorpdfstring{bluetooth\_device\_get\_property\_paired()}{bluetooth\_device\_get\_property\_paired()}}
+{\footnotesize\ttfamily bool bluetooth\+\_\+device\+\_\+get\+\_\+property\+\_\+paired (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct__BluetoothDevice}{Bluetooth\+Device}} $\ast$}]{device }\end{DoxyParamCaption})}
+
+
+
+Returns attribute \textquotesingle{}paired\textquotesingle{} of Bluetooth\+Device ~\newline
+ 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Bluetooth\+Device} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+boolean value of attribute paired 
+\end{DoxyReturn}
+\mbox{\Hypertarget{bluetooth__device_8h_a87b0d5b4327af259e939255cd728c796}\label{bluetooth__device_8h_a87b0d5b4327af259e939255cd728c796}} 
+\index{bluetooth\_device.h@{bluetooth\_device.h}!bluetooth\_device\_get\_property\_trusted@{bluetooth\_device\_get\_property\_trusted}}
+\index{bluetooth\_device\_get\_property\_trusted@{bluetooth\_device\_get\_property\_trusted}!bluetooth\_device.h@{bluetooth\_device.h}}
+\doxysubsubsection{\texorpdfstring{bluetooth\_device\_get\_property\_trusted()}{bluetooth\_device\_get\_property\_trusted()}}
+{\footnotesize\ttfamily bool bluetooth\+\_\+device\+\_\+get\+\_\+property\+\_\+trusted (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct__BluetoothDevice}{Bluetooth\+Device}} $\ast$}]{device }\end{DoxyParamCaption})}
+
+
+
+Returns attribute \textquotesingle{}trusted\textquotesingle{} of Bluetooth\+Device ~\newline
+ 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Bluetooth\+Device} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+boolean value of attribute tusted 
+\end{DoxyReturn}
+\mbox{\Hypertarget{bluetooth__device_8h_a67bf40a282d0cd4e352fa3c051164762}\label{bluetooth__device_8h_a67bf40a282d0cd4e352fa3c051164762}} 
+\index{bluetooth\_device.h@{bluetooth\_device.h}!bluetooth\_device\_print\_properties@{bluetooth\_device\_print\_properties}}
+\index{bluetooth\_device\_print\_properties@{bluetooth\_device\_print\_properties}!bluetooth\_device.h@{bluetooth\_device.h}}
+\doxysubsubsection{\texorpdfstring{bluetooth\_device\_print\_properties()}{bluetooth\_device\_print\_properties()}}
+{\footnotesize\ttfamily void bluetooth\+\_\+device\+\_\+print\+\_\+properties (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct__BluetoothDevice}{Bluetooth\+Device}} $\ast$}]{device }\end{DoxyParamCaption})}
+
+
+
+Print all members inside the struct Bluetooth\+Device. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Bluetooth\+Device} & the device properties we want to print \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{bluetooth__device_8h_a9fbcbdf63591997dba589fcc27973fa6}\label{bluetooth__device_8h_a9fbcbdf63591997dba589fcc27973fa6}} 
+\index{bluetooth\_device.h@{bluetooth\_device.h}!bluetooth\_device\_property\_add\_service\_UUID@{bluetooth\_device\_property\_add\_service\_UUID}}
+\index{bluetooth\_device\_property\_add\_service\_UUID@{bluetooth\_device\_property\_add\_service\_UUID}!bluetooth\_device.h@{bluetooth\_device.h}}
+\doxysubsubsection{\texorpdfstring{bluetooth\_device\_property\_add\_service\_UUID()}{bluetooth\_device\_property\_add\_service\_UUID()}}
+{\footnotesize\ttfamily bool bluetooth\+\_\+device\+\_\+property\+\_\+add\+\_\+service\+\_\+\+U\+U\+ID (\begin{DoxyParamCaption}\item[{const char $\ast$}]{path,  }\item[{const char $\ast$}]{uuid }\end{DoxyParamCaption})}
+
+
+
+Adds the specified U\+U\+ID to the Bluetooth\+Device that has matching path adds the U\+U\+ID to S\+E\+R\+V\+I\+C\+E\+\_\+\+U\+U\+I\+DS array for the device located at the specified path, reutrns false if U\+U\+ID already exists, or array is full. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em string} & path \\
+\hline
+{\em string} & uuid \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+boolean True if succeed, false if device not found, or uuid array is full 
+\end{DoxyReturn}
+\mbox{\Hypertarget{bluetooth__device_8h_a135edecd99a31a1f40d05cc55305a139}\label{bluetooth__device_8h_a135edecd99a31a1f40d05cc55305a139}} 
+\index{bluetooth\_device.h@{bluetooth\_device.h}!bluetooth\_device\_property\_update\_address@{bluetooth\_device\_property\_update\_address}}
+\index{bluetooth\_device\_property\_update\_address@{bluetooth\_device\_property\_update\_address}!bluetooth\_device.h@{bluetooth\_device.h}}
+\doxysubsubsection{\texorpdfstring{bluetooth\_device\_property\_update\_address()}{bluetooth\_device\_property\_update\_address()}}
+{\footnotesize\ttfamily bool bluetooth\+\_\+device\+\_\+property\+\_\+update\+\_\+address (\begin{DoxyParamCaption}\item[{const char $\ast$}]{path,  }\item[{const char $\ast$}]{address }\end{DoxyParamCaption})}
+
+
+
+Updates the attribute address of the Bluetooth\+Device that has matching path Updates the mac address of the device located at the path, returns false if device cannot be found. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em string} & path \\
+\hline
+{\em string} & mac address \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+boolean True if succeed, false if device not found, or uuid array is full 
+\end{DoxyReturn}
+\mbox{\Hypertarget{bluetooth__device_8h_ab064cc2d41430ea19b325b9d1f6d9e5c}\label{bluetooth__device_8h_ab064cc2d41430ea19b325b9d1f6d9e5c}} 
+\index{bluetooth\_device.h@{bluetooth\_device.h}!bluetooth\_device\_property\_update\_alias@{bluetooth\_device\_property\_update\_alias}}
+\index{bluetooth\_device\_property\_update\_alias@{bluetooth\_device\_property\_update\_alias}!bluetooth\_device.h@{bluetooth\_device.h}}
+\doxysubsubsection{\texorpdfstring{bluetooth\_device\_property\_update\_alias()}{bluetooth\_device\_property\_update\_alias()}}
+{\footnotesize\ttfamily bool bluetooth\+\_\+device\+\_\+property\+\_\+update\+\_\+alias (\begin{DoxyParamCaption}\item[{const char $\ast$}]{path,  }\item[{const char $\ast$}]{name }\end{DoxyParamCaption})}
+
+
+
+Updates the attribute alias of the Bluetooth\+Device that has matching path Updates the alias name of the device located at the path, returns false if device cannot be found (N\+O\+TE\+: name is truncated if it exceeds M\+A\+X\+\_\+\+D\+E\+V\+I\+C\+E\+\_\+\+S\+T\+R\+I\+N\+G\+\_\+\+L\+EN. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em string} & path \\
+\hline
+{\em string} & alias name \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+boolean True if succeed, false if device not found, or uuid array is full 
+\end{DoxyReturn}
+\mbox{\Hypertarget{bluetooth__device_8h_ab4791bc9d2cf2053ab6126ef8326be7a}\label{bluetooth__device_8h_ab4791bc9d2cf2053ab6126ef8326be7a}} 
+\index{bluetooth\_device.h@{bluetooth\_device.h}!bluetooth\_device\_property\_update\_connection@{bluetooth\_device\_property\_update\_connection}}
+\index{bluetooth\_device\_property\_update\_connection@{bluetooth\_device\_property\_update\_connection}!bluetooth\_device.h@{bluetooth\_device.h}}
+\doxysubsubsection{\texorpdfstring{bluetooth\_device\_property\_update\_connection()}{bluetooth\_device\_property\_update\_connection()}}
+{\footnotesize\ttfamily bool bluetooth\+\_\+device\+\_\+property\+\_\+update\+\_\+connection (\begin{DoxyParamCaption}\item[{const char $\ast$}]{path,  }\item[{bool}]{is\+Connected }\end{DoxyParamCaption})}
+
+
+
+Updates the attribute connected of the Bluetooth\+Device that has matching path Updates the connection status of the device located at the path, returns false if device cannot be found. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em string} & path \\
+\hline
+{\em boolean} & is\+Connected \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+boolean True if succeed, false if device not found 
+\end{DoxyReturn}
+\mbox{\Hypertarget{bluetooth__device_8h_a30412b7b1eadc15a50a7a912cf00ec4e}\label{bluetooth__device_8h_a30412b7b1eadc15a50a7a912cf00ec4e}} 
+\index{bluetooth\_device.h@{bluetooth\_device.h}!bluetooth\_device\_property\_update\_paired@{bluetooth\_device\_property\_update\_paired}}
+\index{bluetooth\_device\_property\_update\_paired@{bluetooth\_device\_property\_update\_paired}!bluetooth\_device.h@{bluetooth\_device.h}}
+\doxysubsubsection{\texorpdfstring{bluetooth\_device\_property\_update\_paired()}{bluetooth\_device\_property\_update\_paired()}}
+{\footnotesize\ttfamily bool bluetooth\+\_\+device\+\_\+property\+\_\+update\+\_\+paired (\begin{DoxyParamCaption}\item[{const char $\ast$}]{path,  }\item[{bool}]{is\+Paired }\end{DoxyParamCaption})}
+
+
+
+Updates the attribute paired of the Bluetooth\+Device that has matching path Updates the paired status of the device located at the path, true = is paired, false = not paired, returns false if device canot be found. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em string} & path \\
+\hline
+{\em boolean} & is\+Paired \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+boolean True if succeed, false if device not found, or uuid array is full 
+\end{DoxyReturn}
+\mbox{\Hypertarget{bluetooth__device_8h_a0d427bc07dde9265e40ddda05da50900}\label{bluetooth__device_8h_a0d427bc07dde9265e40ddda05da50900}} 
+\index{bluetooth\_device.h@{bluetooth\_device.h}!bluetooth\_device\_property\_update\_RSSI@{bluetooth\_device\_property\_update\_RSSI}}
+\index{bluetooth\_device\_property\_update\_RSSI@{bluetooth\_device\_property\_update\_RSSI}!bluetooth\_device.h@{bluetooth\_device.h}}
+\doxysubsubsection{\texorpdfstring{bluetooth\_device\_property\_update\_RSSI()}{bluetooth\_device\_property\_update\_RSSI()}}
+{\footnotesize\ttfamily bool bluetooth\+\_\+device\+\_\+property\+\_\+update\+\_\+\+R\+S\+SI (\begin{DoxyParamCaption}\item[{const char $\ast$}]{path,  }\item[{gint16}]{rssi }\end{DoxyParamCaption})}
+
+
+
+Adds the atrribtue R\+S\+SI of the Bluetooth\+Device that has matching path Updates the rssi value of the device located at the path, returns false if device cannot be found. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em string} & path \\
+\hline
+{\em int16} & rssi value \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+boolean True if succeed, false if device not found, or uuid array is full 
+\end{DoxyReturn}
+\mbox{\Hypertarget{bluetooth__device_8h_a527845f2038957af2271af10a642a76e}\label{bluetooth__device_8h_a527845f2038957af2271af10a642a76e}} 
+\index{bluetooth\_device.h@{bluetooth\_device.h}!bluetooth\_device\_property\_update\_trusted@{bluetooth\_device\_property\_update\_trusted}}
+\index{bluetooth\_device\_property\_update\_trusted@{bluetooth\_device\_property\_update\_trusted}!bluetooth\_device.h@{bluetooth\_device.h}}
+\doxysubsubsection{\texorpdfstring{bluetooth\_device\_property\_update\_trusted()}{bluetooth\_device\_property\_update\_trusted()}}
+{\footnotesize\ttfamily bool bluetooth\+\_\+device\+\_\+property\+\_\+update\+\_\+trusted (\begin{DoxyParamCaption}\item[{const char $\ast$}]{path,  }\item[{bool}]{is\+Trusted }\end{DoxyParamCaption})}
+
+
+
+Updates the attribute trusted of the Bluetooth\+Device that has matching path Updates the trusted status of the device located at the path, true = is trusted, fasle, not trusted, returns false if device cannot be found. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em string} & path \\
+\hline
+{\em string} & is\+Trusted \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+boolean True if succeed, false if device not found, or uuid array is full 
+\end{DoxyReturn}
+\mbox{\Hypertarget{bluetooth__device_8h_a1f8fd26d63892bdc37ccd48aeceddbc6}\label{bluetooth__device_8h_a1f8fd26d63892bdc37ccd48aeceddbc6}} 
+\index{bluetooth\_device.h@{bluetooth\_device.h}!bluetooth\_device\_remove\_all\_devices@{bluetooth\_device\_remove\_all\_devices}}
+\index{bluetooth\_device\_remove\_all\_devices@{bluetooth\_device\_remove\_all\_devices}!bluetooth\_device.h@{bluetooth\_device.h}}
+\doxysubsubsection{\texorpdfstring{bluetooth\_device\_remove\_all\_devices()}{bluetooth\_device\_remove\_all\_devices()}}
+{\footnotesize\ttfamily bool bluetooth\+\_\+device\+\_\+remove\+\_\+all\+\_\+devices (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Removes Bluetooth\+Devices in linkedlist. 
+
+\begin{DoxyReturn}{Returns}
+boolean True if succeed, false if list is empty 
+\end{DoxyReturn}
+\mbox{\Hypertarget{bluetooth__device_8h_a98434bb71cd07e2016efc826a93f3d03}\label{bluetooth__device_8h_a98434bb71cd07e2016efc826a93f3d03}} 
+\index{bluetooth\_device.h@{bluetooth\_device.h}!bluetooth\_device\_remove\_device\_by\_index@{bluetooth\_device\_remove\_device\_by\_index}}
+\index{bluetooth\_device\_remove\_device\_by\_index@{bluetooth\_device\_remove\_device\_by\_index}!bluetooth\_device.h@{bluetooth\_device.h}}
+\doxysubsubsection{\texorpdfstring{bluetooth\_device\_remove\_device\_by\_index()}{bluetooth\_device\_remove\_device\_by\_index()}}
+{\footnotesize\ttfamily bool bluetooth\+\_\+device\+\_\+remove\+\_\+device\+\_\+by\+\_\+index (\begin{DoxyParamCaption}\item[{int}]{index }\end{DoxyParamCaption})}
+
+
+
+Removes Bluetooth\+Device at specified index. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em index} & integer \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+boolean True if succeed, false if device does not exist 
+\end{DoxyReturn}
+\mbox{\Hypertarget{bluetooth__device_8h_a256e1a62f9b1645b9414c2e0144f2276}\label{bluetooth__device_8h_a256e1a62f9b1645b9414c2e0144f2276}} 
+\index{bluetooth\_device.h@{bluetooth\_device.h}!bluetooth\_device\_remove\_device\_by\_path@{bluetooth\_device\_remove\_device\_by\_path}}
+\index{bluetooth\_device\_remove\_device\_by\_path@{bluetooth\_device\_remove\_device\_by\_path}!bluetooth\_device.h@{bluetooth\_device.h}}
+\doxysubsubsection{\texorpdfstring{bluetooth\_device\_remove\_device\_by\_path()}{bluetooth\_device\_remove\_device\_by\_path()}}
+{\footnotesize\ttfamily bool bluetooth\+\_\+device\+\_\+remove\+\_\+device\+\_\+by\+\_\+path (\begin{DoxyParamCaption}\item[{const char $\ast$}]{path }\end{DoxyParamCaption})}
+
+
+
+Removes a Bluetooth\+Device with specified path It uses \mbox{\hyperlink{struct__BluetoothDevice_a8da4442177eed85b86d72370fc0ef82f}{Bluetooth\+Device.\+P\+A\+TH}} to compare against. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em string} & path \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+boolean True if succeed, false if device does not exist 
+\end{DoxyReturn}
+\mbox{\Hypertarget{bluetooth__device_8h_a0a0374cb0d46f1f91b316202fa2745e9}\label{bluetooth__device_8h_a0a0374cb0d46f1f91b316202fa2745e9}} 
+\index{bluetooth\_device.h@{bluetooth\_device.h}!bluetooth\_get\_device\_at\_index@{bluetooth\_get\_device\_at\_index}}
+\index{bluetooth\_get\_device\_at\_index@{bluetooth\_get\_device\_at\_index}!bluetooth\_device.h@{bluetooth\_device.h}}
+\doxysubsubsection{\texorpdfstring{bluetooth\_get\_device\_at\_index()}{bluetooth\_get\_device\_at\_index()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{struct__BluetoothDevice}{Bluetooth\+Device}}$\ast$ bluetooth\+\_\+get\+\_\+device\+\_\+at\+\_\+index (\begin{DoxyParamCaption}\item[{int}]{index }\end{DoxyParamCaption})}
+
+
+
+Gets the Bluetooth\+Device path at specified index from linkedlist ~\newline
+ 
+
+
+\begin{DoxyParams}{Parameters}
+{\em index} & int that is a reference to head of list \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+string path of the Bluetooth\+Device 
+\end{DoxyReturn}
+\mbox{\Hypertarget{bluetooth__device_8h_a4e15784c134f3466960047a701322c61}\label{bluetooth__device_8h_a4e15784c134f3466960047a701322c61}} 
+\index{bluetooth\_device.h@{bluetooth\_device.h}!bluetooth\_get\_device\_by\_path@{bluetooth\_get\_device\_by\_path}}
+\index{bluetooth\_get\_device\_by\_path@{bluetooth\_get\_device\_by\_path}!bluetooth\_device.h@{bluetooth\_device.h}}
+\doxysubsubsection{\texorpdfstring{bluetooth\_get\_device\_by\_path()}{bluetooth\_get\_device\_by\_path()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{struct__BluetoothDevice}{Bluetooth\+Device}}$\ast$ bluetooth\+\_\+get\+\_\+device\+\_\+by\+\_\+path (\begin{DoxyParamCaption}\item[{const char $\ast$}]{path }\end{DoxyParamCaption})}
+
+
+
+Retrieves the Bluetooth\+Device with matching path from linkedlist ~\newline
+ 
+
+
+\begin{DoxyParams}{Parameters}
+{\em string} & specified path to match with \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Bluetooth\+Device if found, N\+U\+LL othewise 
+\end{DoxyReturn}
+\mbox{\Hypertarget{bluetooth__device_8h_a5f99844ca182d587a39a58a225bd40d2}\label{bluetooth__device_8h_a5f99844ca182d587a39a58a225bd40d2}} 
+\index{bluetooth\_device.h@{bluetooth\_device.h}!bluetooth\_get\_device\_path\_at\_index@{bluetooth\_get\_device\_path\_at\_index}}
+\index{bluetooth\_get\_device\_path\_at\_index@{bluetooth\_get\_device\_path\_at\_index}!bluetooth\_device.h@{bluetooth\_device.h}}
+\doxysubsubsection{\texorpdfstring{bluetooth\_get\_device\_path\_at\_index()}{bluetooth\_get\_device\_path\_at\_index()}}
+{\footnotesize\ttfamily char$\ast$ bluetooth\+\_\+get\+\_\+device\+\_\+path\+\_\+at\+\_\+index (\begin{DoxyParamCaption}\item[{int}]{index }\end{DoxyParamCaption})}
+
+
+
+Gets the Bluetooth\+Device path at specified index from linkedlist ~\newline
+ 
+
+
+\begin{DoxyParams}{Parameters}
+{\em index} & int that is a reference to head of list \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+string path of the Bluetooth\+Device 
+\end{DoxyReturn}

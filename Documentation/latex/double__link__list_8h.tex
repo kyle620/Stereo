@@ -1,0 +1,223 @@
+\hypertarget{double__link__list_8h}{}\doxysection{/home/pi/\+Bluetooth\+Test/\+Stereo/include/double\+\_\+link\+\_\+list.h File Reference}
+\label{double__link__list_8h}\index{/home/pi/BluetoothTest/Stereo/include/double\_link\_list.h@{/home/pi/BluetoothTest/Stereo/include/double\_link\_list.h}}
+
+
+This file implements a double link list of Bluetooth Devices.  
+
+
+{\ttfamily \#include \char`\"{}bluetooth\+\_\+device.\+h\char`\"{}}\newline
+\doxysubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct__Node}{\+\_\+\+Node}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{double__link__list_8h_a8ff62746a396b270606ff04818b7e4ac}\label{double__link__list_8h_a8ff62746a396b270606ff04818b7e4ac}} 
+typedef struct \mbox{\hyperlink{struct__Node}{\+\_\+\+Node}} {\bfseries Node}
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{double__link__list_8h_ac3e3efe1445d90b212d246658c2bfc95}{push}} (\mbox{\hyperlink{struct__Node}{Node}} $\ast$$\ast$head\+Ref, \mbox{\hyperlink{struct__BluetoothDevice}{Bluetooth\+Device}} $\ast$new\+Device)
+\begin{DoxyCompactList}\small\item\em Modifiers. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{double__link__list_8h_a98e5474461119d3d85be8e3977282469}{append}} (\mbox{\hyperlink{struct__Node}{Node}} $\ast$$\ast$head\+Ref, \mbox{\hyperlink{struct__BluetoothDevice}{Bluetooth\+Device}} $\ast$new\+Device)
+\begin{DoxyCompactList}\small\item\em Inserts a new Node at end of list. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{double__link__list_8h_aec13321f83beedb3d80eb0cd091f9a77}{insert\+Before}} (\mbox{\hyperlink{struct__Node}{Node}} $\ast$$\ast$head\+Ref, \mbox{\hyperlink{struct__Node}{Node}} $\ast$next\+Node, \mbox{\hyperlink{struct__BluetoothDevice}{Bluetooth\+Device}} $\ast$new\+Device)
+\begin{DoxyCompactList}\small\item\em Inserts a new Node in the list before Node specified in second paramater. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{double__link__list_8h_a029d0d63a8fafb7350d2bf6d3e3da500}{delete\+Node}} (\mbox{\hyperlink{struct__Node}{Node}} $\ast$$\ast$start, const char $\ast$path)
+\begin{DoxyCompactList}\small\item\em Deletes the Node that contains the Bluetooth\+Device with path from list. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{double__link__list_8h_ab4af7e63a778d6d3c2ea902a2eb1b03b}{clear\+List}} (\mbox{\hyperlink{struct__Node}{Node}} $\ast$$\ast$start)
+\begin{DoxyCompactList}\small\item\em Removes all nodes from list, unallocates all the memory. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{double__link__list_8h_a3b53ee689d70fd0c6fb2158ffcaca7f1}{print\+List}} (\mbox{\hyperlink{struct__Node}{Node}} $\ast$start)
+\begin{DoxyCompactList}\small\item\em Accessors. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{struct__Node}{Node}} $\ast$ \mbox{\hyperlink{double__link__list_8h_ab5e4145c6ce25149bdf55a78ac430b80}{does\+Node\+Exist}} (\mbox{\hyperlink{struct__Node}{Node}} $\ast$head, const char $\ast$path)
+\begin{DoxyCompactList}\small\item\em Searches for a node contains a Bluetooth\+Device with given path. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{struct__Node}{Node}} $\ast$ \mbox{\hyperlink{double__link__list_8h_ab79c6f13d98c63ab936ebce8cb320fc1}{scan\+List}} (\mbox{\hyperlink{struct__Node}{Node}} $\ast$start, int index)
+\begin{DoxyCompactList}\small\item\em Searches for a node at a given index. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{struct__Node}{Node}} $\ast$ \mbox{\hyperlink{double__link__list_8h_a597f5506257fa9b95b4878d2b096d517}{scan\+List\+By\+Path}} (\mbox{\hyperlink{struct__Node}{Node}} $\ast$start, const char $\ast$path)
+\begin{DoxyCompactList}\small\item\em Searches for a Node that contains a Bluetooth\+Device with given path. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+This file implements a double link list of Bluetooth Devices. 
+
+\begin{DoxyAuthor}{Author}
+Kyle Van Cleave 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+March 14, 2020 
+\end{DoxyDate}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{double__link__list_8h_a98e5474461119d3d85be8e3977282469}\label{double__link__list_8h_a98e5474461119d3d85be8e3977282469}} 
+\index{double\_link\_list.h@{double\_link\_list.h}!append@{append}}
+\index{append@{append}!double\_link\_list.h@{double\_link\_list.h}}
+\doxysubsubsection{\texorpdfstring{append()}{append()}}
+{\footnotesize\ttfamily bool append (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct__Node}{Node}} $\ast$$\ast$}]{head\+Ref,  }\item[{\mbox{\hyperlink{struct__BluetoothDevice}{Bluetooth\+Device}} $\ast$}]{new\+Device }\end{DoxyParamCaption})}
+
+
+
+Inserts a new Node at end of list. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Node} & that is a reference to head of list \\
+\hline
+{\em Bluetooth\+Device} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Returns true on success, false if node already exists 
+\end{DoxyReturn}
+\mbox{\Hypertarget{double__link__list_8h_ab4af7e63a778d6d3c2ea902a2eb1b03b}\label{double__link__list_8h_ab4af7e63a778d6d3c2ea902a2eb1b03b}} 
+\index{double\_link\_list.h@{double\_link\_list.h}!clearList@{clearList}}
+\index{clearList@{clearList}!double\_link\_list.h@{double\_link\_list.h}}
+\doxysubsubsection{\texorpdfstring{clearList()}{clearList()}}
+{\footnotesize\ttfamily bool clear\+List (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct__Node}{Node}} $\ast$$\ast$}]{start }\end{DoxyParamCaption})}
+
+
+
+Removes all nodes from list, unallocates all the memory. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em start} & an Node that is a reference to head of list \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Returns true on success, false start is N\+U\+LL 
+\end{DoxyReturn}
+\mbox{\Hypertarget{double__link__list_8h_a029d0d63a8fafb7350d2bf6d3e3da500}\label{double__link__list_8h_a029d0d63a8fafb7350d2bf6d3e3da500}} 
+\index{double\_link\_list.h@{double\_link\_list.h}!deleteNode@{deleteNode}}
+\index{deleteNode@{deleteNode}!double\_link\_list.h@{double\_link\_list.h}}
+\doxysubsubsection{\texorpdfstring{deleteNode()}{deleteNode()}}
+{\footnotesize\ttfamily bool delete\+Node (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct__Node}{Node}} $\ast$$\ast$}]{start,  }\item[{const char $\ast$}]{path }\end{DoxyParamCaption})}
+
+
+
+Deletes the Node that contains the Bluetooth\+Device with path from list. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em start} & an Node that is a reference to head of list \\
+\hline
+{\em path} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Returns true on success, false if start is N\+U\+LL, or Bluetooth\+Device with path is not found 
+\end{DoxyReturn}
+\mbox{\Hypertarget{double__link__list_8h_ab5e4145c6ce25149bdf55a78ac430b80}\label{double__link__list_8h_ab5e4145c6ce25149bdf55a78ac430b80}} 
+\index{double\_link\_list.h@{double\_link\_list.h}!doesNodeExist@{doesNodeExist}}
+\index{doesNodeExist@{doesNodeExist}!double\_link\_list.h@{double\_link\_list.h}}
+\doxysubsubsection{\texorpdfstring{doesNodeExist()}{doesNodeExist()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{struct__Node}{Node}}$\ast$ does\+Node\+Exist (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct__Node}{Node}} $\ast$}]{head,  }\item[{const char $\ast$}]{path }\end{DoxyParamCaption})}
+
+
+
+Searches for a node contains a Bluetooth\+Device with given path. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em start} & an Node that is a reference to head of list \\
+\hline
+{\em path} & used to compare a Bluetooth\+Device path to \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Returns a reference to the Node with the Bluetooth\+Device with given path, N\+U\+LL otherwise 
+\end{DoxyReturn}
+\mbox{\Hypertarget{double__link__list_8h_aec13321f83beedb3d80eb0cd091f9a77}\label{double__link__list_8h_aec13321f83beedb3d80eb0cd091f9a77}} 
+\index{double\_link\_list.h@{double\_link\_list.h}!insertBefore@{insertBefore}}
+\index{insertBefore@{insertBefore}!double\_link\_list.h@{double\_link\_list.h}}
+\doxysubsubsection{\texorpdfstring{insertBefore()}{insertBefore()}}
+{\footnotesize\ttfamily bool insert\+Before (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct__Node}{Node}} $\ast$$\ast$}]{head\+Ref,  }\item[{\mbox{\hyperlink{struct__Node}{Node}} $\ast$}]{next\+Node,  }\item[{\mbox{\hyperlink{struct__BluetoothDevice}{Bluetooth\+Device}} $\ast$}]{new\+Device }\end{DoxyParamCaption})}
+
+
+
+Inserts a new Node in the list before Node specified in second paramater. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em head} & an Node that is a reference to head of list \\
+\hline
+{\em next} & an Node that we insert our new Node in front of \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Returns true on success, false if node already exists 
+\end{DoxyReturn}
+\mbox{\Hypertarget{double__link__list_8h_a3b53ee689d70fd0c6fb2158ffcaca7f1}\label{double__link__list_8h_a3b53ee689d70fd0c6fb2158ffcaca7f1}} 
+\index{double\_link\_list.h@{double\_link\_list.h}!printList@{printList}}
+\index{printList@{printList}!double\_link\_list.h@{double\_link\_list.h}}
+\doxysubsubsection{\texorpdfstring{printList()}{printList()}}
+{\footnotesize\ttfamily void print\+List (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct__Node}{Node}} $\ast$}]{start }\end{DoxyParamCaption})}
+
+
+
+Accessors. 
+
+Prints contents of the linked list staring from the given node 
+\begin{DoxyParams}{Parameters}
+{\em start} & Node that is a reference to where begin printing list from \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{double__link__list_8h_ac3e3efe1445d90b212d246658c2bfc95}\label{double__link__list_8h_ac3e3efe1445d90b212d246658c2bfc95}} 
+\index{double\_link\_list.h@{double\_link\_list.h}!push@{push}}
+\index{push@{push}!double\_link\_list.h@{double\_link\_list.h}}
+\doxysubsubsection{\texorpdfstring{push()}{push()}}
+{\footnotesize\ttfamily bool push (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct__Node}{Node}} $\ast$$\ast$}]{head\+Ref,  }\item[{\mbox{\hyperlink{struct__BluetoothDevice}{Bluetooth\+Device}} $\ast$}]{new\+Device }\end{DoxyParamCaption})}
+
+
+
+Modifiers. 
+
+Inserts a Node at beginning of list 
+\begin{DoxyParams}{Parameters}
+{\em Node} & that is a reference to head of list \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Returns true on success, false if node already exists 
+\end{DoxyReturn}
+\mbox{\Hypertarget{double__link__list_8h_ab79c6f13d98c63ab936ebce8cb320fc1}\label{double__link__list_8h_ab79c6f13d98c63ab936ebce8cb320fc1}} 
+\index{double\_link\_list.h@{double\_link\_list.h}!scanList@{scanList}}
+\index{scanList@{scanList}!double\_link\_list.h@{double\_link\_list.h}}
+\doxysubsubsection{\texorpdfstring{scanList()}{scanList()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{struct__Node}{Node}}$\ast$ scan\+List (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct__Node}{Node}} $\ast$}]{start,  }\item[{int}]{index }\end{DoxyParamCaption})}
+
+
+
+Searches for a node at a given index. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em start} & an Node that is a reference to head of list \\
+\hline
+{\em index} & an integer that is the index we want \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Returns a reference to the Node at index, or N\+U\+LL otherwise 
+\end{DoxyReturn}
+\mbox{\Hypertarget{double__link__list_8h_a597f5506257fa9b95b4878d2b096d517}\label{double__link__list_8h_a597f5506257fa9b95b4878d2b096d517}} 
+\index{double\_link\_list.h@{double\_link\_list.h}!scanListByPath@{scanListByPath}}
+\index{scanListByPath@{scanListByPath}!double\_link\_list.h@{double\_link\_list.h}}
+\doxysubsubsection{\texorpdfstring{scanListByPath()}{scanListByPath()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{struct__Node}{Node}}$\ast$ scan\+List\+By\+Path (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct__Node}{Node}} $\ast$}]{start,  }\item[{const char $\ast$}]{path }\end{DoxyParamCaption})}
+
+
+
+Searches for a Node that contains a Bluetooth\+Device with given path. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em start} & an Node that is a reference to head of list param path a string that is the path we are looking for \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Returns a reference to the Node that contains a Bluetooth Device with given path, or N\+U\+LL if not found 
+\end{DoxyReturn}

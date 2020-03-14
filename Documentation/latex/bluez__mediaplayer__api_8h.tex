@@ -1,0 +1,143 @@
+\hypertarget{bluez__mediaplayer__api_8h}{}\doxysection{/home/pi/\+Bluetooth\+Test/\+Stereo/include/bluez\+\_\+mediaplayer\+\_\+api.h File Reference}
+\label{bluez__mediaplayer__api_8h}\index{/home/pi/BluetoothTest/Stereo/include/bluez\_mediaplayer\_api.h@{/home/pi/BluetoothTest/Stereo/include/bluez\_mediaplayer\_api.h}}
+
+
+This file implements majority of the functioanlity described in the \char`\"{}media-\/api.\+txt\char`\"{} file provided by bluez. To learn more, please visit \textquotesingle{}\href{https://git.kernel.org/pub/scm/bluetooth/bluez.git/tree/doc/media-api.txt'}{\texttt{ https\+://git.\+kernel.\+org/pub/scm/bluetooth/bluez.\+git/tree/doc/media-\/api.\+txt\textquotesingle{}}}.  
+
+
+{\ttfamily \#include $<$glib.\+h$>$}\newline
+{\ttfamily \#include $<$gio/gio.\+h$>$}\newline
+{\ttfamily \#include $<$stdbool.\+h$>$}\newline
+\doxysubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct__MediaPlayer}{\+\_\+\+Media\+Player}}
+\begin{DoxyCompactList}\small\item\em T\+O\+DO need to do bound checking on size of chars. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{bluez__mediaplayer__api_8h_a012aa12808bcebda48ab1816a292741d}{P\+R\+O\+P\+E\+R\+T\+Y\+\_\+\+R\+E\+P\+E\+AT}}~\char`\"{}Repeat\char`\"{}
+\begin{DoxyCompactList}\small\item\em Defines for the properties we can ask for according to the org.\+bluez.\+Media\+Player1 interface. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{bluez__mediaplayer__api_8h_a593399a22c9bf5fcd7d040b973b9af5e}\label{bluez__mediaplayer__api_8h_a593399a22c9bf5fcd7d040b973b9af5e}} 
+\#define \mbox{\hyperlink{bluez__mediaplayer__api_8h_a593399a22c9bf5fcd7d040b973b9af5e}{P\+R\+O\+P\+E\+R\+T\+Y\+\_\+\+S\+H\+U\+F\+F\+LE}}~\char`\"{}Shuffle\char`\"{}
+\begin{DoxyCompactList}\small\item\em Boolean. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{bluez__mediaplayer__api_8h_a0af48f48239f959c68c804fabdb1ce44}\label{bluez__mediaplayer__api_8h_a0af48f48239f959c68c804fabdb1ce44}} 
+\#define \mbox{\hyperlink{bluez__mediaplayer__api_8h_a0af48f48239f959c68c804fabdb1ce44}{P\+R\+O\+P\+E\+R\+T\+Y\+\_\+\+S\+T\+A\+T\+US}}~\char`\"{}Status\char`\"{}
+\begin{DoxyCompactList}\small\item\em String. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{bluez__mediaplayer__api_8h_ac93ca458341ee17edd9e9f8e1f8cd782}\label{bluez__mediaplayer__api_8h_ac93ca458341ee17edd9e9f8e1f8cd782}} 
+\#define \mbox{\hyperlink{bluez__mediaplayer__api_8h_ac93ca458341ee17edd9e9f8e1f8cd782}{P\+R\+O\+P\+E\+R\+T\+Y\+\_\+\+N\+A\+ME}}~\char`\"{}Name\char`\"{}
+\begin{DoxyCompactList}\small\item\em String. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{bluez__mediaplayer__api_8h_ab27ffab23f458f2baf0dc27d19c1a536}\label{bluez__mediaplayer__api_8h_ab27ffab23f458f2baf0dc27d19c1a536}} 
+\#define \mbox{\hyperlink{bluez__mediaplayer__api_8h_ab27ffab23f458f2baf0dc27d19c1a536}{P\+R\+O\+P\+E\+R\+T\+Y\+\_\+\+T\+Y\+PE}}~\char`\"{}Type\char`\"{}
+\begin{DoxyCompactList}\small\item\em String. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{bluez__mediaplayer__api_8h_adebdb1894045ac9368db2b43c3fc43ab}\label{bluez__mediaplayer__api_8h_adebdb1894045ac9368db2b43c3fc43ab}} 
+\#define \mbox{\hyperlink{bluez__mediaplayer__api_8h_adebdb1894045ac9368db2b43c3fc43ab}{P\+R\+O\+P\+E\+R\+T\+Y\+\_\+\+P\+O\+S\+I\+T\+I\+ON}}~\char`\"{}Position\char`\"{}
+\begin{DoxyCompactList}\small\item\em U\+I\+N\+T32. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{bluez__mediaplayer__api_8h_a94f08f27e9f68480f4baf7372278e157}\label{bluez__mediaplayer__api_8h_a94f08f27e9f68480f4baf7372278e157}} 
+\#define \mbox{\hyperlink{bluez__mediaplayer__api_8h_a94f08f27e9f68480f4baf7372278e157}{P\+R\+O\+P\+E\+R\+T\+Y\+\_\+\+D\+U\+R\+A\+T\+I\+ON}}~\char`\"{}Duration\char`\"{}
+\begin{DoxyCompactList}\small\item\em U\+I\+N\+T32. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{bluez__mediaplayer__api_8h_a4f6a9058fc9a09d58126589adb8988c9}\label{bluez__mediaplayer__api_8h_a4f6a9058fc9a09d58126589adb8988c9}} 
+\#define \mbox{\hyperlink{bluez__mediaplayer__api_8h_a4f6a9058fc9a09d58126589adb8988c9}{P\+R\+O\+P\+E\+R\+T\+Y\+\_\+\+T\+R\+A\+C\+K\+\_\+\+N\+U\+M\+B\+ER}}~\char`\"{}Track\+Number\char`\"{}
+\begin{DoxyCompactList}\small\item\em U\+I\+N\+T32. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{bluez__mediaplayer__api_8h_a95958d7892329977d76348534c84ce6a}\label{bluez__mediaplayer__api_8h_a95958d7892329977d76348534c84ce6a}} 
+\#define \mbox{\hyperlink{bluez__mediaplayer__api_8h_a95958d7892329977d76348534c84ce6a}{P\+R\+O\+P\+E\+R\+T\+Y\+\_\+\+T\+R\+A\+C\+K\+\_\+\+T\+I\+T\+LE}}~\char`\"{}Title\char`\"{}
+\begin{DoxyCompactList}\small\item\em String. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{bluez__mediaplayer__api_8h_a95ab350c70698d6358468e84fcc30dff}\label{bluez__mediaplayer__api_8h_a95ab350c70698d6358468e84fcc30dff}} 
+\#define \mbox{\hyperlink{bluez__mediaplayer__api_8h_a95ab350c70698d6358468e84fcc30dff}{P\+R\+O\+P\+E\+R\+T\+Y\+\_\+\+T\+R\+A\+C\+K\+\_\+\+A\+R\+T\+I\+ST}}~\char`\"{}Artist\char`\"{}
+\begin{DoxyCompactList}\small\item\em String. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{bluez__mediaplayer__api_8h_af2e293d81a73c002613fe62899f25b32}\label{bluez__mediaplayer__api_8h_af2e293d81a73c002613fe62899f25b32}} 
+\#define \mbox{\hyperlink{bluez__mediaplayer__api_8h_af2e293d81a73c002613fe62899f25b32}{P\+R\+O\+P\+E\+R\+T\+Y\+\_\+\+T\+R\+A\+C\+K\+\_\+\+A\+L\+B\+UM}}~\char`\"{}Album\char`\"{}
+\begin{DoxyCompactList}\small\item\em String. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{bluez__mediaplayer__api_8h_af54a6703fac3cc028fcfaedd0ed8d12e}\label{bluez__mediaplayer__api_8h_af54a6703fac3cc028fcfaedd0ed8d12e}} 
+\#define \mbox{\hyperlink{bluez__mediaplayer__api_8h_af54a6703fac3cc028fcfaedd0ed8d12e}{P\+R\+O\+P\+E\+R\+T\+Y\+\_\+\+T\+R\+A\+C\+K\+\_\+\+G\+E\+N\+RE}}~\char`\"{}Genre\char`\"{}
+\begin{DoxyCompactList}\small\item\em String. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{bluez__mediaplayer__api_8h_a830112d08cc5c21ef28d0edc4b3f2916}\label{bluez__mediaplayer__api_8h_a830112d08cc5c21ef28d0edc4b3f2916}} 
+typedef struct \mbox{\hyperlink{struct__MediaPlayer}{\+\_\+\+Media\+Player}} {\bfseries Media\+Player}
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{bluez__mediaplayer__api_8h_a7e940b2f1e29aefbcdbef7b42af23bff}\label{bluez__mediaplayer__api_8h_a7e940b2f1e29aefbcdbef7b42af23bff}} 
+void {\bfseries bluez\+\_\+media\+\_\+player\+\_\+print\+\_\+current\+\_\+player} (void)
+\item 
+int \mbox{\hyperlink{bluez__mediaplayer__api_8h_a5d650e3933487debe1f5bb99144b11c9}{bluez\+\_\+media\+\_\+player\+\_\+init}} (G\+D\+Bus\+Connection $\ast$conn)
+\item 
+\mbox{\Hypertarget{bluez__mediaplayer__api_8h_a4823a61e7000cd8bbbb7a823a2d55881}\label{bluez__mediaplayer__api_8h_a4823a61e7000cd8bbbb7a823a2d55881}} 
+void {\bfseries bluez\+\_\+media\+\_\+player\+\_\+set\+\_\+default\+\_\+properties} (void)
+\item 
+\mbox{\Hypertarget{bluez__mediaplayer__api_8h_a259b3733d9b8112150cd79c24a22189b}\label{bluez__mediaplayer__api_8h_a259b3733d9b8112150cd79c24a22189b}} 
+void {\bfseries bluez\+\_\+media\+\_\+player\+\_\+init\+\_\+signals} (void)
+\item 
+\mbox{\Hypertarget{bluez__mediaplayer__api_8h_aeffd50e141bae1e5ecc1df6d433b1dc9}\label{bluez__mediaplayer__api_8h_aeffd50e141bae1e5ecc1df6d433b1dc9}} 
+void {\bfseries bluez\+\_\+media\+\_\+player\+\_\+mute\+\_\+signals} (void)
+\item 
+\mbox{\Hypertarget{bluez__mediaplayer__api_8h_a7674b504be3197d469a000a7a2a12b90}\label{bluez__mediaplayer__api_8h_a7674b504be3197d469a000a7a2a12b90}} 
+void {\bfseries bluez\+\_\+media\+\_\+player\+\_\+read\+\_\+remote\+\_\+player\+\_\+properties} ()
+\item 
+\mbox{\Hypertarget{bluez__mediaplayer__api_8h_ac89f53759f86679aa3d8cde94e8c0db6}\label{bluez__mediaplayer__api_8h_ac89f53759f86679aa3d8cde94e8c0db6}} 
+void {\bfseries bluez\+\_\+mediaplayer\+\_\+play} ()
+\item 
+\mbox{\Hypertarget{bluez__mediaplayer__api_8h_a97b4da946ffdbc7e730e8fc1f5356ca6}\label{bluez__mediaplayer__api_8h_a97b4da946ffdbc7e730e8fc1f5356ca6}} 
+void {\bfseries bluez\+\_\+mediaplayer\+\_\+pause} ()
+\item 
+\mbox{\Hypertarget{bluez__mediaplayer__api_8h_a6290bd10a7f2b98804a4ce242377cc80}\label{bluez__mediaplayer__api_8h_a6290bd10a7f2b98804a4ce242377cc80}} 
+void {\bfseries bluez\+\_\+mediaplayer\+\_\+stop} ()
+\item 
+\mbox{\Hypertarget{bluez__mediaplayer__api_8h_aeb3fa544ef69a316d58e4770a1894f06}\label{bluez__mediaplayer__api_8h_aeb3fa544ef69a316d58e4770a1894f06}} 
+void {\bfseries bluez\+\_\+mediaplayer\+\_\+next} ()
+\item 
+\mbox{\Hypertarget{bluez__mediaplayer__api_8h_a48f6a0db3b7e9b995c42a239b9dfc7a8}\label{bluez__mediaplayer__api_8h_a48f6a0db3b7e9b995c42a239b9dfc7a8}} 
+void {\bfseries bluez\+\_\+mediaplayer\+\_\+previous} ()
+\item 
+\mbox{\Hypertarget{bluez__mediaplayer__api_8h_a0eec44e276b9d9e832a77e69116cd86e}\label{bluez__mediaplayer__api_8h_a0eec44e276b9d9e832a77e69116cd86e}} 
+void {\bfseries bluez\+\_\+mediaplayer\+\_\+shuffle\+\_\+on} ()
+\item 
+\mbox{\Hypertarget{bluez__mediaplayer__api_8h_a9b89cb022a193c96d227de0a7abff316}\label{bluez__mediaplayer__api_8h_a9b89cb022a193c96d227de0a7abff316}} 
+void {\bfseries bluez\+\_\+mediaplayer\+\_\+shuffle\+\_\+off} ()
+\item 
+\mbox{\Hypertarget{bluez__mediaplayer__api_8h_ad86d8a172c98b2823b6f3a71d7388aeb}\label{bluez__mediaplayer__api_8h_ad86d8a172c98b2823b6f3a71d7388aeb}} 
+void {\bfseries bluez\+\_\+mediaplayer\+\_\+repeat\+\_\+singletrack} ()
+\item 
+\mbox{\Hypertarget{bluez__mediaplayer__api_8h_a52e3b2373040834ea9ad486c1f72cc41}\label{bluez__mediaplayer__api_8h_a52e3b2373040834ea9ad486c1f72cc41}} 
+void {\bfseries bluez\+\_\+mediaplayer\+\_\+repeat\+\_\+alltracks} ()
+\item 
+\mbox{\Hypertarget{bluez__mediaplayer__api_8h_ae27b4b45ed3a6de6f1dfaadf4d0e734d}\label{bluez__mediaplayer__api_8h_ae27b4b45ed3a6de6f1dfaadf4d0e734d}} 
+void {\bfseries bluez\+\_\+mediaplayer\+\_\+repeat\+\_\+off} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+This file implements majority of the functioanlity described in the \char`\"{}media-\/api.\+txt\char`\"{} file provided by bluez. To learn more, please visit \textquotesingle{}\href{https://git.kernel.org/pub/scm/bluetooth/bluez.git/tree/doc/media-api.txt'}{\texttt{ https\+://git.\+kernel.\+org/pub/scm/bluetooth/bluez.\+git/tree/doc/media-\/api.\+txt\textquotesingle{}}}. 
+
+\begin{DoxyAuthor}{Author}
+Kyle Van Cleave 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+March 14, 2020 
+\end{DoxyDate}
+
+
+\doxysubsection{Macro Definition Documentation}
+\mbox{\Hypertarget{bluez__mediaplayer__api_8h_a012aa12808bcebda48ab1816a292741d}\label{bluez__mediaplayer__api_8h_a012aa12808bcebda48ab1816a292741d}} 
+\index{bluez\_mediaplayer\_api.h@{bluez\_mediaplayer\_api.h}!PROPERTY\_REPEAT@{PROPERTY\_REPEAT}}
+\index{PROPERTY\_REPEAT@{PROPERTY\_REPEAT}!bluez\_mediaplayer\_api.h@{bluez\_mediaplayer\_api.h}}
+\doxysubsubsection{\texorpdfstring{PROPERTY\_REPEAT}{PROPERTY\_REPEAT}}
+{\footnotesize\ttfamily \#define P\+R\+O\+P\+E\+R\+T\+Y\+\_\+\+R\+E\+P\+E\+AT~\char`\"{}Repeat\char`\"{}}
+
+
+
+Defines for the properties we can ask for according to the org.\+bluez.\+Media\+Player1 interface. 
+
+Boolean 
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{bluez__mediaplayer__api_8h_a5d650e3933487debe1f5bb99144b11c9}\label{bluez__mediaplayer__api_8h_a5d650e3933487debe1f5bb99144b11c9}} 
+\index{bluez\_mediaplayer\_api.h@{bluez\_mediaplayer\_api.h}!bluez\_media\_player\_init@{bluez\_media\_player\_init}}
+\index{bluez\_media\_player\_init@{bluez\_media\_player\_init}!bluez\_mediaplayer\_api.h@{bluez\_mediaplayer\_api.h}}
+\doxysubsubsection{\texorpdfstring{bluez\_media\_player\_init()}{bluez\_media\_player\_init()}}
+{\footnotesize\ttfamily int bluez\+\_\+media\+\_\+player\+\_\+init (\begin{DoxyParamCaption}\item[{G\+D\+Bus\+Connection $\ast$}]{conn }\end{DoxyParamCaption})}
+
+T\+O\+DO Need to organize Error Codes
