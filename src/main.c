@@ -133,6 +133,36 @@ int main( int argc, char** argv )
 				case 10:
 					bluez_register_agent();
 				break;
+				case 11:
+					bluez_media_player_print_current_player();
+				break;
+				case 12:
+					bluez_mediaplayer_play();
+					break;
+				case 13:
+					bluez_mediaplayer_pause();
+					break;
+				case 14:
+					bluez_mediaplayer_next();
+				break;
+				case 15:
+					bluez_mediaplayer_previous();
+				break;
+				case 16:
+					bluez_mediaplayer_shuffle_on();
+					break;
+				case 17:
+					bluez_mediaplayer_shuffle_off();
+					break;
+				case 18:
+					bluez_mediaplayer_repeat_singletrack();
+					break;
+				case 19:
+					bluez_mediaplayer_repeat_alltracks();
+				break;
+				case 20:
+					bluez_mediaplayer_repeat_off();
+				break;
 				default:
 					printf("Unsupported Command\n");
 		  }
@@ -164,6 +194,18 @@ static void printOptions()
 	g_print(" 6:\tAgent On\n");
 	g_print(" 7:\tInit Signals\n");
 	g_print(" 8:\tMute Signals\n");
+	g_print(" 9:\tRemove Device\n");
+	g_print(" 10:\tRegister Agent\n");
+	g_print(" 11:\tPrint Player\n");
+	g_print(" 12:\tPlay\n");
+	g_print(" 13:\tPause\n");
+	g_print(" 14:\tNext\n");
+	g_print(" 15:\tPrevious\n");
+	g_print(" 16:\tShuffle On\n");
+	g_print(" 17:\tShuffle Off\n");
+	g_print(" 18:\tRepeat Single\n");
+	g_print(" 19:\tRepeat All\n");
+	g_print(" 20:\tRepeat Off\n");
 }
 
 static void* gdbusMainLoopThread(void* aArg)

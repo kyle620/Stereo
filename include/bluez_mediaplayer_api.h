@@ -14,7 +14,6 @@
 #include <stdbool.h>
 
 // Defines for the properties we can ask for according to the org.bluez.MediaPlayer1 interface
-#define PROPERTY_EQUALIZER		"Equalizer\0"
 #define PROPERTY_REPEAT			"Repeat"
 #define PROPERTY_SHUFFLE		"Shuffle"
 #define PROPERTY_STATUS			"Status"
@@ -169,7 +168,6 @@
 struct _MediaPlayer{
 	char	OBJECT_PATH[100];	// Path of the device we are connected to: example: /org/bluez/hci0/dev_XX_XX_XX_XX_XX_XX
 	char 	PLAYER_PATH[100];	// Path of the player we want to listen/exchange track data with, and control using control methods
-	char 	EQUALIZER[10];		// Possible values "off" or "on"
 	char	REPEAT[20];			// Possible values: "off", "singletrack", "alltracks" or "group"
 	char	SHUFFLE[20];		// Possible values: "off", "alltracks" or "group"
 	char	STATUS[20];			// Possible status: "playing", "stopped", "paused", "forward-seek", "reverse-seek" or "error"
@@ -190,7 +188,7 @@ typedef struct _MediaPlayer MediaPlayer;
 /* 
 *	Accessors
 */
-
+void bluez_media_player_print_current_player(void);							// prints the properties of the current player
 
 /*
 * Modifiers
@@ -199,7 +197,6 @@ int bluez_media_player_init(GDBusConnection * conn);
 void bluez_media_player_set_default_properties(void);
 void bluez_media_player_init_signals(void);
 void bluez_media_player_mute_signals(void);
-void bluez_media_player_update_remote_device_property(const char * prop_name, const char * value);
 void bluez_media_player_read_remote_player_properties();
 
 /*
@@ -258,11 +255,16 @@ Methods		void Play()
 			Possible Errors: org.bluez.Error.NotSupported
 					 org.bluez.Error.Failed
 */
-void bluez_mediaplayer_play();				// Tells remote object to start playing track
-void bluez_mediaplayer_pause();				// Tells remote object to pause
-void bluez_mediaplayer_stop();				// Tells remote object to stop
-void bluez_mediaplayer_next();				// Tells remote object to skip to next track
-void bluez_mediaplayer_previous();			// Tells remote object to jump back to previous track
+void bluez_mediaplayer_play();					// Tells remote object to start playing track
+void bluez_mediaplayer_pause();					// Tells remote object to pause
+void bluez_mediaplayer_stop();					// Tells remote object to stop
+void bluez_mediaplayer_next();					// Tells remote object to skip to next track
+void bluez_mediaplayer_previous();				// Tells remote object to jump back to previous track
+void bluez_mediaplayer_shuffle_on();			// Tells remote object to turn shuffle 'alltracks'
+void bluez_mediaplayer_shuffle_off();			// Tells remote object to turn shuffle off
+void bluez_mediaplayer_repeat_singletrack();	// Tells remote object to turn repeat 'alltracks'
+void bluez_mediaplayer_repeat_alltracks();		// Tells remote object to turn repeat 'alltracks'
+void bluez_mediaplayer_repeat_off();			// Tells remote object to turn repeat 'off'
 
 
 #endif

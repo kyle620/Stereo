@@ -37,6 +37,23 @@ static guint prop_changed_control;
 /*
  * Accessors
  */
+ void bluez_media_player_print_current_player(void)
+ {
+	 if(!mDefaultPlayer.CONNECTED)
+		 g_print("No Player exists!\n");
+	 else
+	 {
+		 g_print("***\tCurrent Player Info\t***\n");
+		 g_print("\t- Object Path:\t%s\n",mDefaultPlayer.OBJECT_PATH);
+		 g_print("\t- Player Path:\t%s\n",mDefaultPlayer.PLAYER_PATH);
+		 g_print("\t- Repeat:\t%s\n",mDefaultPlayer.REPEAT);
+		 g_print("\t- Shuffle:\t%s\n",mDefaultPlayer.SHUFFLE);
+		 g_print("\t- Status:\t%s\n",mDefaultPlayer.STATUS);
+		 g_print("\t- Player Name:\t%s\n",mDefaultPlayer.PLAYER_NAME);
+		 g_print("\t- Type:\t\t%s\n",mDefaultPlayer.TYPE);
+	 }
+	g_print("\n");
+ }
  
  /*
   * Modifiers
@@ -66,7 +83,6 @@ static guint prop_changed_control;
 	 // initialize our mediaplayer object with values
 	strcpy(mDefaultPlayer.OBJECT_PATH,"NULL");
 	strcpy(mDefaultPlayer.PLAYER_PATH,"NULL");
-	strcpy(mDefaultPlayer.EQUALIZER,"off");
 	strcpy(mDefaultPlayer.REPEAT,"off");
 	strcpy(mDefaultPlayer.STATUS,"stopped");
 	strcpy(mDefaultPlayer.PLAYER_NAME,"NULL");
@@ -113,24 +129,9 @@ void bluez_media_player_mute_signals(void)
 	g_dbus_connection_signal_unsubscribe(mCon, prop_changed_control);
 }
  
- void bluez_media_player_update_remote_device_property(const char * prop_name, const char * value)
- {
-
-	 //update MediaPlayer
-	 if(strcmp(prop_name, "Equalizer"))
-		 strcpy(mDefaultPlayer.EQUALIZER, value);
-	 else if(strcmp(prop_name, "Repeat"))
-		 strcpy(mDefaultPlayer.REPEAT, value);
-	 else if(strcmp(prop_name, "Shuffle"))
-		 strcpy(mDefaultPlayer.SHUFFLE, value);
-	 
-	 // Send command to remote device
-	 bluez_media_player_set_property(prop_name, g_variant_new("s", value));
- }
  
  void bluez_media_player_read_remote_player_properties()
  {
-	 bluez_media_player_read_property(mDefaultPlayer.PLAYER_PATH,PROPERTY_EQUALIZER);
 	 bluez_media_player_read_property(mDefaultPlayer.PLAYER_PATH,PROPERTY_REPEAT);
 	 bluez_media_player_read_property(mDefaultPlayer.PLAYER_PATH,PROPERTY_SHUFFLE);
 	 bluez_media_player_read_property(mDefaultPlayer.PLAYER_PATH,PROPERTY_STATUS);
@@ -166,6 +167,36 @@ void bluez_mediaplayer_previous()
 	bluez_media_player_call_method("Previous",NULL);
 }
 
+void bluez_mediaplayer_shuffle_on()
+{
+	// Send command to remote device
+	 bluez_media_player_set_property(PROPERTY_SHUFFLE, g_variant_new("s", "alltracks"));
+}
+
+void bluez_mediaplayer_shuffle_off()
+{
+	// Send command to remote device
+	 bluez_media_player_set_property(PROPERTY_SHUFFLE, g_variant_new("s", "off"));
+}
+
+void bluez_mediaplayer_repeat_singletrack()
+{
+	// Send command to remote device
+	 bluez_media_player_set_property(PROPERTY_REPEAT, g_variant_new("s", "singletrack"));
+}
+
+void bluez_mediaplayer_repeat_alltracks()
+{
+	// Send command to remote device
+	 bluez_media_player_set_property(PROPERTY_REPEAT, g_variant_new("s", "alltracks"));
+}
+
+void bluez_mediaplayer_repeat_off()
+{
+	// Send command to remote device
+	 bluez_media_player_set_property(PROPERTY_REPEAT, g_variant_new("s", "off"));
+}
+
 /*
  * Private Method
 */
@@ -174,10 +205,18 @@ static int bluez_media_player_call_method( const char *method, GVariant *param)
 {
 	GVariant *result;
 	GError *error = NULL;
+	
+	// only call the method if we have a valid path, meaning we are connected to a phone
+	if(!mDefaultPlayer.CONNECTED)
+	{
+		g_print("Error: No valid player\n");
+		g_print("Cannot execute command: %s\n", method);
+		return -2;
+	}
 
 	result = g_dbus_connection_call_sync(mCon,
 					     BLUEZ_BUS_NAME,						// defined in bluez_dbus_names.h
-					     mDefaultPlayer.OBJECT_PATH,
+					     mDefaultPlayer.PLAYER_PATH,
 					     BLUEZ_MediaPlayer_INTERFACE,			// defined in bluez_dbus_names.h
 					     method,
 					     param,
@@ -200,10 +239,18 @@ static int bluez_media_player_set_property(const char *prop, GVariant *value)
 {
 	GVariant *result;
 	GError *error = NULL;
+	
+	// only call the method if we have a valid path, meaning we are connected to a phone
+	if(!mDefaultPlayer.CONNECTED)
+	{
+		g_print("Error: No valid player\n");
+		g_print("Cannot update property: %s\n", prop);
+		return -2;
+	}
 
 	result = g_dbus_connection_call_sync(mCon,
 					     BLUEZ_BUS_NAME,						// defined in bluez_dbus_names.h
-					     mDefaultPlayer.OBJECT_PATH,
+					     mDefaultPlayer.PLAYER_PATH,
 					     "org.freedesktop.DBus.Properties",
 					     "Set",
 					     g_variant_new("(ssv)", BLUEZ_MediaPlayer_INTERFACE, prop, value),
@@ -213,7 +260,11 @@ static int bluez_media_player_set_property(const char *prop, GVariant *value)
 					     NULL,
 					     &error);
 	if(error != NULL)
+	{
+		g_print("Error: Unbale to set Property %s\tReason: %s\n",prop,error->message);
+		g_error_free(error);
 		return -1;
+	}
 
 	g_variant_unref(result);
 	return 0;
@@ -229,14 +280,12 @@ static int bluez_media_player_read_property(const char * path, const char *prope
 		return -3;
 	}
 	
-	g_print("Reading Property: %s\tfrom Object: %s\n",property,mDefaultPlayer.PLAYER_PATH);
-	
 	g_dbus_connection_call(mCon,
 					     BLUEZ_BUS_NAME,							// defined in bluez_dbus_names.h
 					     mDefaultPlayer.PLAYER_PATH,				// defined in bluez_dbus_names.h
 					     "org.freedesktop.DBus.Properties",
 					     "Get",
-					     g_variant_new("(ss)", BLUEZ_MediaPlayer_INTERFACE, (char *)property),
+					     g_variant_new("(ss)", BLUEZ_MediaPlayer_INTERFACE, property),
 					     NULL,
 					     G_DBUS_CALL_FLAGS_NONE,
 					     -1,
@@ -269,12 +318,15 @@ static void bluez_media_player_properties_changed(GDBusConnection *sig,
 	GVariant * unknown;
 	
 	g_print("\n****\t MediaPlayer Properties Changed \t****\n");
-	
 	g_print ("\t- Object Path: %s\n", object_path);
+	
 	g_variant_get(parameters, "(&sa{sv}as)", &object, &intr, &unknown);
 
 	while(g_variant_iter_next(intr, "{sv}", &key, &value)) 
 		bluez_media_player_parse_property_value(key,value);
+	
+	// lets grab all properites to be safe
+	bluez_media_player_read_remote_player_properties();
 	
 	/* Do not unref, it gets cleaned up on its own */
 	//g_variant_unref(intr);
@@ -303,9 +355,10 @@ static void bluez_media_control_properties_changed(GDBusConnection *sig,
 	GVariant * unknown;
 	
 	g_print("\n****\tMedia Controller Properties Changed \t****\n");
-	//g_print("Type: %s\n", g_variant_get_type_string(parameters));
-	
 	g_print ("\t- Object Path: %s\n", object_path);
+	
+	strcpy(mDefaultPlayer.OBJECT_PATH,object_path);
+	
 	g_variant_get(parameters, "(&sa{sv}as)", &object, &intr, &unknown);
 
 	while(g_variant_iter_next(intr, "{sv}", &key, &value)) 
@@ -326,9 +379,7 @@ static void bluez_media_player_parse_property_value(const gchar *key, GVariant *
 		case 's':
 					
 			g_print("%s\n", g_variant_get_string(value, NULL));
-			if(strcmp(key,PROPERTY_EQUALIZER) == 0)
-				strcpy(mDefaultPlayer.EQUALIZER, g_variant_get_string(value,NULL));
-			else if(strcmp(key,PROPERTY_REPEAT) == 0)
+			if(strcmp(key,PROPERTY_REPEAT) == 0)
 				strcpy(mDefaultPlayer.REPEAT, g_variant_get_string(value,NULL));
 			else if(strcmp(key,PROPERTY_SHUFFLE) == 0)
 				strcpy(mDefaultPlayer.SHUFFLE, g_variant_get_string(value,NULL));
@@ -398,13 +449,8 @@ static void bluez_media_control_parse_property_value(const gchar *key, GVariant 
 			if(strcmp(key, "Connected") == 0)
 			{
 				if(g_variant_get_boolean(value))
-				{
-					// media player has connected!
-					mDefaultPlayer.CONNECTED = true;
-					
-					// not every property is set during a propertychange signal, therefore we can ask for them
-					bluez_media_player_read_remote_player_properties();
-				}
+					mDefaultPlayer.CONNECTED = true;		// media player connected!
+				
 				else
 					bluez_media_player_set_default_properties();
 			}
@@ -422,8 +468,6 @@ static void bluez_media_control_parse_property_value(const gchar *key, GVariant 
 			
 			break;
 		case 'a':
-		
-			bluez_mediaplayer_print_track_data(value);
 			break;
 		
 		default:
@@ -452,6 +496,7 @@ static void bluez_media_player_read_property_cb(GObject *con,GAsyncResult *res,g
 	GVariant *result = NULL;
 	GVariant * propertyValue = NULL;
 	char propertyName[100];
+	GError *error = NULL;
 
 	g_print("***\t Media Player Inside Property Callback\t***\n");
 	
@@ -459,10 +504,16 @@ static void bluez_media_player_read_property_cb(GObject *con,GAsyncResult *res,g
 	strcpy(propertyName,userData);
 	
 	// was the call successful?
-	result = g_dbus_connection_call_finish((GDBusConnection *)con, res, NULL);
+	result = g_dbus_connection_call_finish((GDBusConnection *)con, res, &error);
 	if(result == NULL)
 	{
 		g_print("\t- Unable to get result for Property: %s\n", propertyName);
+		
+		if(error != NULL)
+		{
+			g_print("\t- Error: %s\n",error->message);
+			g_error_free(error);
+		}
 		return;
 	}
 	
@@ -478,6 +529,7 @@ static void bluez_media_player_read_property_cb(GObject *con,GAsyncResult *res,g
 			bluez_media_player_parse_property_value(propertyName, propertyValue);
 		}
 	}
-	g_variant_unref(result);	
+	g_variant_unref(result);
+	g_variant_unref(propertyValue);	
 }
 
