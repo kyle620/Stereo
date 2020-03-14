@@ -82,6 +82,16 @@ BluetoothDevice * bluetooth_get_device_at_index(int index)
 	return NULL;
 }
 
+BluetoothDevice * bluetooth_get_device_by_path(const char * path)
+{
+	Node * deviceFound = NULL;
+	
+	deviceFound = scanListByPath(mHead,path);
+	
+	return &deviceFound->device;
+}
+
+
 // functions to get properties of a device
 bool bluetooth_device_get_property_paired(BluetoothDevice * device)
 {

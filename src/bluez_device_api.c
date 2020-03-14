@@ -18,7 +18,7 @@ static void bluez_signal_device_changed(GDBusConnection *conn,
                     GVariant *params,
                     void *userdata);
 static void bluez_device_parse_properties(const char* path, const char * key, GVariant * propertyValue);
-static int bluez_device_read_property(const char * path, const char *property);
+static void bluez_device_read_property(const char * path, const char *property);
 static void bluez_device_get_property_cb(GObject *con,GAsyncResult *res,gpointer data);
 /*
 *	Private Variables
@@ -31,7 +31,15 @@ static guint device_changed;
 /*
 * Accessors
 */
-
+void bluez_device_read_remote_device_properties(const char * devicePath)
+{
+	bluez_device_read_property(devicePath, PROPERTY_ADDRESS);
+	bluez_device_read_property(devicePath, PROPERTY_NAME);
+	bluez_device_read_property(devicePath, PROPERTY_ICON);
+	bluez_device_read_property(devicePath, PROPERTY_PAIRED);
+	bluez_device_read_property(devicePath, PROPERTY_TRUSTED);
+	bluez_device_read_property(devicePath, PROPERTY_ALIAS);
+}
 
 /*
 * Modifiers
@@ -98,6 +106,7 @@ bool bluez_device_trust_device(const char * objectPath)
 	if(error != NULL)
 	{
 		g_print("Error: Device Trust. Message: %s", error->message);
+		g_error_free(error);
 		succeed = false;
 	}
 	
@@ -129,6 +138,7 @@ bool bluez_device_pair_device(const char *objectPath)
 	if(error != NULL)
 	{
 		g_print("Error:Device Pair. Message: %s", error->message);
+		g_error_free(error);
 		succeed = false;
 	}
 	
@@ -180,10 +190,9 @@ static void bluez_signal_device_changed(GDBusConnection *conn,
 			g_variant_unref(value);
 }
 
-static int bluez_device_read_property(const char * path, const char *property)
+static void bluez_device_read_property(const char * path, const char *property)
 {
 
-	GError *error = NULL;
 	GVariant *userData;
 	
 	GVariantBuilder *u = g_variant_builder_new(G_VARIANT_TYPE_VARDICT);
@@ -203,10 +212,7 @@ static int bluez_device_read_property(const char * path, const char *property)
 						 NULL,
 					     bluez_device_get_property_cb,
 					     g_variant_new_tuple(&userData,1));
-	if(error != NULL)
-		return -1;
-
-	return 0;
+	
 }
 
 static void bluez_device_get_property_cb(GObject *con,GAsyncResult *res,gpointer  userData)
@@ -215,6 +221,7 @@ static void bluez_device_get_property_cb(GObject *con,GAsyncResult *res,gpointer
 	GVariant * propertyValue = NULL;
 	GVariant *userDataValue;
 	GVariantIter *params = NULL;
+	GError * error = NULL;
 	char path[100];
 	char property[100];
 	char * key;
@@ -240,13 +247,18 @@ static void bluez_device_get_property_cb(GObject *con,GAsyncResult *res,gpointer
 	if(strcmp(path,"NULL") == 0 || strcmp(property,"NULL") == 0)
 	{
 		g_print("\t- Error: Invalid path or property\n");
+		g_variant_unref(userDataValue);
 		return;
 	}
 	
 	// was the call successful?
-	result = g_dbus_connection_call_finish((GDBusConnection *)con, res, NULL);
+	result = g_dbus_connection_call_finish((GDBusConnection *)con, res, &error);
 	if(result == NULL)
-		g_print("\t-t Unable to get result for Property: %s\n", property);
+	{
+		g_print("\t- Unable to get result for Property: %s\n", property);
+		g_print("\t- Error Reason: %s\n",error->message);
+		g_error_free(error);
+	}
 	
 	// okay lets update the property we asked for
 	if(result) {
@@ -261,6 +273,8 @@ static void bluez_device_get_property_cb(GObject *con,GAsyncResult *res,gpointer
 		}
 	}
 	g_variant_unref(result);
+	g_variant_unref(userDataValue);
+	g_variant_unref(propertyValue);
 }
 
 static void bluez_device_parse_properties(const char * path, const char * propertyKey, GVariant * propertyValue)
@@ -286,8 +300,7 @@ static void bluez_device_parse_properties(const char * path, const char * proper
 				if(g_variant_get_boolean(propertyValue))
 				{
 					bluetooth_device_property_update_connection(path,true);
-					bluez_device_read_property(path, "Paired");
-					
+					bluez_device_read_remote_device_properties(path);
 				}
 				else
 					bluetooth_device_property_update_connection(path,false);
@@ -302,20 +315,27 @@ static void bluez_device_parse_properties(const char * path, const char * proper
 		if(!g_variant_is_of_type(propertyValue, G_VARIANT_TYPE_BOOLEAN))
             g_print("Invalid argument type for %s: %s != %s", propertyKey,g_variant_get_type_string(propertyValue), "b");
 		else
-		{
 			bluetooth_device_property_update_paired(path,g_variant_get_boolean(propertyValue));
-			
-			// if we are paired with device we should see if we are trusted
-			if(g_variant_get_boolean(propertyValue))
-				bluez_device_trust_device(path);
-		}
 	}
 	else if(strcmp(propertyKey, "Trusted") == 0)
 	{
 		if(!g_variant_is_of_type(propertyValue, G_VARIANT_TYPE_BOOLEAN))
             g_print("Invalid argument type for %s: %s != %s", propertyKey,g_variant_get_type_string(propertyValue), "b");
 		else
+		{
+			if(!g_variant_get_boolean(propertyValue))
+			{
+				// we want to Trust a device we have paired with
+				// find device
+				BluetoothDevice * device = NULL;
+				device = bluetooth_get_device_by_path(path);
+				if(device != NULL)
+					if(bluetooth_device_get_property_paired(device))
+						bluez_device_trust_device(path);
+			}
+			
 			bluetooth_device_property_update_trusted(path,g_variant_get_boolean(propertyValue));
+		}
 	}
 	else if(strcmp(propertyKey, "Alias") == 0)
 	{

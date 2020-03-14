@@ -39,7 +39,7 @@ bool bluetooth_get_device_address_at_index(int index, char * addrContainer, bool
 char * bluetooth_get_device_path_at_index(int index);
 //int bluetooth_device_get_index(const char * path);													// returns -1 if device does not exist, ohterwise returns the array index of device
 BluetoothDevice * bluetooth_get_device_at_index(int index);
-
+BluetoothDevice * bluetooth_get_device_by_path(const char * path);
 // functions to get properties of the device
 bool bluetooth_device_get_property_paired(BluetoothDevice * device);
 
