@@ -7,7 +7,6 @@
 	* @date March 14, 2020
 	* 
 	* @brief This file defines the methods and properties of Bluez's adapter-api.txt.
-	* 
 	* For more information please refer to https://git.kernel.org/pub/scm/bluetooth/bluez.git/tree/doc/adapter-api.txt
 **/
 

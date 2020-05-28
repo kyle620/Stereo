@@ -1,10 +1,10 @@
 /**
 	* @file bluez_device_api.c
 	* @author Kyle Van Cleave
-	* @date March 14,2020
+	* @date March 14, 2020
 	* @brief Is meant to implement the functionality of the device-api.txt file that is described by bluez.org
 	*
-	* 	- The main purpose of this file is to pair, trust, and connect to new devices after powering the adapter, if any devices
+	*	- The main purpose of this file is to pair, trust, and connect to new devices after powering the adapter, if any devices
 	* 	  appeared in /org/hciX/dev_XX_YY_ZZ_AA_BB_CC, it is monitered using "InterfaceAdded"
 	*	  signal and all the properties of the device are printed
 	*	- Once a device connects a bluetooth_device is created which stores alot of properties about the remote device
